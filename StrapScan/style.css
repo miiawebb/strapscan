@@ -1,0 +1,182 @@
+/* Reset + base layout */
+html, body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  background: #f4f6f9;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Box sizing reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Wrapper to center everything */
+.flex-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+}
+
+/* Main container */
+.ai-inspector {
+  background: #fff;
+  padding: 24px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+  border-radius: 12px;
+}
+
+/* Banner image */
+.strapscan-header {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.strapscan-header img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Subtext */
+.subtext {
+  font-size: 0.9em;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Labels */
+label {
+  font-weight: 600;
+  margin-top: 14px;
+  display: block;
+  font-size: 14px;
+}
+
+/* Inputs */
+input[type="file"],
+select,
+textarea {
+  width: 100%;
+  margin: 6px 0 16px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Two-column layout */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.half {
+  flex: 1 1 calc(50% - 10px);
+  min-width: 240px;
+}
+
+/* Standards note (revised look) */
+.standards-note {
+  background: #E5EAEF;
+  border-left: 4px solid #000;
+  padding: 12px;
+  font-size: 13px;
+  color: #222;
+  border-radius: 6px;
+  margin: 30px 0 40px; /* top: 10px, sides: 0, bottom: 20px */
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.standards-wrapper {
+  padding-bottom: 24px;
+}
+
+/* Image preview box */
+.preview {
+  display: block;
+  margin-top: 10px;
+  max-width: 100%;
+  max-height: 240px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  object-fit: contain;
+}
+
+/* Submit button */
+button {
+  background-color: #000;
+  color: #fff;
+  font-weight: bold;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #222;
+}
+
+/* Result box (AI output) */
+.result-box {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 8px;
+  background: #E5EAEF;
+  border: 1px solid #ccc;
+  display: none;
+  font-size: 14px;
+  color: #222;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Disclaimer box */
+.disclaimer-box {
+  background: #E5EAEF;
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 8px;
+  margin-top: 30px;
+  font-size: 13px;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* Accessibility */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: 2px solid #66afe9;
+  outline-offset: 2px;
+}
+
+/* Responsive for mobile */
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .half {
+    flex: 1 1 100%;
+  }
+}
