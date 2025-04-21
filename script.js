@@ -11,60 +11,19 @@ function showStandards() {
 
   if (region === "us") {
     if (isTieDown) {
-      html = `
-        <strong>🇺🇸 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>
-        • FMCSA<br>
-        • DOT<br>
-        • NHTSA<br>
-        • WSTDA<br>
-        • OSHA
-      `;
+      html = `<strong>🇺🇸 Tie-Down / Ratchet Strap Inspection Standards:</strong> FMCSA, DOT, NHTSA, WSTDA, OSHA.`;
     } else if (isSling) {
-      html = `
-        <strong>🇺🇸 Lifting Sling Inspection Standards:</strong><br>
-        • OSHA<br>
-        • ASME B30.9<br>
-        • WSTDA<br>
-        • ASTM International
-      `;
+      html = `<strong>🇺🇸 Lifting Sling Inspection Standards:</strong> OSHA, ASME B30.9, WSTDA, ASTM International.`;
     } else if (isTow) {
-      html = `
-        <strong>🇺🇸 Towing / Recovery Strap Best Practices:</strong><br>
-        There are no formal federal regulations specific to towing or recovery straps.<br>
-        Recommended to follow:<br>
-        • OSHA<br>
-        • ASME B30<br>
-        • WSTDA manufacturing and inspection standards
-      `;
+      html = `<strong>🇺🇸 Towing / Recovery Strap Best Practices:</strong> OSHA, ASME B30, WSTDA (no formal federal standards).`;
     }
   } else if (region === "ca") {
     if (isTieDown) {
-      html = `
-        <strong>🇨🇦 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>
-        • Transport Canada<br>
-        • CCMTA<br>
-        • NSC Standard 10<br>
-        • CVSA<br>
-        • CSA Group
-      `;
+      html = `<strong>🇨🇦 Tie-Down / Ratchet Strap Inspection Standards:</strong> Transport Canada, CCMTA, NSC 10, CVSA, CSA Group.`;
     } else if (isSling) {
-      html = `
-        <strong>🇨🇦 Lifting Sling Inspection Standards:</strong><br>
-        • CSA Group<br>
-        • ASME B30.9 (Edited)<br>
-        • ANSI<br>
-        • CVSA<br>
-        • CCOHS
-      `;
+      html = `<strong>🇨🇦 Lifting Sling Inspection Standards:</strong> CSA B167, ASME B30.9, ANSI, CVSA, CCOHS.`;
     } else if (isTow) {
-      html = `
-        <strong>🇨🇦 Towing / Recovery Strap Best Practices:</strong><br>
-        No specific federal towing strap regulations exist.<br>
-        Industry best practice includes:<br>
-        • CSA B167<br>
-        • ASME B30.9<br>
-        • Provincial OHS guidelines
-      `;
+      html = `<strong>🇨🇦 Towing / Recovery Strap Best Practices:</strong> CSA B167, ASME B30.9, Provincial OHS Guidelines.`;
     }
   }
 
