@@ -1,61 +1,72 @@
-import OpenAI from "openai";
+// /api/inspect.js
+import fs from 'fs';
+import path from 'path';
+import { OpenAI } from 'openai';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-export const config = {
-  api: { bodyParser: true }
-};
+export async function POST(req) {
+  const data = await req.formData();
+  const file = data.get('file');
 
-export default async function handler(req, res) {
-  try {
-    const { imageBase64, material, productType, region, notes } = req.body;
-
-    if (!imageBase64) {
-      return res.status(400).json({ result: "Missing image data." });
-    }
-
-    const prompt = `
-You are a synthetic webbing safety inspector reviewing a user-submitted ${material} ${productType}, used in the ${region}. Your role is to decide if this item should be removed from service based solely on visible condition and tag compliance.
-
-Before analyzing the image, visually reference these training examples:
-- ✅ PASS examples: https://imgur.com/a/qBKAnbq
-- ❌ FAIL examples: https://imgur.com/a/AzCKcuX
-
-Evaluate based on tag clarity, abrasion, cuts, fraying, stitching, chemical damage, or any visible defect that could compromise safe use. Consider the following user context:
-"${notes}"
-
-Your response must begin with one of the following lines:
-→ PASS – suitable for continued use  
-→ FAIL – should be removed from service
-
-Then provide a brief technical justification in the next sentence.
-
-Use this exact structure and phrasing. Do not reword or paraphrase the PASS/FAIL lines.  
-Avoid mentioning any standards, regulations, or issuing authorities.
-Use professional, factual, inspection-style language only — no casual tone or explanations.
-`;
-
-    const result = await openai.chat.completions.create({
-      model: "gpt-4-turbo",
-      messages: [
-        {
-          role: "user",
-          content: [
-            { type: "text", text: prompt },
-            {
-              type: "image_url",
-              image_url: { url: imageBase64 }
-            }
-          ]
-        }
-      ],
-      max_tokens: 500
-    });
-
-    const answer = result.choices[0].message.content;
-    res.status(200).json({ result: answer });
-  } catch (err) {
-    console.error("OpenAI Error:", err);
-    res.status(500).json({ result: `OpenAI failed: ${err.name} – ${err.message}` });
+  if (!file) {
+    return new Response('No file uploaded', { status: 400 });
   }
+
+  const bytes = await file.arrayBuffer();
+  const base64Image = Buffer.from(bytes).toString('base64');
+
+  // Load example metadata
+  const failMetaPath = path.join(process.cwd(), 'fail', 'metadata.json');
+  const passMetaPath = path.join(process.cwd(), 'pass', 'metadata.json');
+  const failMeta = JSON.parse(fs.readFileSync(failMetaPath, 'utf-8'));
+  const passMeta = JSON.parse(fs.readFileSync(passMetaPath, 'utf-8'));
+
+  // Pick 2 random examples from each
+  const getRandomExamples = (meta, type) => {
+    const entries = Object.entries(meta);
+    const selected = entries.sort(() => 0.5 - Math.random()).slice(0, 2);
+    return selected.flatMap(([filename, caption]) => [
+      {
+        type: 'image_url',
+        image_url: { url: `https://strapscan.vercel.app/${type}/${filename}` }
+      },
+      {
+        type: 'text',
+        text: `${type.toUpperCase()}: ${caption}`
+      }
+    ]);
+  };
+
+  const references = [
+    {
+      type: 'text',
+      text: 'Use these examples to guide your analysis. Begin your answer with PASS: or FAIL: and nothing else.'
+    },
+    ...getRandomExamples(failMeta, 'fail'),
+    ...getRandomExamples(passMeta, 'pass'),
+    {
+      type: 'image_url',
+      image_url: { url: `data:image/jpeg;base64,${base64Image}` }
+    },
+    {
+      type: 'text',
+      text: 'Analyze this image and return your result. Begin with PASS: or FAIL: followed by a short explanation.'
+    }
+  ];
+
+  // Call GPT-4 Vision
+  const response = await openai.chat.completions.create({
+    model: 'gpt-4-vision-preview',
+    messages: [
+      {
+        role: 'user',
+        content: references
+      }
+    ],
+    max_tokens: 500
+  });
+
+  const result = response.choices[0]?.message?.content || 'Inspection failed. Try again later.';
+  return new Response(result);
 }
