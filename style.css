@@ -115,7 +115,7 @@ textarea {
   border-radius: 6px;
   margin: 15px 0;
   width: 100%;
-  margin-top: 24px; /* 👈 tweak this manually to align with upload box */
+  margin-top: 34px; /* 👈 tweak this manually to align with upload box */
 }
 
 /* Submit button */
