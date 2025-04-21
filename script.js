@@ -12,27 +12,24 @@ function showStandards() {
   if (region === "us") {
     if (isTieDown) {
       html = `
-        <strong>🇺🇸 U.S. Tie-Down / Ratchet Strap Inspection Standards:</strong><br>
-        • FMCSA (Federal Motor Carrier Safety Administration)<br>
-        • DOT (Department of Transportation)<br>
-        • NHTSA (National Highway Traffic Safety Administration)<br>
-        • WSTDA (Web Sling & Tie Down Association)<br>
-        • OSHA (Occupational Safety and Health Administration)
+        <strong>🇺🇸 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>
+        • FMCSA<br>
+        • DOT<br>
+        • NHTSA<br>
+        • WSTDA<br>
+        • OSHA
       `;
     } else if (isSling) {
       html = `
-        <strong>🇺🇸 U.S. Lifting Sling Inspection Standards:</strong><br>
-        • OSHA (Occupational Safety and Health Administration)<br>
-        • ASME (B30 Series)<br>
-        • ANSI (American National Standards Institute)<br>
-        • WSTDA (WS and RS standards)<br>
-        • NACM (National Association of Chain Manufacturers)<br>
-        • ASTM International<br>
-        • FMCSA (if used in transport securement)
+        <strong>🇺🇸 Lifting Sling Inspection Standards:</strong><br>
+        • OSHA<br>
+        • ASME B30.9<br>
+        • WSTDA<br>
+        • ASTM International
       `;
     } else if (isTow) {
       html = `
-        <strong>🇺🇸 U.S. Towing / Recovery Strap Best Practices:</strong><br>
+        <strong>🇺🇸 Towing / Recovery Strap Best Practices:</strong><br>
         There are no formal federal regulations specific to towing or recovery straps.<br>
         Recommended to follow:<br>
         • OSHA<br>
@@ -43,29 +40,29 @@ function showStandards() {
   } else if (region === "ca") {
     if (isTieDown) {
       html = `
-        <strong>🇨🇦 Canadian Tie-Down / Ratchet Strap Inspection Standards:</strong><br>
+        <strong>🇨🇦 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>
         • Transport Canada<br>
-        • CCMTA (Canadian Council of Motor Transport Administrators)<br>
-        • NSC Standard 10 (Cargo Securement)<br>
-        • CVSA (North American Cargo Securement Standard)<br>
-        • CSA Group (Canadian Standards Association)
+        • CCMTA<br>
+        • NSC Standard 10<br>
+        • CVSA<br>
+        • CSA Group
       `;
     } else if (isSling) {
       html = `
-        <strong>🇨🇦 Canadian Lifting Sling Inspection Standards:</strong><br>
-        • CSA Group (e.g., CSA B167)<br>
-        • ASME (B30 Series – partially adopted)<br>
-        • ANSI (in some jurisdictions)<br>
-        • CVSA (where applicable)<br>
-        • CCOHS (Canadian Centre for Occupational Health and Safety)
+        <strong>🇨🇦 Lifting Sling Inspection Standards:</strong><br>
+        • CSA Group<br>
+        • ASME B30.9 (Edited)<br>
+        • ANSI<br>
+        • CVSA<br>
+        • CCOHS
       `;
     } else if (isTow) {
       html = `
-        <strong>🇨🇦 Canadian Towing / Recovery Strap Best Practices:</strong><br>
+        <strong>🇨🇦 Towing / Recovery Strap Best Practices:</strong><br>
         No specific federal towing strap regulations exist.<br>
         Industry best practice includes:<br>
         • CSA B167<br>
-        • ASME B30<br>
+        • ASME B30.9<br>
         • Provincial OHS guidelines
       `;
     }
