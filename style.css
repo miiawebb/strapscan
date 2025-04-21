@@ -7,6 +7,13 @@ html, body {
   font-family: 'Segoe UI', sans-serif;
 }
 
+.subtext {
+  font-size: 0.9em;
+  color: #555;
+  margin: 10px 0; /* reduce top/bottom spacing */
+  line-height: 1.4; /* tighter vertical line spacing */
+}
+
 /* Box sizing reset */
 *, *::before, *::after {
   box-sizing: border-box;
