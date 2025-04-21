@@ -89,7 +89,7 @@ textarea {
   min-width: 240px;
 }
 
-/* Standards note (revised look) */
+/* Standards note - consistent spacing */
 .standards-note {
   background: #E5EAEF;
   border-left: 4px solid #000;
@@ -97,13 +97,8 @@ textarea {
   font-size: 13px;
   color: #222;
   border-radius: 6px;
-  margin: 30px 0 40px; /* top: 10px, sides: 0, bottom: 20px */
-  box-sizing: border-box;
+  margin: 15px 0;
   width: 100%;
-}
-
-.standards-wrapper {
-  padding-bottom: 24px;
 }
 
 /* Image preview box */
@@ -117,7 +112,7 @@ textarea {
   object-fit: contain;
 }
 
-/* Submit button */
+/* Submit button - consistent spacing */
 button {
   background-color: #000;
   color: #fff;
@@ -128,7 +123,7 @@ button {
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  margin-top: 10px;
+  margin: 15px 0;
   transition: background-color 0.2s ease;
 }
 
@@ -138,7 +133,7 @@ button:hover {
 
 /* Result box (AI output) */
 .result-box {
-  margin-top: 20px;
+  margin: 15px 0;
   padding: 16px;
   border-radius: 8px;
   background: #E5EAEF;
@@ -149,13 +144,13 @@ button:hover {
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
-/* Disclaimer box */
+/* Disclaimer box - consistent spacing */
 .disclaimer-box {
   background: #E5EAEF;
   border: 1px solid #ccc;
   padding: 16px;
   border-radius: 8px;
-  margin-top: 30px;
+  margin: 15px 0;
   font-size: 13px;
   color: #222;
   line-height: 1.6;
