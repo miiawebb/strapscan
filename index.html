@@ -10,6 +10,7 @@
 <body>
   <div class="flex-wrapper">
     <div class="ai-inspector">
+      
       <!-- Header Banner -->
       <div class="strapscan-header">
         <img src="https://i.imgur.com/xCVtL06.jpeg" alt="StrapScan Banner" />
@@ -29,8 +30,9 @@
         <div class="half">
           <label for="material">Webbing Material</label>
           <select id="material">
-            <option>Polyester</option>
-            <option>Nylon</option>
+            <option>Polyester (PES)</option>
+            <option>Nylon (PA6)</option>
+            <option>Nylon (PA6.6)</option>
             <option>Polypropylene (PP)</option>
             <option>Other</option>
           </select>
@@ -40,8 +42,11 @@
           <label for="use">Product Type</label>
           <select id="use" onchange="showStandards()">
             <option>Tie Down / Ratchet Strap</option>
-            <option>Tow Strap / Recovery Strap</option>
-            <option>Lifting Sling</option>
+            <option>Towing Strap</option>
+            <option>Recovery Strap</option>
+            <option>Lifting Sling Eye-Eye</option>
+            <option>Lifting Sling Endless</option>
+            <option>Roundsling</option>
           </select>
         </div>
       </div>
@@ -62,38 +67,35 @@
         </div>
       </div>
 
-      <!-- Upload + Preview -->
-     <div class="row">
-  <div class="half">
-    <label for="damageUpload">Upload Damaged Area Photo (Required)</label>
-    <input type="file" id="damageUpload" accept="image/*" />
-  </div>
+      <!-- Upload + Standards -->
+      <div class="row">
+        <div class="half">
+          <label for="damageUpload">Upload Damaged Area Photo (Required)</label>
+          <input type="file" id="damageUpload" accept="image/*" />
+        </div>
 
-  <div class="half preview-box">
-    <label>Preview</label>
-    <img id="damagePreview" class="preview" />
-  </div>
-</div>
+        <div class="half">
+          <div class="standards-wrapper">
+            <div id="standardsBox" class="standards-note"></div>
+          </div>
+        </div>
+      </div>
 
-      <!-- ✅ Standards Box: placed outside .row, full-width, clean layout -->
-<!-- Standards Box Row (LEFT side only) -->
-<!-- Standards Box Row (Left-Aligned, with spacing below) -->
-<div class="row">
-  <div class="half">
-    <div class="standards-wrapper">
-      <div id="standardsBox" class="standards-note"></div>
-    </div>
-  </div>
-  <div class="half"></div>
-</div>
+      <!-- Full Width Preview Below -->
+      <div class="row">
+        <div class="full-width">
+          <label>Preview</label>
+          <img id="damagePreview" class="preview" />
+        </div>
+      </div>
 
-      <!-- Button -->
+      <!-- Run Inspection Button -->
       <button onclick="showResult()">Run Inspection</button>
       <div id="processingMessage" style="display:none;margin-top:10px;font-weight:bold;">
         Processing image, please wait...
       </div>
 
-      <!-- AI Result -->
+      <!-- AI Result Output -->
       <div class="result-box" id="resultBox"></div>
 
       <!-- Disclaimer -->
@@ -101,6 +103,7 @@
         <strong>Disclaimer:</strong><br>
         StrapScan is an AI-assisted tool designed to support preliminary visual assessments of straps and slings. It does not replace a certified inspection. Final decisions must be made by a qualified professional under applicable standards.
       </div>
+
     </div>
   </div>
 </body>
