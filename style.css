@@ -76,12 +76,13 @@ textarea {
   resize: vertical;
 }
 
-/* Two-column layout */
+/* Two-column layout (unified + stable) */
 .row {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   margin-top: 10px;
+  align-items: flex-start;
 }
 
 .half {
@@ -89,7 +90,7 @@ textarea {
   min-width: 240px;
 }
 
-/* Standards note - consistent spacing */
+/* Standards note */
 .standards-note {
   background: #E5EAEF;
   border-left: 4px solid #000;
@@ -105,18 +106,18 @@ textarea {
 .preview {
   display: block;
   width: 100%;
-  height: 240px; /* Fixed height always */
+  height: 240px; /* Fixed height to prevent layout jump */
   border-radius: 8px;
   border: 1px solid #bbb;
   object-fit: contain;
-  background-color: #f2f2f2; /* Light gray background for placeholder */
+  background-color: #f2f2f2;
   background-image: url("data:image/svg+xml,%3Csvg width='100%25' height='100%25' viewBox='0 0 400 240' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='400' height='240' fill='%23f2f2f2'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23999' font-size='18'%3EPreview%3C/text%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
 }
 
-/* Submit button - consistent spacing */
+/* Submit button */
 button {
   background-color: #000;
   color: #fff;
@@ -135,7 +136,7 @@ button:hover {
   background-color: #222;
 }
 
-/* Result box (AI output) */
+/* Result box */
 .result-box {
   margin: 15px 0;
   padding: 16px;
@@ -148,7 +149,7 @@ button:hover {
   transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
-/* Disclaimer box - consistent spacing */
+/* Disclaimer box */
 .disclaimer-box {
   background: #E5EAEF;
   border: 1px solid #ccc;
