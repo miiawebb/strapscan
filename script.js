@@ -155,7 +155,8 @@ async function generatePdfReport({ resultText, detected, image, material, produc
   // Add banner image at top
   const bannerImg = new Image();
   bannerImg.src = "https://i.imgur.com/xCVtL06.jpeg";
-  doc.addImage(bannerImg, "JPEG", 0, 0, 210, 25); // full A4 width
+  doc.addImage(bannerImg, "JPEG", 0, 0, 210, 40); // wider/taller image
+let yPos = 50; // push content further down
 
   const timestamp = new Date();
   const formattedDate = timestamp.toLocaleDateString();
