@@ -4,27 +4,52 @@ function showStandards() {
   const box = document.getElementById("standardsBox");
 
   let html = "";
-
-  const isTieDown = use.includes("Tie Down") || use.includes("Ratchet");
-  const isSling = use.includes("Sling") || use.includes("Roundsling");
-  const isTow = use.includes("Towing") || use.includes("Recovery");
+  const isTieDown = use === "Tie Down / Ratchet Strap";
 
   if (region === "us") {
-    if (isTieDown) {
-      html = `<strong>🇺🇸 Tie-Down / Ratchet Strap Inspection Standards:</strong> FMCSA, DOT, NHTSA, WSTDA, OSHA.`;
-    } else if (isSling) {
-      html = `<strong>🇺🇸 Lifting Sling Inspection Standards:</strong> OSHA, ASME B30.9, WSTDA, ASTM International.`;
-    } else if (isTow) {
-      html = `<strong>🇺🇸 Towing / Recovery Strap Best Practices:</strong> OSHA, ASME B30, WSTDA (no formal federal standards).`;
-    }
+    html = isTieDown
+      ? `
+        <div class="standards-note">
+          <strong>🇺🇸 U.S. Tie-Down Inspection Standards:</strong><br>
+          • FMCSA 49 CFR §393.102<br>
+          • WSTDA T-1<br>
+          • CVSA Inspection Criteria<br>
+          • OSHA Cargo Securement<br>
+          • ANSI / DOT Guidance
+        </div>
+      `
+      : `
+        <div class="standards-note">
+          <strong>🇺🇸 U.S. Sling/Recovery Strap Inspection Standards:</strong><br>
+          • OSHA 1910.184(e)<br>
+          • ASME B30.9<br>
+          • WSTDA T-4<br>
+          • CVSA Securement Guide<br>
+          • ANSI Safety Recommendations
+        </div>
+      `;
   } else if (region === "ca") {
-    if (isTieDown) {
-      html = `<strong>🇨🇦 Tie-Down / Ratchet Strap Inspection Standards:</strong> Transport Canada, CCMTA, NSC 10, CVSA, CSA Group.`;
-    } else if (isSling) {
-      html = `<strong>🇨🇦 Lifting Sling Inspection Standards:</strong> CSA B167, ASME B30.9, ANSI, CVSA, CCOHS.`;
-    } else if (isTow) {
-      html = `<strong>🇨🇦 Towing / Recovery Strap Best Practices:</strong> CSA B167, ASME B30.9, Provincial OHS Guidelines.`;
-    }
+    html = isTieDown
+      ? `
+        <div class="standards-note">
+          <strong>🇨🇦 Canadian Tie-Down Inspection Standards:</strong><br>
+          • NSC Standard 10<br>
+          • WSTDA T-1<br>
+          • CVSA North American Inspection Criteria<br>
+          • Bilingual Tag Requirement<br>
+          • Transport Canada Securement Guidance
+        </div>
+      `
+      : `
+        <div class="standards-note">
+          <strong>🇨🇦 Canadian Sling/Recovery Strap Inspection Standards:</strong><br>
+          • CSA Z248 / Z150<br>
+          • ASME B30.9<br>
+          • WSTDA T-4<br>
+          • CCOHS & Provincial Regulations<br>
+          • Bilingual Label Enforcement (Tag = Mandatory)
+        </div>
+      `;
   }
 
   box.innerHTML = html;
