@@ -14,24 +14,38 @@ export default async function handler(req, res) {
       return res.status(400).json({ result: "Missing image data." });
     }
 
-    const prompt = `
+const prompt = `
 You are a synthetic webbing safety inspector reviewing a user-submitted ${material} ${productType}, used in the ${region}. Your role is to decide if this item should be removed from service based solely on visible condition and tag compliance.
 
 Before analyzing the image, visually reference these training examples:
 - ✅ PASS examples: https://imgur.com/a/qBKAnbq
 - ❌ FAIL examples: https://imgur.com/a/AzCKcuX
 
-Evaluate based on tag clarity, abrasion, cuts, fraying, stitching, chemical damage, or any visible defect that could compromise safe use. Consider the following user context:
+Evaluate the image for the following potential damage types:
+
+1. **Abrasion** – Fuzzy, matted, or worn patches; dulled or flattened weave.
+2. **Cuts/Tears** – Straight or jagged breaks, frayed or severed threads.
+3. **Burns/Melting** – Blackened, glossy, or fused spots; hard or warped fibers.
+4. **UV Degradation** – Faded, brittle, or chalky texture; discoloration.
+5. **Edge Fraying** – Ragged, notched, or unraveled edges.
+6. **Snags** – Loops, raised threads, or thin spots caused by snagging.
+7. **Embedded Material** – Bulges, indentations, or foreign objects embedded in the fibers.
+8. **Chemical or Heat Discoloration** – Yellow/green/brown stains, sticky or brittle spots.
+9. **Crushed Webbing** – Flattened or hardened areas; distorted weave.
+10. **Broken or Loose Stitching** – Gaps or missing stitches, especially in critical load areas.
+11. **Knots** – Any tied or bunched section distorting the strap.
+
+Also consider this user context:
 "${notes}"
 
-Your response must begin with one of the following lines:
+Begin your response with one of the following lines:
 → PASS – suitable for continued use  
 → FAIL – should be removed from service
 
 Then provide a brief technical justification in the next sentence.
 
 Use this exact structure and phrasing. Do not reword or paraphrase the PASS/FAIL lines.  
-Avoid mentioning any standards, regulations, or issuing authorities.
+Avoid mentioning any standards, regulations, or issuing authorities.  
 Use professional, factual, inspection-style language only — no casual tone or explanations.
 `;
 
