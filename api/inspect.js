@@ -13,7 +13,7 @@ export default async function handler(req, res) {
       material,
       productType,
       region,
-      inspectionType // ✅ new field from dropdown
+      inspectionType
     } = req.body;
 
     if (!imageBase64) {
@@ -22,88 +22,71 @@ export default async function handler(req, res) {
 
     let prompt = "";
 
-    // ✅ Use the correct prompt based on inspection type
+    // ✅ Inspection Type: TAG
     if (inspectionType === "tag") {
       prompt = `
-You are a synthetic webbing safety inspector analyzing a photo of a strap’s product tag or label. Your job is to visually determine if the tag is present and readable.
+You are a synthetic webbing safety inspector analyzing a photo of a strap’s product tag or label.
 
-Tag Evaluation Instructions:
-- If a stitched or printed label is visible, determine if it is fully legible, partially readable, or too faded/torn.
-- If no tag is visible in the image, state this clearly.
+Your task:
+- Check if a tag or label is present in the image.
+- If yes, say whether it is fully legible, partially readable, or unreadable.
+- If no tag is visible, state that clearly.
 
-If any of the following data is readable, include it in the result:
-- Manufacturer or brand name  
-- Date of manufacture or expiration  
-- Working Load Limit (WLL)  
-- Serial number  
-- Material or model ID
+Only report info visible on the tag, such as:
+- Manufacturer name
+- Working Load Limit (WLL)
+- Date of manufacture
+- Serial number
+- Material type or rating
 
-Do not guess or infer any data.
-Only report what is clearly visible on the tag itself.
+DO NOT GUESS. Only describe what's clearly seen.
 
-Your response must begin with:
-→ PASS – Tag present and legible  
-or  
+Your result must begin with:
+→ PASS – Tag present and legible
+or
 → FAIL – Tag missing or unreadable
 
-Then explain briefly what you see.
-      `.trim();
-    } else {
-      prompt = `
-You are a synthetic webbing safety inspector reviewing a user-submitted ${material} ${productType}, used in the ${region}. Your role is to determine if this item should be removed from service based solely on visible condition and tag compliance.
-
-Before analyzing the image, refer to these known training examples:
-- ✅ PASS: https://imgur.com/a/qBKAnbq
-- ❌ FAIL: https://imgur.com/a/AzCKcuX
-
-Use the official criteria below. Only these definitions are valid — do not improvise, guess, or assume damage based on color, texture, contrast, or shadow alone.
-
----
-
-VISUAL DEFINITIONS: DAMAGE TYPES
-
-1. **Abrasion** – Fuzzy, matted, or worn patches; dulled or flattened weave.
-2. **Cuts/Tears** – Straight or jagged breaks, frayed or severed threads.
-3. **Burns/Melting** – Blackened, glossy, or fused spots; hard or warped fibers.
-4. **UV Degradation** – Faded, brittle, or chalky texture; discoloration.
-5. **Edge Fraying** – Ragged, notched, or unraveled edges.
-6. **Snags** – Loops, raised threads, or thin spots caused by snagging.
-7. **Embedded Material** – Bulges, indentations, or visible foreign objects embedded in the fibers.
-8. **Chemical or Heat Discoloration** – Yellow, green, or brown stains; sticky or brittle texture.
-9. **Crushed Webbing** – Flattened or hardened areas; distorted weave pattern.
-10. **Broken or Loose Stitching** – Gaps, missing or hanging stitches, especially at structural points.
-11. **Knots** – Any tied or bunched section distorting the strap.
-
----
-
-Your response must ALWAYS start with one of the following two lines:
-
-→ PASS – suitable for continued use  
-→ FAIL – should be removed from service
-
-Then give a **1-sentence justification** using technical inspection language only.
-
----
-
-❗ Detected Damage Line – RULES:
-
-Only include this line if you are confident based on clear, visual match to one or more of the definitions above:
-
-Detected Damage: [e.g., Cuts/Tears, Burns/Melting]
-
-Never list damage types unless the features visibly match the definitions.  
-Never list “Embedded Material” unless an actual object is visible.  
-Never list “Cuts” unless clean separation or severed threads are visible.  
-Do not infer or assume damage based on color, dirt, smudges, wear, or shadow.
-
-If no valid damage types match, do not include the line at all.
-Do not say “None” or “No visible damage” — just omit the line.
-
-Use professional, inspection-style language only.
-Do not reference any standards, certifications, or authorities.
-Do not paraphrase or reword the PASS/FAIL decision lines.
+Then include a short technical reason why.
       `.trim();
     }
+
+    // ✅ Inspection Type: DAMAGE (default)
+    else {
+      prompt = `
+You are a synthetic webbing safety inspector reviewing a user-submitted ${material} ${productType} used in ${region}.
+
+Your task is to determine whether this item should be removed from service based on visual condition alone.
+
+Inspect for these specific damage types only:
+
+1. Abrasion – Fuzzy, matted, dulled, or worn weave.
+2. Cuts/Tears – Jagged or clean fiber breaks, frayed threads.
+3. Burns/Melting – Glossy, blackened, or fused areas.
+4. UV Degradation – Fading, chalkiness, brittle feel.
+5. Edge Fraying – Unraveled or ragged strap edges.
+6. Snags – Raised loops or snag marks.
+7. Embedded Material – Bulges or foreign objects inside weave.
+8. Chemical/Heat Discoloration – Unnatural stains (yellow/green/brown), sticky or brittle spots.
+9. Crushed Webbing – Flattened, hard, or distorted texture.
+10. Broken Stitching – Loose, missing, or pulled stitching.
+11. Knots – Any visible knot or twisted section.
+
+Your response must begin with:
+→ PASS – suitable for continued use
+or
+→ FAIL – should be removed from service
+
+Then provide a 1-sentence professional justification.
+
+Only include:
+Detected Damage: [type1, type2, ...]
+…if specific types above are clearly visible. DO NOT GUESS.
+
+If no damage matches visually, do not include that line.
+      `.trim();
+    }
+
+    console.log("🧠 AI Prompt:", prompt); // ✅ DEBUG: shows prompt in terminal
 
     const result = await openai.chat.completions.create({
       model: "gpt-4-turbo",
@@ -114,7 +97,10 @@ Do not paraphrase or reword the PASS/FAIL decision lines.
             { type: "text", text: prompt },
             {
               type: "image_url",
-              image_url: { url: imageBase64 }
+              image_url: {
+                url: imageBase64,
+                detail: "low" // prevents image overload, keeps latency low
+              }
             }
           ]
         }
@@ -122,10 +108,12 @@ Do not paraphrase or reword the PASS/FAIL decision lines.
       max_tokens: 500
     });
 
-    const answer = result.choices[0].message.content;
+    const answer = result.choices[0]?.message?.content || "No response received.";
     res.status(200).json({ result: answer });
   } catch (err) {
     console.error("OpenAI Error:", err);
-    res.status(500).json({ result: `OpenAI failed: ${err.name} – ${err.message}` });
+    res.status(500).json({
+      result: `AI inspection failed. (${err.name} – ${err.message})`
+    });
   }
 }
