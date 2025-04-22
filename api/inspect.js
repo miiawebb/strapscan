@@ -35,6 +35,21 @@ Evaluate the image for the following potential damage types:
 10. **Broken or Loose Stitching** – Gaps or missing stitches, especially in critical load areas.
 11. **Knots** – Any tied or bunched section distorting the strap.
 
+When evaluating cuts and holes, apply these rules:
+
+- Cuts on the **same edge** are not additive. Measure only the largest one.
+- Cuts on **opposite edges** are additive. Add both sides together.
+- Cuts and holes at **different positions across the width** are additive.
+
+If the **total defect size** exceeds the following thresholds, the item should be removed from service:
+
+• 4" (100 mm) webbing → FAIL if defect > 3/4" (19 mm)  
+• 3" (75 mm) webbing → FAIL if defect > 5/8" (16 mm)  
+• 2" (50 mm) webbing → FAIL if defect > 3/8" (10 mm)  
+• 1.75" (45 mm) webbing → FAIL if defect > 3/8" (10 mm)
+
+Always compare total defect width to webbing size when visible.
+
 Also consider this user context:
 "${notes}"
 
