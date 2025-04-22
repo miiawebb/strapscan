@@ -113,6 +113,16 @@ textarea {
   display: block;
 }
 
+.preview {
+  display: none; /* 👈 Hides all previews initially */
+  width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  object-fit: contain;
+  background-color: #f2f2f2;
+}
+
 /* Standards Box */
 .standards-note {
   background: #E5EAEF;
