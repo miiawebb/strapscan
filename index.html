@@ -34,53 +34,56 @@
         </p>
       </div>
 
-      <!-- ROW 1: Material + Product Type + Inspection Type -->
-      <div class="row">
-        <div class="third">
-          <label for="material">Webbing Material</label>
-          <select id="material">
-            <option>Polyester</option>
-            <option>Nylon</option>
-          </select>
-        </div>
+      <!-- Webbing Material + Product Type -->
+<div class="row">
+  <div class="half">
+    <label for="material">Webbing Material</label>
+    <select id="material">
+      <option>Polyester</option>
+      <option>Nylon</option>
+    </select>
+  </div>
 
-        <div class="third">
-          <label for="use">Product Type</label>
-          <select id="use">
-            <option>Winch Strap</option>
-            <option>Ratchet Strap</option>
-            <option>Logistic Strap</option>
-          </select>
-        </div>
+  <div class="half">
+    <label for="use">Product Type</label>
+    <select id="use">
+      <option>Winch Strap</option>
+      <option>Ratchet Strap</option>
+      <option>Logistic Strap</option>
+    </select>
+  </div>
+</div>
 
-        <div class="third">
-          <label for="inspectionType">Inspection Type</label>
-          <select id="inspectionType">
-            <option value="damage" selected>Damage Analysis</option>
-            <option value="tag">Label Verification</option>
-          </select>
-        </div>
-      </div>
+<!-- Inspection Type + Standards Box -->
+<div class="row">
+  <div class="half">
+    <label for="inspectionType">Inspection Type</label>
+    <select id="inspectionType">
+      <option value="damage" selected>Damage Analysis</option>
+      <option value="tag">Label Verification</option>
+    </select>
+  </div>
 
-      <!-- ROW 2: Standards + Image 1 + Image 2 -->
-      <div class="row">
-        <div class="third">
-          <label>Inspection Standards</label>
-          <div class="standards-wrapper">
-            <div id="standardsBox" class="standards-note"></div>
-          </div>
-        </div>
+  <div class="half">
+    <label>Inspection Standards</label>
+    <div class="standards-wrapper">
+      <div id="standardsBox" class="standards-note"></div>
+    </div>
+  </div>
+</div>
 
-        <div class="third">
-          <label for="damageUpload">Upload Photo – Image 1 (Required)</label>
-          <input type="file" id="damageUpload" accept="image/*" />
-        </div>
+<!-- Upload Image 1 + Image 2 -->
+<div class="row">
+  <div class="half">
+    <label for="damageUpload">Upload Photo – Image 1 (Required)</label>
+    <input type="file" id="damageUpload" accept="image/*" />
+  </div>
 
-        <div class="third">
-          <label for="secondaryUpload">Upload Photo – Image 2 (Optional)</label>
-          <input type="file" id="secondaryUpload" accept="image/*" />
-        </div>
-      </div>
+  <div class="half">
+    <label for="secondaryUpload">Upload Photo – Image 2 (Optional)</label>
+    <input type="file" id="secondaryUpload" accept="image/*" />
+  </div>
+</div>
 
       <!-- Image Preview -->
       <div class="row">
