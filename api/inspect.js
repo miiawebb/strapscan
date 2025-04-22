@@ -74,7 +74,7 @@ DO NOT GUESS. Only mention damage that is visibly confirmed. If no damage is det
 
     // Call OpenAI Vision
     const response = await openai.chat.completions.create({
-      model: "gpt-4-vision-preview",
+      model: "gpt-4-turbo",
       max_tokens: 800,
       messages: [
         {
