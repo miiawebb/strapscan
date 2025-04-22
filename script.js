@@ -59,11 +59,17 @@ window.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify({
             imageBase64,
             material: document.getElementById("material")?.value,
-            productType: document.getElementById("use")?.value
+            productType: document.getElementById("use")?.value,
+            label
           })
         });
 
-        const { result } = await res.json();
+        const contentType = res.headers.get("content-type") || "";
+        const data = contentType.includes("application/json") ? await res.json() : { result: "Non-JSON error from server." };
+        const result = data.result;
+
+        if (!result) throw new Error("Empty result returned.");
+
         const cleanedResult = result.replace(/Detected Damage:.*$/im, "").trim();
         const clean = result.toUpperCase().replace(/[^A-Z0-9 ]/g, "");
 
