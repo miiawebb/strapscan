@@ -95,7 +95,7 @@ textarea {
 /* Preview container (new version) */
 .preview-box {
   height: 250px;
-  background: #f2f2f2;
+  background: #fff;
   border: 1px solid #bbb;
   border-radius: 8px;
   display: flex;
