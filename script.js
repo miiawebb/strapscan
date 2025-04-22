@@ -12,38 +12,19 @@ window.addEventListener("DOMContentLoaded", () => {
 
     if (region === "us") {
       if (isTieDown) {
-        html = `
-          <strong>🇺🇸 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>
-          • FMCSA, DOT, NHTSA, WSTDA, OSHA
-        `;
+        html = `<strong>🇺🇸 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>• FMCSA, DOT, NHTSA, WSTDA, OSHA`;
       } else if (isSling) {
-        html = `
-          <strong>🇺🇸 Lifting Sling Inspection Standards:</strong><br>
-          • OSHA, ASME B30, ANSI, WSTDA, NACM, ASTM
-        `;
+        html = `<strong>🇺🇸 Lifting Sling Inspection Standards:</strong><br>• OSHA, ASME B30, ANSI, WSTDA, NACM, ASTM`;
       } else if (isTow) {
-        html = `
-          <strong>🇺🇸 Towing / Recovery Strap Best Practices:</strong><br>
-          • Recommended: OSHA, ASME B30, WSTDA
-        `;
+        html = `<strong>🇺🇸 Towing / Recovery Strap Best Practices:</strong><br>• Recommended: OSHA, ASME B30, WSTDA`;
       }
     } else if (region === "ca") {
       if (isTieDown) {
-        html = `
-          <strong>🇨🇦 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>
-          • Transport Canada, CCMTA, NSC 10, CVSA, CSA
-        `;
+        html = `<strong>🇨🇦 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>• Transport Canada, CCMTA, NSC 10, CVSA, CSA`;
       } else if (isSling) {
-        html = `
-          <strong>🇨🇦 Lifting Sling Inspection Standards:</strong><br>
-          • CSA B167, ASME B30, ANSI, CCOHS
-        `;
+        html = `<strong>🇨🇦 Lifting Sling Inspection Standards:</strong><br>• CSA B167, ASME B30, ANSI, CCOHS`;
       } else if (isTow) {
-        html = `
-          <strong>🇨🇦 Towing / Recovery Strap Best Practices:</strong><br>
-          No specific federal regs.<br>
-          Recommended: CSA B167, ASME B30, Provincial OHS
-        `;
+        html = `<strong>🇨🇦 Towing / Recovery Strap Best Practices:</strong><br>No specific federal regs.<br>Recommended: CSA B167, ASME B30, Provincial OHS`;
       }
     }
 
@@ -125,7 +106,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
       document.getElementById("processingMessage").style.display = "none";
 
-      // Show download button and assign logic
       document.getElementById("downloadPdfBtn").style.display = "inline-block";
       document.getElementById("downloadPdfBtn").onclick = function () {
         generatePdfReport({
@@ -135,7 +115,7 @@ window.addEventListener("DOMContentLoaded", () => {
           material: payload.material,
           productType: payload.productType,
           region: payload.region,
-          notes: "", // no longer using freeform notes
+          inspectionType: payload.inspectionType,
           status: cleanResult.includes("FAIL") ? "FAIL" : "PASS"
         });
       };
@@ -151,10 +131,82 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Bind the function to global scope so the button can call it
+  function generatePdfReport({ resultText, detected, image, material, productType, region, inspectionType, status }) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const timestamp = new Date();
+    const formattedDate = timestamp.toLocaleDateString();
+    const formattedTime = timestamp.toLocaleTimeString();
+
+    doc.setFontSize(18);
+    doc.setFont(undefined, "bold");
+    doc.text("StrapScan Inspection Report", 14, 20);
+
+    doc.setFontSize(12);
+    doc.setFont(undefined, "normal");
+    doc.text(`Inspection Timestamp:`, 14, 30);
+    doc.text(`${formattedDate} – ${formattedTime}`, 60, 30);
+
+    doc.setFont(undefined, "bold");
+    doc.text("Inspection Outcome:", 14, 42);
+    doc.setFont(undefined, "normal");
+    doc.text(status === "FAIL" ? "FAIL" : "PASS", 60, 42);
+
+    doc.setFont(undefined, "bold");
+    doc.text("Item Details", 14, 54);
+    doc.setFont(undefined, "normal");
+    doc.text(`Webbing Type: ${material}`, 14, 60);
+    doc.text(`Product Classification: ${productType}`, 14, 66);
+    doc.text(`Inspection Region: ${region}`, 14, 72);
+
+    doc.setFont(undefined, "bold");
+    doc.text("Inspection Focus", 14, 82);
+    doc.setFont(undefined, "normal");
+    doc.text(inspectionType === "tag" ? "Product Tag / Label" : "Damage Area", 14, 88);
+
+    doc.setFont(undefined, "bold");
+    doc.text("Inspection Summary", 14, 98);
+    doc.setFont(undefined, "normal");
+    const resultLines = doc.splitTextToSize(`Result: Inspection ${status === "FAIL" ? "Failed" : "Passed"}\n${resultText}`, 180);
+    doc.text(resultLines, 14, 104);
+    let yPos = 104 + resultLines.length * 6;
+
+    if (status === "FAIL" && detected.length > 0) {
+      doc.setFont(undefined, "bold");
+      doc.text("Detected Damage Types", 14, yPos += 10);
+      doc.setFont(undefined, "normal");
+      detected.forEach((d) => {
+        doc.text(`• ${d}`, 18, yPos += 6);
+      });
+    }
+
+    doc.setFont(undefined, "bold");
+    doc.text("Final Recommendation", 14, yPos += 12);
+    doc.setFont(undefined, "normal");
+    const recommendation = status === "FAIL"
+      ? "Action Required: This strap is not safe for continued use. It must be taken out of service and replaced. Use of damaged webbing can result in catastrophic failure under load, posing serious risk to personnel and equipment."
+      : "No action required: This strap passed the visual inspection and shows no signs of critical damage. Continue regular monitoring as part of your safety protocol.";
+    const recLines = doc.splitTextToSize(recommendation, 180);
+    doc.text(recLines, 14, yPos += 8);
+    yPos += recLines.length * 6;
+
+    doc.setFontSize(9);
+    doc.setTextColor(100);
+    doc.setFont(undefined, "normal");
+    const disclaimer = `This inspection report was automatically generated using AI-assisted image analysis technology provided by StrapScan. It is designed to assist in preliminary visual evaluations of synthetic webbing products.
+
+StrapScan is not a certified inspection method and should not replace formal evaluations by qualified professionals. This result is based solely on visible image data and may not reflect internal damage or degradation.
+
+Use this report as part of a broader, standards-compliant inspection program. © 2025 StrapScan. All rights reserved.`;
+    const disclaimerLines = doc.splitTextToSize(disclaimer, 180);
+    doc.text(disclaimerLines, 14, Math.min(yPos + 12, 270));
+
+    doc.save(`StrapScan_Report_${status}_${Date.now()}.pdf`);
+  }
+
   window.showResult = showResult;
 
-  // Image preview
   document.getElementById("damageUpload").addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -164,10 +216,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Rebind standards dropdown listeners
   document.getElementById("region").addEventListener("change", showStandards);
   document.getElementById("use").addEventListener("change", showStandards);
-
-  // Initial load
   showStandards();
 });
