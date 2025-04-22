@@ -14,7 +14,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   async function showResult() {
     const image1 = document.getElementById("damageUpload")?.files[0];
-    const inspectionType = document.getElementById("inspectionType")?.value;
 
     if (!image1) {
       alert("Please upload the required image.");
@@ -38,7 +37,7 @@ window.addEventListener("DOMContentLoaded", () => {
       imageBase64: image1Base64,
       material: document.getElementById("material")?.value,
       productType: document.getElementById("use")?.value,
-      inspectionType
+      inspectionType: "damage" // hardcoded since we removed the inspectionType select
     };
 
     try {
@@ -137,11 +136,18 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Placeholder handler for secondary image
-  const secondaryInput = document.getElementById("secondaryUpload");
-  if (secondaryInput) {
-    secondaryInput.addEventListener("change", () => {
-      console.log("Secondary image selected (placeholder only)");
+  // Secondary image preview
+  const fileInput2 = document.getElementById("secondaryUpload");
+  if (fileInput2) {
+    fileInput2.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        const preview = document.getElementById("secondaryPreview");
+        if (preview) {
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = "block";
+        }
+      }
     });
   }
 
@@ -161,10 +167,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   const useSelect = document.getElementById("use");
-  const inspectionTypeSelect = document.getElementById("inspectionType");
-
   if (useSelect) useSelect.addEventListener("change", showStandards);
-  if (inspectionTypeSelect) inspectionTypeSelect.addEventListener("change", showStandards);
 
   showStandards();
 
