@@ -36,7 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
     const image2Base64 = await readAsBase64(image2);
 
     const payload = {
-      imageBase64: image2Base64, // DAMAGE IMAGE is sent to AI
+      imageBase64: image2Base64,
       material: document.getElementById("material")?.value,
       productType: document.getElementById("use")?.value
     };
@@ -122,7 +122,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (processingMessage) processingMessage.style.display = "none";
   }
 
-  // Image Preview Handlers
+  // Image Preview
   document.getElementById("damageUpload")?.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -145,7 +145,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Signature Pad Setup
+  // Signature
   const canvas = document.getElementById("signatureCanvas");
   if (canvas) {
     signaturePad = new SignaturePad(canvas, {
