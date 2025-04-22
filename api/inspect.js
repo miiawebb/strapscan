@@ -63,11 +63,15 @@ Then give a brief technical justification (one sentence).
 Then, if you are confident, include this additional line:
 Detected Damage: [list of specific types, e.g., Abrasion, UV Degradation]
 
-If you are not confident, do not guess — omit the line.
+Only include this line if the result is FAIL.  
+If the result is PASS, do not list any damage types — assume the item has no visible damage worth reporting.
 
-Use only professional, inspection-style language. Do not mention any standards, certifications, or issuing authorities.
+Do not list damage types unless there is clear, visible evidence. Do not infer or assume wear based on lighting, texture, or general appearance.
+
+Use only professional, inspection-style language. Do not mention any standards, certifications, or issuing authorities.  
 Do not reword or paraphrase the PASS/FAIL lines.
 `;
+
 
     const result = await openai.chat.completions.create({
       model: "gpt-4-turbo",
