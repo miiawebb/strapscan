@@ -131,9 +131,19 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function generatePdfReport({ resultText, detected, image, material, productType, region, inspectionType, status }) {
+    function generatePdfReport({ resultText, detected, image, material, productType, region, inspectionType, status }) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
+
+    const banner = new Image();
+    banner.crossOrigin = "anonymous";
+    banner.src = "https://i.imgur.com/xCVtL06.jpeg"; // same as your main page
+
+    banner.onload = () => {
+    doc.addImage(banner, "JPEG", 0, 0, 210, 60); // full width at top
+    let yPos = 70;
+
+    // The rest of the content goes below this:
 
     const timestamp = new Date();
     const formattedDate = timestamp.toLocaleDateString();
