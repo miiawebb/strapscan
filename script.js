@@ -122,7 +122,19 @@ window.addEventListener("DOMContentLoaded", () => {
     if (processingMessage) processingMessage.style.display = "none";
   }
 
-  // Image Preview
+  // Only show the preview row if both images are loaded
+  function checkAndShowPreview() {
+    const img1 = document.getElementById("damagePreview").src;
+    const img2 = document.getElementById("secondaryPreview").src;
+    const row = document.getElementById("previewRow");
+    if (
+      img1 && img1 !== window.location.href &&
+      img2 && img2 !== window.location.href
+    ) {
+      row.style.display = "flex";
+    }
+  }
+
   document.getElementById("damageUpload")?.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -130,6 +142,7 @@ window.addEventListener("DOMContentLoaded", () => {
       if (preview) {
         preview.src = URL.createObjectURL(file);
         preview.style.display = "block";
+        checkAndShowPreview();
       }
     }
   });
@@ -141,11 +154,11 @@ window.addEventListener("DOMContentLoaded", () => {
       if (preview) {
         preview.src = URL.createObjectURL(file);
         preview.style.display = "block";
+        checkAndShowPreview();
       }
     }
   });
 
-  // Signature
   const canvas = document.getElementById("signatureCanvas");
   if (canvas) {
     signaturePad = new SignaturePad(canvas, {
