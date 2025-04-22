@@ -98,6 +98,13 @@ async function showResult() {
     const resultBox = document.getElementById("resultBox");
     resultBox.style.display = "block";
     resultBox.innerHTML = `<strong>AI Inspection Result:</strong><br>${result}`;
+    // Add damage type breakdown if available
+const damageMatch = result.match(/Detected Damage:\s*(.+)/i);
+if (damageMatch) {
+  const damageList = damageMatch[1].split(',').map(d => d.trim());
+  const listHtml = damageList.map(d => `<li>${d}</li>`).join('');
+  resultBox.innerHTML += `<br><br><strong>Detected Damage Types:</strong><ul>${listHtml}</ul>`;
+}
 
     const cleanResult = result.toUpperCase().replace(/[^A-Z0-9 ]/g, "");
 
