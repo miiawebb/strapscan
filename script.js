@@ -84,8 +84,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
       const damageMatch = result.match(/Detected Damage:\s*(.+)/i);
       if (damageMatch) {
-        const damageList = damageMatch[1].split(',').map(d => d.trim());
-        const listHtml = damageList.map(d => `<li>${d}</li>`).join('');
+        const cleaned = damageMatch[1]
+          .replace(/[\[\]]/g, '')       // remove square brackets
+          .split(/[\n,]+/)              // split by newline or comma
+          .map(d => d.trim())
+          .filter(Boolean);             // remove any empty entries
+
+        const listHtml = cleaned.map(d => `<li>${d}</li>`).join('');
         resultBox.innerHTML += `<br><br><strong>Detected Damage Types:</strong><ul>${listHtml}</ul>`;
       }
 
@@ -110,7 +115,13 @@ window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("downloadPdfBtn").onclick = function () {
         generatePdfReport({
           resultText: cleanedResult,
-          detected: damageMatch ? damageMatch[1].split(',').map(d => d.trim()) : [],
+          detected: damageMatch
+            ? damageMatch[1]
+                .replace(/[\[\]]/g, '')
+                .split(/[\n,]+/)
+                .map(d => d.trim())
+                .filter(Boolean)
+            : [],
           image: document.getElementById("damagePreview").src,
           material: payload.material,
           productType: payload.productType,
@@ -220,6 +231,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   window.showResult = showResult;
+  window.showStandards = showStandards;
 
   document.getElementById("damageUpload").addEventListener("change", (e) => {
     const file = e.target.files[0];
