@@ -6,10 +6,13 @@
   <title>StrapScan</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- ✅ Load jsPDF for PDF export functionality -->
+  <!-- jsPDF for PDF export functionality -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <!-- ✅ Your own script (must come after jsPDF) -->
+  <!-- Signature Pad for capturing signatures -->
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
+
+  <!-- Custom app script -->
   <script defer src="script.js"></script>
 </head>
 <body>
@@ -21,21 +24,21 @@
         <img src="https://i.imgur.com/xCVtL06.jpeg" alt="StrapScan Banner" />
       </div>
 
-      <!-- Intro Text -->
-     <div class="subtext" style="margin-top: 1rem;">
-  <p><strong>StrapScan Instructions:</strong></p>
-  <ul style="margin: 0.5rem 0 0.5rem 1.25rem; padding: 0; list-style-type: disc;">
-    <li style="margin-bottom: 0.4rem;">
-      Upload a clear image of your strap, sling, or identification tag for instant AI-powered inspection.
-    </li>
-    <li style="margin-bottom: 0.4rem;">
-      Be sure to select the appropriate inspection type. "damage analysis" or "label verification" to ensure optimal accuracy.
-    </li>
-  </ul>
-  <p style="margin-top: 0.6rem;">
-    StrapScan applies advanced machine learning algorithms aligned with U.S. and Canadian safety standards to deliver a pass/fail result in seconds.
-  </p>
-</div>
+      <!-- Instructions -->
+      <div class="subtext" style="margin-top: 1rem;">
+        <p><strong>StrapScan Instructions:</strong></p>
+        <ul style="margin: 0.5rem 0 0.5rem 1.25rem; padding: 0; list-style-type: disc;">
+          <li style="margin-bottom: 0.4rem;">
+            Upload a clear image of your strap, sling, or identification tag for instant AI-powered inspection.
+          </li>
+          <li style="margin-bottom: 0.4rem;">
+            Be sure to select the appropriate inspection type. "damage analysis" or "label verification" to ensure optimal accuracy.
+          </li>
+        </ul>
+        <p style="margin-top: 0.6rem;">
+          StrapScan applies advanced machine learning algorithms aligned with U.S. and Canadian safety standards to deliver a pass/fail result in seconds.
+        </p>
+      </div>
 
       <!-- Webbing Material + Product Type -->
       <div class="row">
@@ -92,7 +95,7 @@
         </div>
       </div>
 
-      <!-- Full Width Preview Below -->
+      <!-- Preview -->
       <div class="row">
         <div class="full-width">
           <label>Preview</label>
@@ -100,16 +103,27 @@
         </div>
       </div>
 
-      <!-- Run Inspection Button -->
+      <!-- Signature -->
+      <div class="row signature-section">
+        <div class="full-width">
+          <label for="signatureCanvas">Digital Signature (Required for PDF)</label>
+          <div class="signature-pad-wrapper">
+            <canvas id="signatureCanvas" width="600" height="150"></canvas>
+            <button type="button" id="clearSignatureBtn">Clear Signature</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Inspection Button -->
       <button onclick="showResult()">Run Inspection</button>
       <div id="processingMessage" style="display:none;margin-top:10px;font-weight:bold;">
         Processing image, please wait...
       </div>
 
-      <!-- AI Result Output -->
+      <!-- AI Result -->
       <div class="result-box" id="resultBox"></div>
 
-      <!-- PDF Download Button -->
+      <!-- Download PDF -->
       <button id="downloadPdfBtn" style="display: none;">Download FREE PDF Report</button>
 
       <!-- Disclaimer -->
@@ -117,7 +131,7 @@
         <strong>Disclaimer:</strong><br>
         StrapScan is an AI-assisted tool designed to support preliminary visual assessments of straps and slings. It does not replace a certified inspection. Final decisions must be made by a qualified professional under applicable standards.
       </div>
-
+      
     </div>
   </div>
 </body>
