@@ -38,15 +38,20 @@ Evaluate the image for the following potential damage types:
 Also consider this user context:
 "${notes}"
 
-Begin your response with one of the following lines:
+Your response must always begin with:
 → PASS – suitable for continued use  
+or  
 → FAIL – should be removed from service
 
-Then provide a brief technical justification in the next sentence.
+Then give a brief technical justification (one sentence).
 
-Use this exact structure and phrasing. Do not reword or paraphrase the PASS/FAIL lines.  
-Avoid mentioning any standards, regulations, or issuing authorities.  
-Use professional, factual, inspection-style language only — no casual tone or explanations.
+Then, if you are confident, include this additional line:
+Detected Damage: [list of specific types, e.g., Abrasion, UV Degradation]
+
+If you are not confident, do not guess — omit the line.
+
+Use only professional, inspection-style language. Do not mention any standards, certifications, or issuing authorities.
+Do not reword or paraphrase the PASS/FAIL lines.
 `;
 
     const result = await openai.chat.completions.create({
