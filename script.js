@@ -122,14 +122,15 @@ window.addEventListener("DOMContentLoaded", () => {
     if (processingMessage) processingMessage.style.display = "none";
   }
 
-  // Only show the preview row if both images are loaded
+  // Show previews only after both are uploaded
   function checkAndShowPreview() {
     const img1 = document.getElementById("damagePreview").src;
     const img2 = document.getElementById("secondaryPreview").src;
     const row = document.getElementById("previewRow");
+
     if (
-      img1 && img1 !== window.location.href &&
-      img2 && img2 !== window.location.href
+      img1 && img1.includes("blob:") &&
+      img2 && img2.includes("blob:")
     ) {
       row.style.display = "flex";
     }
@@ -175,4 +176,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   window.showResult = showResult;
   window.showStandards = showStandards;
+
+  // HIDE PREVIEW ROW INITIALLY
+  const row = document.getElementById("previewRow");
+  if (row) row.style.display = "none";
 });
