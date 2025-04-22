@@ -24,8 +24,7 @@ function showStandards() {
     } else if (isTow) {
       html = `
         <strong>🇺🇸 Towing / Recovery Strap Best Practices:</strong><br>
-        No formal federal regs specific to towing/recovery straps.<br>
-        Recommended: OSHA, ASME B30, WSTDA
+        • Recommended: OSHA, ASME B30, WSTDA
       `;
     }
   } else if (region === "ca") {
