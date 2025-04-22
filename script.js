@@ -9,6 +9,7 @@ window.addEventListener("DOMContentLoaded", () => {
   <strong>Tie-Down Inspection Standards:</strong><br><br>
   • Web Sling & Tie Down Association, Federal Motor Carrier Safety Administration, Occupational Safety and Health Administration, Commercial Vehicle Safety Alliance, Department of Transportation<br><br>
   • Canadian Standards Association Z150, Canadian Council of Motor Transport Administrators
+    
 `;
     }
   }
