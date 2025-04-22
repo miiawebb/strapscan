@@ -152,11 +152,16 @@ async function generatePdfReport({ resultText, detected, image, material, produc
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF();
 
+  // Add banner image at top
+  const bannerImg = new Image();
+  bannerImg.src = "https://i.imgur.com/xCVtL06.jpeg";
+  doc.addImage(bannerImg, "JPEG", 0, 0, 210, 25); // full A4 width
+
   const timestamp = new Date();
   const formattedDate = timestamp.toLocaleDateString();
   const formattedTime = timestamp.toLocaleTimeString();
 
-  let yPos = 20;
+  let yPos = 32; // Start content just below banner
 
   doc.setFontSize(18);
   doc.setFont(undefined, "bold");
