@@ -62,7 +62,7 @@ window.addEventListener("DOMContentLoaded", () => {
       material: document.getElementById("material").value,
       productType: document.getElementById("use").value,
       region: document.getElementById("region").value,
-      inspectionType: document.getElementById("inspectionType")?.value || "damage"
+      inspectionType: document.getElementById("inspectionType").value
     };
 
     try {
@@ -74,6 +74,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
       const data = await res.json();
       const result = data.result;
+
       const resultBox = document.getElementById("resultBox");
       resultBox.style.display = "block";
 
@@ -85,12 +86,12 @@ window.addEventListener("DOMContentLoaded", () => {
         ? damageMatch[1]
             .replace(/[\[\]]/g, '')
             .split(/[\n,]+/)
-            .map((d) => d.trim())
+            .map(d => d.trim())
             .filter(Boolean)
         : [];
 
       if (detectedList.length > 0) {
-        const listHtml = detectedList.map((d) => `<li>${d}</li>`).join('');
+        const listHtml = detectedList.map(d => `<li>${d}</li>`).join('');
         resultBox.innerHTML += `<br><br><strong>Detected Damage Types:</strong><ul>${listHtml}</ul>`;
       }
 
@@ -103,21 +104,21 @@ window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("processingMessage").style.display = "none";
 
       document.getElementById("downloadPdfBtn").style.display = "inline-block";
-      document.getElementById("downloadPdfBtn").onclick = async function () {
+      document.getElementById("downloadPdfBtn").onclick = () => {
         const signatureData = signaturePad && !signaturePad.isEmpty()
           ? signaturePad.toDataURL("image/png")
           : null;
 
         const imageElement = document.getElementById("damagePreview");
-        const finalImage = new Image();
-        finalImage.crossOrigin = "anonymous";
-        finalImage.src = imageElement.src;
+        const previewImg = new Image();
+        previewImg.crossOrigin = "anonymous";
+        previewImg.src = imageElement.src;
 
-        finalImage.onload = () => {
+        previewImg.onload = () => {
           generatePdfReport({
             resultText: cleanedResult,
             detected: detectedList,
-            image: finalImage,
+            image: previewImg,
             material: payload.material,
             productType: payload.productType,
             region: payload.region,
@@ -143,103 +144,105 @@ window.addEventListener("DOMContentLoaded", () => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    // Banner
     const banner = new Image();
-    banner.src = "/mnt/data/StrapScan.jpg"; // adjust if you're hosting externally
-    banner.onload = () => {
+    banner.crossOrigin = "anonymous";
+    banner.src = "https://i.imgur.com/xCVtL06.jpeg"; // your hosted banner
+
+    const drawPdf = () => {
       doc.addImage(banner, "JPEG", 0, 0, 210, 25);
 
       let y = 35;
+      const timestamp = new Date();
+      const dateTime = `${timestamp.toLocaleDateString()}  ${timestamp.toLocaleTimeString()}`;
+
       doc.setFontSize(12);
       doc.setFont(undefined, "bold");
       doc.text("Inspection Details", 14, y);
 
-      // Draw structured data block
       doc.setFont(undefined, "normal");
-      const timestamp = new Date();
-      const dateTime = `${timestamp.toLocaleDateString()}  ${timestamp.toLocaleTimeString()}`;
       const details = [
         `Date & Time: ${dateTime}`,
-        `Webbing Material: ${material}`,
+        `Material: ${material}`,
         `Product Type: ${productType}`,
         `Region: ${region}`,
-        `Inspection Type: ${inspectionType === "tag" ? "Label Verification" : "Damage Analysis"}`
+        `Inspection: ${inspectionType === "tag" ? "Label Verification" : "Damage Analysis"}`
       ];
 
-      let tableY = y + 6;
+      let detailY = y + 6;
       details.forEach(line => {
-        doc.text(line, 14, tableY);
-        tableY += 6;
+        doc.text(line, 14, detailY);
+        detailY += 6;
       });
 
-      // Insert Image
+      // Image scaling
       const imgX = 110;
       const imgY = y + 6;
-      const imgMaxW = 85;
-      const imgMaxH = 65;
-
       let imgW = image.width;
       let imgH = image.height;
+      const maxW = 85;
+      const maxH = 65;
+
       if (imgW > imgH) {
-        const scale = imgMaxW / imgW;
-        imgW = imgMaxW;
-        imgH = imgH * scale;
+        const scale = maxW / imgW;
+        imgW = maxW;
+        imgH *= scale;
       } else {
-        const scale = imgMaxH / imgH;
-        imgH = imgMaxH;
-        imgW = imgW * scale;
+        const scale = maxH / imgH;
+        imgH = maxH;
+        imgW *= scale;
       }
 
       doc.addImage(image, "JPEG", imgX, imgY, imgW, imgH);
-      let yBottom = Math.max(tableY, imgY + imgH) + 10;
+      let yPos = Math.max(detailY, imgY + imgH) + 10;
 
-      // Outcome
       doc.setFont(undefined, "bold");
-      doc.text("Inspection Outcome:", 14, yBottom);
+      doc.text("Outcome:", 14, yPos);
       doc.setFont(undefined, "normal");
-      doc.text(status, 60, yBottom);
+      doc.text(status, 50, yPos);
 
-      // Summary
       doc.setFont(undefined, "bold");
-      doc.text("Summary", 14, yBottom += 10);
+      doc.text("Summary", 14, yPos += 10);
       doc.setFont(undefined, "normal");
       const summaryLines = doc.splitTextToSize(resultText, 180);
-      doc.text(summaryLines, 14, yBottom += 6);
-      yBottom += summaryLines.length * 5;
+      doc.text(summaryLines, 14, yPos += 6);
+      yPos += summaryLines.length * 6;
 
-      // Detected damage
       if (detected.length > 0) {
         doc.setFont(undefined, "bold");
-        doc.text("Detected Damage Types", 14, yBottom += 10);
+        doc.text("Detected Damage", 14, yPos += 8);
         doc.setFont(undefined, "normal");
-        detected.forEach(d => {
-          doc.text(`• ${d}`, 18, yBottom += 6);
-        });
+        detected.forEach(d => doc.text(`• ${d}`, 18, yPos += 6));
       }
 
-      // Signature
       if (signatureData) {
         doc.setFont(undefined, "bold");
-        doc.text("Inspector Signature", 14, yBottom += 14);
-        doc.addImage(signatureData, "PNG", 14, yBottom + 4, 80, 20);
-        yBottom += 32;
+        doc.text("Inspector Signature", 14, yPos += 12);
+        doc.addImage(signatureData, "PNG", 14, yPos += 4, 80, 20);
+        yPos += 30;
       }
 
-      // Footer disclaimer
+      // Footer
       const pageHeight = doc.internal.pageSize.height;
       const footerY = pageHeight - 30;
       doc.setFontSize(9);
       doc.setTextColor(100);
       doc.setFont(undefined, "normal");
-      const disclaimer = `This inspection report was automatically generated using AI-powered image analysis from StrapScan. It is a tool to assist in visual inspections and does not replace a certified evaluation. Final judgment should be made by qualified professionals under applicable standards.`;
-      const disclaimerLines = doc.splitTextToSize(disclaimer, 180);
-      doc.text(disclaimerLines, 14, footerY);
+      const disclaimer = `This inspection report was generated using AI-assisted image analysis via StrapScan. This is not a certified inspection and should be reviewed by a qualified professional. © 2025 StrapScan. All rights reserved.`;
+      const footerLines = doc.splitTextToSize(disclaimer, 180);
+      doc.text(footerLines, 14, footerY);
 
       doc.save(`StrapScan_Report_${status}_${Date.now()}.pdf`);
     };
+
+    if (banner.complete) {
+      drawPdf();
+    } else {
+      banner.onload = drawPdf;
+    }
   }
 
-  // Init
+  // --- INIT ---
+
   window.showResult = showResult;
   window.showStandards = showStandards;
 
