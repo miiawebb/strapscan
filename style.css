@@ -105,6 +105,10 @@ textarea {
   padding: 4px;
 }
 
+.preview-box label {
+  margin-bottom: 10px;
+}
+
 /* Image inside preview */
 .preview-box img {
   width: 100%;
