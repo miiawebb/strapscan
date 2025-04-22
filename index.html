@@ -5,14 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>StrapScan</title>
   <link rel="stylesheet" href="style.css" />
-
-  <!-- jsPDF for PDF export functionality -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
-  <!-- Signature Pad for digital signature capture -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
-
-  <!-- App Logic -->
   <script defer src="script.js"></script>
 </head>
 <body>
@@ -29,50 +23,37 @@
         <p><strong>StrapScan Instructions:</strong></p>
         <ul style="margin: 0.5rem 0 0.5rem 1.25rem; padding: 0; list-style-type: disc;">
           <li style="margin-bottom: 0.4rem;">
-            Upload a clear image of your strap, sling, or identification tag for instant AI-powered inspection.
+            Upload a clear image of your strap or label for instant AI-powered inspection.
           </li>
           <li style="margin-bottom: 0.4rem;">
-            Be sure to select the appropriate inspection type. "damage analysis" or "label verification" to ensure optimal accuracy.
+            Select damage analysis or label verification to ensure optimal accuracy.
           </li>
         </ul>
         <p style="margin-top: 0.6rem;">
-          StrapScan applies advanced machine learning algorithms aligned with U.S. and Canadian safety standards to deliver a pass/fail result in seconds.
+          StrapScan uses AI trained on U.S. safety standards for ratchet straps and tie-downs to deliver pass/fail results in seconds.
         </p>
       </div>
 
-      <!-- Webbing Material + Product Type -->
+      <!-- ROW 1: Material + Product Type + Inspection Type -->
       <div class="row">
-        <div class="half">
+        <div class="third">
           <label for="material">Webbing Material</label>
           <select id="material">
             <option>Polyester</option>
             <option>Nylon</option>
-            <option>Polypropylene</option>
-            <option>Other</option>
           </select>
         </div>
 
-        <div class="half">
+        <div class="third">
           <label for="use">Product Type</label>
-          <select id="use" onchange="showStandards()">
-            <option>Tie Down / Ratchet Strap</option>
-            <option>Tow Strap / Recovery Strap</option>
-            <option>Lifting Sling</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Region + Inspection Type -->
-      <div class="row">
-        <div class="half">
-          <label for="region">Region</label>
-          <select id="region" onchange="showStandards()">
-            <option value="us">United States</option>
-            <option value="ca">Canada</option>
+          <select id="use">
+            <option>Winch Strap</option>
+            <option>Ratchet Strap</option>
+            <option>Logistic Strap</option>
           </select>
         </div>
 
-        <div class="half">
+        <div class="third">
           <label for="inspectionType">Inspection Type</label>
           <select id="inspectionType">
             <option value="damage" selected>Damage Analysis</option>
@@ -81,17 +62,23 @@
         </div>
       </div>
 
-      <!-- Upload + Standards -->
+      <!-- ROW 2: Standards + Image 1 + Image 2 -->
       <div class="row">
-        <div class="half">
-          <label for="damageUpload">Upload Photo (Required)</label>
-          <input type="file" id="damageUpload" accept="image/*" />
-        </div>
-
-        <div class="half">
+        <div class="third">
+          <label>Inspection Standards</label>
           <div class="standards-wrapper">
             <div id="standardsBox" class="standards-note"></div>
           </div>
+        </div>
+
+        <div class="third">
+          <label for="damageUpload">Upload Photo – Image 1 (Required)</label>
+          <input type="file" id="damageUpload" accept="image/*" />
+        </div>
+
+        <div class="third">
+          <label for="secondaryUpload">Upload Photo – Image 2 (Optional)</label>
+          <input type="file" id="secondaryUpload" accept="image/*" />
         </div>
       </div>
 
@@ -112,21 +99,17 @@
       <!-- AI Result Output -->
       <div class="result-box" id="resultBox"></div>
 
-      <!-- Signature Section (final aligned version) -->
+      <!-- Signature Section -->
       <div class="row" style="margin-top: 15px; align-items: stretch;">
-        <!-- Signature Canvas -->
         <div class="half" style="display: flex; flex-direction: column;">
           <label for="signatureCanvas">Digital Signature</label>
           <canvas id="signatureCanvas" width="400" height="100" style="width: 100%; height: 100px; border: 1px solid #bbb; border-radius: 6px; background-color: #fff;"></canvas>
-          <button
-            type="button"
-            id="clearSignatureBtn"
+          <button type="button" id="clearSignatureBtn"
             style="margin-top: 10px; background-color: #888; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer;">
             Clear Signature
           </button>
         </div>
 
-        <!-- Signature Instructions -->
         <div class="half" style="display: flex; justify-content: center; align-items: center;">
           <p style="font-size: 14px; color: #444; line-height: 1.6; text-align: justify; margin: 0;">
             If you would like your PDF inspection report to include an electronic signature, please sign in the box provided before downloading. Signed reports can help support documentation in compliance and safety audits.
