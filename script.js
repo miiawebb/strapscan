@@ -242,3 +242,10 @@ Use this report as part of a broader, standards-compliant inspection program. ©
   // Save
   doc.save(`StrapScan_Report_${status}_${Date.now()}.pdf`);
 }
+document.getElementById("damageUpload").addEventListener("change", (e) => {
+  ...
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  showStandards();
+});
