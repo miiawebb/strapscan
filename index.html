@@ -9,10 +9,7 @@
   <!-- ✅ Load jsPDF for PDF export functionality -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <!-- ✅ Load Fabric.js for annotation support -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
-
-  <!-- ✅ Your own script (must come after jsPDF and Fabric) -->
+  <!-- ✅ Your own script (must come after jsPDF) -->
   <script defer src="script.js"></script>
 </head>
 <body>
@@ -89,19 +86,6 @@
         <div class="full-width">
           <label>Preview</label>
           <img id="damagePreview" class="preview" />
-        </div>
-      </div>
-
-      <!-- 🔧 Annotation Canvas Section -->
-      <div class="row">
-        <div class="full-width">
-          <label>Annotate (Optional)</label>
-          <canvas id="annotationCanvas" width="600" height="300" style="border:1px solid #ccc; border-radius: 8px;"></canvas>
-          <div style="margin-top:10px; display:flex; gap:10px; flex-wrap: wrap;">
-            <button type="button" onclick="enableDrawing()">Enable Draw</button>
-            <button type="button" onclick="clearCanvas()">Clear Annotations</button>
-            <button type="button" onclick="useAnnotatedImage()">Use Annotated Image</button>
-          </div>
         </div>
       </div>
 
