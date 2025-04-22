@@ -8,13 +8,48 @@ export const config = {
 
 export default async function handler(req, res) {
   try {
-    const { imageBase64, material, productType, region, notes } = req.body;
+    const {
+      imageBase64,
+      material,
+      productType,
+      region,
+      inspectionType // ✅ new field from dropdown
+    } = req.body;
 
     if (!imageBase64) {
       return res.status(400).json({ result: "Missing image data." });
     }
 
-const prompt = `
+    let prompt = "";
+
+    // ✅ Use the correct prompt based on inspection type
+    if (inspectionType === "tag") {
+      prompt = `
+You are a synthetic webbing safety inspector analyzing a photo of a strap’s product tag or label. Your job is to visually determine if the tag is present and readable.
+
+Tag Evaluation Instructions:
+- If a stitched or printed label is visible, determine if it is fully legible, partially readable, or too faded/torn.
+- If no tag is visible in the image, state this clearly.
+
+If any of the following data is readable, include it in the result:
+- Manufacturer or brand name  
+- Date of manufacture or expiration  
+- Working Load Limit (WLL)  
+- Serial number  
+- Material or model ID
+
+Do not guess or infer any data.
+Only report what is clearly visible on the tag itself.
+
+Your response must begin with:
+→ PASS – Tag present and legible  
+or  
+→ FAIL – Tag missing or unreadable
+
+Then explain briefly what you see.
+      `.trim();
+    } else {
+      prompt = `
 You are a synthetic webbing safety inspector reviewing a user-submitted ${material} ${productType}, used in the ${region}. Your role is to determine if this item should be removed from service based solely on visible condition and tag compliance.
 
 Before analyzing the image, refer to these known training examples:
@@ -38,11 +73,6 @@ VISUAL DEFINITIONS: DAMAGE TYPES
 9. **Crushed Webbing** – Flattened or hardened areas; distorted weave pattern.
 10. **Broken or Loose Stitching** – Gaps, missing or hanging stitches, especially at structural points.
 11. **Knots** – Any tied or bunched section distorting the strap.
-
----
-
-Use the following user-supplied context to assist visual judgment only:
-"${notes}"
 
 ---
 
@@ -72,7 +102,8 @@ Do not say “None” or “No visible damage” — just omit the line.
 Use professional, inspection-style language only.
 Do not reference any standards, certifications, or authorities.
 Do not paraphrase or reword the PASS/FAIL decision lines.
-`;
+      `.trim();
+    }
 
     const result = await openai.chat.completions.create({
       model: "gpt-4-turbo",
