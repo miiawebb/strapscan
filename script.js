@@ -1,5 +1,3 @@
-let canvas;
-
 window.addEventListener("DOMContentLoaded", () => {
   function showStandards() {
     const region = document.getElementById("region").value;
@@ -34,32 +32,25 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   async function showResult() {
-    const useAnnotated = window.__useAnnotatedImage;
     const damageFile = document.getElementById("damageUpload").files[0];
     const inspectionType = document.getElementById("inspectionType").value;
 
-    if (!damageFile && !useAnnotated) {
+    if (!damageFile) {
       alert("Please upload the damaged area photo.");
       return;
     }
 
     document.getElementById("processingMessage").style.display = "block";
 
-    let damageBase64;
+    const readAsBase64 = (file) =>
+      new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
 
-    if (useAnnotated && canvas) {
-      damageBase64 = canvas.toDataURL("image/png");
-    } else {
-      const readAsBase64 = (file) =>
-        new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-
-      damageBase64 = await readAsBase64(damageFile);
-    }
+    const damageBase64 = await readAsBase64(damageFile);
 
     if (!damageBase64.startsWith("data:image")) {
       alert("The uploaded file is not a valid image.");
@@ -120,7 +111,7 @@ window.addEventListener("DOMContentLoaded", () => {
         generatePdfReport({
           resultText: cleanedResult,
           detected: damageMatch ? damageMatch[1].split(',').map(d => d.trim()) : [],
-          image: damageBase64,
+          image: document.getElementById("damagePreview").src,
           material: payload.material,
           productType: payload.productType,
           region: payload.region,
@@ -142,54 +133,101 @@ window.addEventListener("DOMContentLoaded", () => {
 
   window.showResult = showResult;
 
-  // Init Fabric.js canvas
-  canvas = new fabric.Canvas("annotationCanvas", {
-    isDrawingMode: false,
-    backgroundColor: "#f4f4f4"
-  });
+  function generatePdfReport({ resultText, detected, image, material, productType, region, inspectionType, status }) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-  // Enable drawing
-  window.enableDrawing = () => {
-    canvas.isDrawingMode = true;
-    canvas.freeDrawingBrush.width = 3;
-    canvas.freeDrawingBrush.color = "#ff0000";
-  };
+    const banner = new Image();
+    banner.crossOrigin = "anonymous";
+    banner.src = "https://i.imgur.com/xCVtL06.jpeg";
 
-  // Clear canvas
-  window.clearCanvas = () => {
-    canvas.clear();
-  };
+    banner.onload = () => {
+      doc.addImage(banner, "JPEG", 0, 0, 210, 60);
+      let yPos = 70;
 
-  // Use annotation for AI
-  window.useAnnotatedImage = () => {
-    window.__useAnnotatedImage = true;
-    alert("The annotated image will now be used for AI inspection.");
-  };
+      const timestamp = new Date();
+      const formattedDate = timestamp.toLocaleDateString();
+      const formattedTime = timestamp.toLocaleTimeString();
 
-  // Load uploaded image into canvas
+      doc.setFontSize(18);
+      doc.setFont(undefined, "bold");
+      doc.text("StrapScan Inspection Report", 14, yPos);
+      yPos += 12;
+
+      doc.setFontSize(12);
+      doc.setFont(undefined, "normal");
+      doc.text(`Inspection Timestamp:`, 14, yPos);
+      doc.text(`${formattedDate} – ${formattedTime}`, 60, yPos);
+      yPos += 10;
+
+      doc.setFont(undefined, "bold");
+      doc.text("Inspection Outcome:", 14, yPos);
+      doc.setFont(undefined, "normal");
+      doc.text(status === "FAIL" ? "FAIL" : "PASS", 60, yPos);
+      yPos += 10;
+
+      doc.setFont(undefined, "bold");
+      doc.text("Item Details", 14, yPos);
+      yPos += 8;
+      doc.setFont(undefined, "normal");
+      doc.text(`Webbing Type: ${material}`, 14, yPos);
+      yPos += 6;
+      doc.text(`Product Classification: ${productType}`, 14, yPos);
+      yPos += 6;
+      doc.text(`Inspection Region: ${region}`, 14, yPos);
+      yPos += 10;
+
+      doc.setFont(undefined, "bold");
+      doc.text("Inspection Focus", 14, yPos);
+      doc.setFont(undefined, "normal");
+      doc.text(inspectionType === "tag" ? "Product Tag / Label" : "Damage Area", 14, yPos += 6);
+      yPos += 8;
+
+      doc.setFont(undefined, "bold");
+      doc.text("Inspection Summary", 14, yPos);
+      yPos += 8;
+      doc.setFont(undefined, "normal");
+      const resultLines = doc.splitTextToSize(`Result: Inspection ${status === "FAIL" ? "Failed" : "Passed"}\n${resultText}`, 180);
+      doc.text(resultLines, 14, yPos);
+      yPos += resultLines.length * 6;
+
+      if (status === "FAIL" && detected.length > 0) {
+        doc.setFont(undefined, "bold");
+        doc.text("Detected Damage Types", 14, yPos += 10);
+        doc.setFont(undefined, "normal");
+        detected.forEach((d) => {
+          doc.text(`• ${d}`, 18, yPos += 6);
+        });
+      }
+
+      doc.setFont(undefined, "bold");
+      doc.text("Final Recommendation", 14, yPos += 12);
+      doc.setFont(undefined, "normal");
+      const recommendation = status === "FAIL"
+        ? "Action Required: This strap is not safe for continued use. It must be taken out of service and replaced. Use of damaged webbing can result in catastrophic failure under load, posing serious risk to personnel and equipment."
+        : "No action required: This strap passed the visual inspection and shows no signs of critical damage. Continue regular monitoring as part of your safety protocol.";
+      const recLines = doc.splitTextToSize(recommendation, 180);
+      doc.text(recLines, 14, yPos += 8);
+      yPos += recLines.length * 6;
+
+      doc.setFontSize(9);
+      doc.setTextColor(100);
+      doc.setFont(undefined, "normal");
+      const disclaimer = `This inspection report was automatically generated using AI-assisted image analysis technology provided by StrapScan. It is designed to assist in preliminary visual evaluations of synthetic webbing products.\n\nStrapScan is not a certified inspection method and should not replace formal evaluations by qualified professionals. This result is based solely on visible image data and may not reflect internal damage or degradation.\n\nUse this report as part of a broader, standards-compliant inspection program. © 2025 StrapScan. All rights reserved.`;
+      const disclaimerLines = doc.splitTextToSize(disclaimer, 180);
+      doc.text(disclaimerLines, 14, Math.min(yPos + 12, 270));
+
+      doc.save(`StrapScan_Report_${status}_${Date.now()}.pdf`);
+    };
+  }
+
+  // Image preview
   document.getElementById("damageUpload").addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
-      const reader = new FileReader();
-      reader.onload = function (event) {
-        const imgObj = new Image();
-        imgObj.src = event.target.result;
-        imgObj.onload = function () {
-          const imgInstance = new fabric.Image(imgObj, {
-            scaleX: canvas.width / imgObj.width,
-            scaleY: canvas.height / imgObj.height,
-            selectable: false
-          });
-          canvas.clear();
-          canvas.add(imgInstance);
-          canvas.sendToBack(imgInstance);
-
-          const preview = document.getElementById("damagePreview");
-          preview.src = event.target.result;
-          preview.style.display = "block";
-        };
-      };
-      reader.readAsDataURL(file);
+      const preview = document.getElementById("damagePreview");
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = "block";
     }
   });
 
