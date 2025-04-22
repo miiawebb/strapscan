@@ -21,31 +21,27 @@
         Submit your strap or sling for inspection. StrapScan uses AI-powered visual analysis aligned with international safety standards. Upload a photo of the damaged area for AI-powered inspection.
       </p>
 
-      <!-- Material + Product Type -->
-      <div class="row">
-        <div class="half">
-          <label for="material">Webbing Material</label>
-          <select id="material">
-            <option>Polyester</option>
-            <option>Nylon</option>
-            <option>Polypropylene</option>
-            <option>Other</option>
-          </select>
-        </div>
+<!-- Webbing Material + Product Type -->
+<div class="row"> <!-- ✅ This wrapper was missing -->
+  <div class="half">
+    <label for="material">Webbing Material</label>
+    <select id="material">
+      <option>Polyester</option>
+      <option>Nylon</option>
+      <option>Polypropylene</option>
+      <option>Other</option>
+    </select>
+  </div>
 
-        <div class="half">
-          <label for="use">Product Type</label>
-          <select id="use" onchange="showStandards()">
-          <option>Tie Down / Ratchet Strap</option>
-          <option>Towing Strap</option>
-          <option>Recovery Strap</option>
-          <option>Lifting Sling Eye-Eye</option>
-          <option>Lifting Sling Endless</option>
-          <option>Roundsling</option>
-        </select>
-
-        </div>
-      </div>
+  <div class="half">
+    <label for="use">Product Type</label>
+    <select id="use" onchange="showStandards()">
+      <option>Tie Down / Ratchet Strap</option>
+      <option>Tow Strap / Recovery Strap</option>
+      <option>Lifting Sling</option>
+    </select>
+  </div>
+</div>
 
       <!-- Region + Notes -->
       <div class="row">
