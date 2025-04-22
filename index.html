@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StrapScan</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- ✅ Load jsPDF for PDF export functionality -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- ✅ Your own script (must come after jsPDF) -->
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="flex-wrapper">
+    <div class="ai-inspector">
+      
+      <!-- Header Banner -->
+      <div class="strapscan-header">
+        <img src="https://i.imgur.com/xCVtL06.jpeg" alt="StrapScan Banner" />
+      </div>
+
+      <!-- Intro Text -->
+      <p class="subtext">
+        Submit your strap or sling for inspection. StrapScan uses AI-powered visual analysis aligned with international safety standards. Upload a photo of the damaged area or tag for AI-powered inspection.
+      </p>
+
+      <!-- Webbing Material + Product Type -->
+      <div class="row">
+        <div class="half">
+          <label for="material">Webbing Material</label>
+          <select id="material">
+            <option>Polyester</option>
+            <option>Nylon</option>
+            <option>Polypropylene</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <div class="half">
+          <label for="use">Product Type</label>
+          <select id="use" onchange="showStandards()">
+            <option>Tie Down / Ratchet Strap</option>
+            <option>Tow Strap / Recovery Strap</option>
+            <option>Lifting Sling</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Region + Inspection Type -->
+      <div class="row">
+        <div class="half">
+          <label for="region">Region</label>
+          <select id="region" onchange="showStandards()">
+            <option value="us">United States</option>
+            <option value="ca">Canada</option>
+          </select>
+        </div>
+
+        <div class="half">
+          <label for="inspectionType">Inspection Type</label>
+          <select id="inspectionType">
+            <option value="damage" selected>Inspect for Damage</option>
+            <option value="tag">Inspect Product Tag / Label</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Upload + Standards -->
+      <div class="row">
+        <div class="half">
+          <label for="damageUpload">Upload Photo (Required)</label>
+          <input type="file" id="damageUpload" accept="image/*" />
+        </div>
+
+        <div class="half">
+          <div class="standards-wrapper">
+            <div id="standardsBox" class="standards-note"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full Width Preview Below -->
+      <div class="row">
+        <div class="full-width">
+          <label>Preview</label>
+          <img id="damagePreview" class="preview" />
+        </div>
+      </div>
+
+      <!-- Run Inspection Button -->
+      <button onclick="showResult()">Run Inspection</button>
+      <div id="processingMessage" style="display:none;margin-top:10px;font-weight:bold;">
+        Processing image, please wait...
+      </div>
+
+      <!-- AI Result Output -->
+      <div class="result-box" id="resultBox"></div>
+
+      <!-- PDF Download Button -->
+      <button id="downloadPdfBtn" style="display: none;">Download FREE PDF Report</button>
+
+      <!-- Disclaimer -->
+      <div class="disclaimer-box">
+        <strong>Disclaimer:</strong><br>
+        StrapScan is an AI-assisted tool designed to support preliminary visual assessments of straps and slings. It does not replace a certified inspection. Final decisions must be made by a qualified professional under applicable standards.
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
