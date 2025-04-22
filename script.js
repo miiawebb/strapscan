@@ -156,26 +156,21 @@ async function generatePdfReport({ resultText, detected, image, material, produc
   const formattedDate = timestamp.toLocaleDateString();
   const formattedTime = timestamp.toLocaleTimeString();
 
-  // Header
   doc.setFontSize(18);
   doc.setFont(undefined, "bold");
   doc.text("StrapScan Inspection Report", 14, 20);
 
-  // Timestamp
   doc.setFontSize(12);
   doc.setFont(undefined, "normal");
-  doc.text(`Inspection Timestamp:`, 14, 30);
+  doc.text("Inspection Timestamp:", 14, 30);
   doc.text(`${formattedDate} – ${formattedTime}`, 14, 36);
 
-  // Outcome
   doc.setFont(undefined, "bold");
-  doc.setFontSize(12);
   doc.text("Inspection Outcome:", 14, 48);
   doc.setFont(undefined, "normal");
   const symbol = status === "FAIL" ? "❌ FAIL" : "✅ PASS";
   doc.text(symbol, 14, 54);
 
-  // Item Details
   doc.setFont(undefined, "bold");
   doc.text("Item Details", 14, 66);
   doc.setFont(undefined, "normal");
@@ -183,18 +178,13 @@ async function generatePdfReport({ resultText, detected, image, material, produc
   doc.text(`Product Classification: ${productType}`, 14, 78);
   doc.text(`Inspection Region: ${region}`, 14, 84);
 
-  // Summary Header
   doc.setFont(undefined, "bold");
   doc.text("Inspection Summary", 14, 96);
-
-  // Summary Content
   doc.setFont(undefined, "normal");
   const resultLines = doc.splitTextToSize(`Result: Inspection ${status === "FAIL" ? "Failed" : "Passed"}\n${resultText}`, 180);
   doc.text(resultLines, 14, 102);
-
   let yPos = 102 + resultLines.length * 6;
 
-  // Damage Types (if FAIL)
   if (status === "FAIL" && detected.length > 0) {
     doc.setFont(undefined, "bold");
     doc.text("Detected Damage Types", 14, yPos += 10);
@@ -204,7 +194,6 @@ async function generatePdfReport({ resultText, detected, image, material, produc
     });
   }
 
-  // Final Recommendation
   doc.setFont(undefined, "bold");
   doc.text("Final Recommendation", 14, yPos += 12);
   doc.setFont(undefined, "normal");
@@ -215,7 +204,6 @@ async function generatePdfReport({ resultText, detected, image, material, produc
   doc.text(recLines, 14, yPos += 8);
   yPos += recLines.length * 6;
 
-  // Optional: Notes
   if (notes) {
     doc.setFont(undefined, "bold");
     doc.text("User Notes", 14, yPos += 10);
@@ -225,7 +213,6 @@ async function generatePdfReport({ resultText, detected, image, material, produc
     yPos += noteLines.length * 6;
   }
 
-  // Disclaimer (always at bottom)
   const disclaimerY = 270;
   doc.setFontSize(9);
   doc.setTextColor(100);
@@ -235,21 +222,13 @@ async function generatePdfReport({ resultText, detected, image, material, produc
 StrapScan™ is not a certified inspection method and should not replace formal evaluations by qualified professionals. This result is based solely on visible image data and may not reflect internal damage or degradation.
 
 Use this report as part of a broader, standards-compliant inspection program. © 2025 StrapScan. All rights reserved.`;
-
   const disclaimerLines = doc.splitTextToSize(disclaimer, 180);
   doc.text(disclaimerLines, 14, disclaimerY);
 
-  // Save
   doc.save(`StrapScan_Report_${status}_${Date.now()}.pdf`);
 }
-document.getElementById("damageUpload").addEventListener("change", (e) => {
-  ...
-});
 
-window.addEventListener("DOMContentLoaded", () => {
-  showStandards();
-});
-// Preview uploaded image
+// Image preview
 document.getElementById("damageUpload").addEventListener("change", (e) => {
   const file = e.target.files[0];
   if (file && file.type.startsWith("image/")) {
@@ -259,10 +238,9 @@ document.getElementById("damageUpload").addEventListener("change", (e) => {
   }
 });
 
-// Make sure standards load on page ready
+// Init standards and bind changes
 window.addEventListener("DOMContentLoaded", () => {
   showStandards();
   document.getElementById("region").addEventListener("change", showStandards);
   document.getElementById("use").addEventListener("change", showStandards);
 });
-
