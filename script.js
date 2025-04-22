@@ -14,9 +14,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
   async function showResult() {
     const image1 = document.getElementById("damageUpload")?.files[0];
+    const image2 = document.getElementById("secondaryUpload")?.files[0];
 
-    if (!image1) {
-      alert("Please upload the required image.");
+    if (!image1 || !image2) {
+      alert("Please upload both required images.");
       return;
     }
 
@@ -32,12 +33,12 @@ window.addEventListener("DOMContentLoaded", () => {
       });
 
     const image1Base64 = await readAsBase64(image1);
+    const image2Base64 = await readAsBase64(image2);
 
     const payload = {
-      imageBase64: image1Base64,
+      imageBase64: image2Base64, // DAMAGE IMAGE is sent to AI
       material: document.getElementById("material")?.value,
-      productType: document.getElementById("use")?.value,
-      inspectionType: "damage" // hardcoded since we removed the inspectionType select
+      productType: document.getElementById("use")?.value
     };
 
     try {
@@ -96,9 +97,9 @@ window.addEventListener("DOMContentLoaded", () => {
               resultText: cleanedResult,
               detected: detectedList,
               image1: image1Base64,
+              image2: image2Base64,
               material: payload.material,
               productType: payload.productType,
-              inspectionType: payload.inspectionType,
               status: cleanResult.includes("FAIL") ? "FAIL" : "PASS",
               signatureData
             });
@@ -121,37 +122,30 @@ window.addEventListener("DOMContentLoaded", () => {
     if (processingMessage) processingMessage.style.display = "none";
   }
 
-  // Primary image preview
-  const fileInput1 = document.getElementById("damageUpload");
-  if (fileInput1) {
-    fileInput1.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file && file.type.startsWith("image/")) {
-        const preview = document.getElementById("damagePreview");
-        if (preview) {
-          preview.src = URL.createObjectURL(file);
-          preview.style.display = "block";
-        }
+  // Image Preview Handlers
+  document.getElementById("damageUpload")?.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const preview = document.getElementById("damagePreview");
+      if (preview) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
       }
-    });
-  }
+    }
+  });
 
-  // Secondary image preview
-  const fileInput2 = document.getElementById("secondaryUpload");
-  if (fileInput2) {
-    fileInput2.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file && file.type.startsWith("image/")) {
-        const preview = document.getElementById("secondaryPreview");
-        if (preview) {
-          preview.src = URL.createObjectURL(file);
-          preview.style.display = "block";
-        }
+  document.getElementById("secondaryUpload")?.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith("image/")) {
+      const preview = document.getElementById("secondaryPreview");
+      if (preview) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
       }
-    });
-  }
+    }
+  });
 
-  // Signature pad setup
+  // Signature Pad Setup
   const canvas = document.getElementById("signatureCanvas");
   if (canvas) {
     signaturePad = new SignaturePad(canvas, {
@@ -159,16 +153,11 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  const clearBtn = document.getElementById("clearSignatureBtn");
-  if (clearBtn) {
-    clearBtn.addEventListener("click", () => {
-      if (signaturePad) signaturePad.clear();
-    });
-  }
+  document.getElementById("clearSignatureBtn")?.addEventListener("click", () => {
+    if (signaturePad) signaturePad.clear();
+  });
 
-  const useSelect = document.getElementById("use");
-  if (useSelect) useSelect.addEventListener("change", showStandards);
-
+  document.getElementById("use")?.addEventListener("change", showStandards);
   showStandards();
 
   window.showResult = showResult;
