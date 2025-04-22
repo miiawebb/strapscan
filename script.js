@@ -6,8 +6,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (box) {
       box.innerHTML = `
         <strong>Tie-Down Inspection Standards:</strong><br><br>
-• WSTDA (Web Sling & Tie Down Association), FMCSA (Federal Motor Carrier Safety Administration), OSHA (Occupational Safety and Health Administration), CVSA (Commercial Vehicle Safety Alliance), DOT (Department of Transportation), CSA Z150 (Canadian Standards Association Z150), CCMTA (Canadian Council of Motor Transport Administrators).
-
+• Web Sling & Tie Down Association, Federal Motor Carrier Safety Administration, Occupational Safety and Health Administration, Commercial Vehicle Safety Alliance, Department of Transportation
       `;
     }
   }
