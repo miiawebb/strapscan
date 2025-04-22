@@ -239,4 +239,11 @@ button:focus {
   #signatureCanvas {
     height: 120px;
   }
+
+  .subtext-tight {
+  margin: 4px 0;
+  font-size: 0.9em;
+  color: #666;
+}
+
 }
