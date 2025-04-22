@@ -96,11 +96,9 @@ async function showResult() {
     const resultBox = document.getElementById("resultBox");
     resultBox.style.display = "block";
 
-    // Strip the "Detected Damage: ..." line from raw result
     const cleanedResult = result.replace(/Detected Damage:.*$/im, "").trim();
     resultBox.innerHTML = `<strong>AI Inspection Result:</strong><br>${cleanedResult}`;
 
-    // Parse and display structured Detected Damage list
     const damageMatch = result.match(/Detected Damage:\s*(.+)/i);
     if (damageMatch) {
       const damageList = damageMatch[1].split(',').map(d => d.trim());
@@ -109,7 +107,6 @@ async function showResult() {
     }
 
     const cleanResult = result.toUpperCase().replace(/[^A-Z0-9 ]/g, "");
-
     if (cleanResult.includes("FAIL")) {
       resultBox.style.backgroundColor = "#fdecea";
       resultBox.style.borderColor = "#f5c2c7";
@@ -125,6 +122,20 @@ async function showResult() {
     }
 
     document.getElementById("processingMessage").style.display = "none";
+
+    document.getElementById("downloadPdfBtn").style.display = "inline-block";
+    document.getElementById("downloadPdfBtn").onclick = function () {
+      generatePdfReport({
+        resultText: cleanedResult,
+        detected: damageMatch ? damageMatch[1].split(',').map(d => d.trim()) : [],
+        image: document.getElementById("damagePreview").src,
+        material: payload.material,
+        productType: payload.productType,
+        region: payload.region,
+        notes: payload.notes,
+        status: cleanResult.includes("FAIL") ? "FAIL" : "PASS"
+      });
+    };
   } catch (err) {
     console.error("Fetch failed:", err);
     document.getElementById("processingMessage").style.display = "none";
@@ -136,21 +147,6 @@ async function showResult() {
     resultBox.innerHTML = `<strong>Error:</strong><br>Inspection failed. Try again later.`;
   }
 }
-
-// Show preview of uploaded image
-document.getElementById("damageUpload").addEventListener("change", (e) => {
-  const file = e.target.files[0];
-  if (file && file.type.startsWith("image/")) {
-    const preview = document.getElementById("damagePreview");
-    preview.src = URL.createObjectURL(file);
-    preview.style.display = "block";
-  }
-});
-
-// Initialize standards on load
-window.addEventListener("DOMContentLoaded", () => {
-  showStandards();
-});
 
 async function generatePdfReport({ resultText, detected, image, material, productType, region, notes, status }) {
   const { jsPDF } = window.jspdf;
@@ -191,7 +187,6 @@ async function generatePdfReport({ resultText, detected, image, material, produc
     doc.text(doc.splitTextToSize(notes, 180), 14, noteStart + 6);
   }
 
-  // Image preview
   if (image && image.startsWith("data:image")) {
     const imgY = 180;
     doc.setFont(undefined, "bold");
@@ -199,10 +194,22 @@ async function generatePdfReport({ resultText, detected, image, material, produc
     doc.addImage(image, "JPEG", 14, imgY, 60, 60);
   }
 
-  // Footer
   doc.setFontSize(10);
   doc.setTextColor(100);
   doc.text("This report was generated using AI-assisted visual inspection. Final safety assessment must be made by a qualified professional.", 14, 280);
 
   doc.save(`StrapScan_Report_${status}_${Date.now()}.pdf`);
 }
+
+document.getElementById("damageUpload").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (file && file.type.startsWith("image/")) {
+    const preview = document.getElementById("damagePreview");
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+  }
+});
+
+window.addEventListener("DOMContentLoaded", () => {
+  showStandards();
+});
