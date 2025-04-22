@@ -161,7 +161,7 @@ async function generatePdfReport({ resultText, detected, image, material, produc
   bannerImg.src = "https://i.imgur.com/xCVtL06.jpeg";
 
   bannerImg.onload = function () {
-    doc.addImage(bannerImg, "JPEG", 0, 0, 210, 40); // full width, natural height
+    doc.addImage(bannerImg, "JPEG", 0, 0, 210, 60); // full width, natural height
     let yPos = 50;
 
     doc.setFontSize(18);
