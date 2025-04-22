@@ -20,74 +20,57 @@
 
       <!-- Intro Text -->
       <div class="subtext" style="margin-top: 1rem;">
-  <p><strong>StrapScan – AI-Powered Tie-Down Inspection Tool</strong></p>
-  <ul style="margin: 0.5rem 0 0.5rem 1.25rem; padding: 0; list-style-type: disc;">
-    <li style="margin-bottom: 0.4rem;">
-      Select the strap material and tie-down type to begin.
-    </li>
-    <li style="margin-bottom: 0.4rem;">
-      Upload a clear, close-up photo of the ID tag—ensure the serial number and markings are legible.
-    </li>
-    <li style="margin-bottom: 0.4rem;">
-      Upload a close-up photo of the area to be analyzed—focus on visible damage, wear, or label degradation.
-    </li>
-  </ul>
-  <p style="margin-top: 0.6rem;">
-    StrapScan uses AI trained on U.S. safety standards for ratchet straps and tie-downs to deliver pass/fail results in seconds.
-  </p>
-</div>
-
+        <p><strong>StrapScan – AI-Powered Tie-Down Inspection Tool</strong></p>
+        <ul style="margin: 0.5rem 0 0.5rem 1.25rem; padding: 0; list-style-type: disc;">
+          <li style="margin-bottom: 0.4rem;">Select the strap material and tie-down type to begin.</li>
+          <li style="margin-bottom: 0.4rem;">Upload a clear, close-up photo of the ID tag—ensure the serial number and markings are legible.</li>
+          <li style="margin-bottom: 0.4rem;">Upload a close-up photo of the area to be analyzed—focus on visible damage, wear, or label degradation.</li>
+        </ul>
+        <p style="margin-top: 0.6rem;">
+          StrapScan uses AI trained on U.S. safety standards for ratchet straps and tie-downs to deliver pass/fail results in seconds.
+        </p>
+      </div>
 
       <!-- Webbing Material + Product Type -->
-<div class="row">
-  <div class="half">
-    <label for="material">Webbing Material</label>
-    <select id="material">
-      <option>Polyester</option>
-      <option>Nylon</option>
-    </select>
-  </div>
+      <div class="row">
+        <div class="half">
+          <label for="material">Webbing Material</label>
+          <select id="material">
+            <option>Polyester</option>
+            <option>Nylon</option>
+          </select>
+        </div>
+        <div class="half">
+          <label for="use">Product Type</label>
+          <select id="use">
+            <option>Winch Strap</option>
+            <option>Ratchet Strap</option>
+            <option>Logistic Strap</option>
+          </select>
+        </div>
+      </div>
 
-  <div class="half">
-    <label for="use">Product Type</label>
-    <select id="use">
-      <option>Winch Strap</option>
-      <option>Ratchet Strap</option>
-      <option>Logistic Strap</option>
-    </select>
-  </div>
-</div>
+      <!-- Image Uploads -->
+      <div class="row">
+        <div class="half">
+          <label for="damageUpload">ID Tag Upload (Required)</label>
+          <input type="file" id="damageUpload" accept="image/*" />
+        </div>
+        <div class="half">
+          <label for="secondaryUpload">Analysis Image (Required)</label>
+          <input type="file" id="secondaryUpload" accept="image/*" />
+        </div>
+      </div>
 
-<!-- Inspection Type + Standards Box -->
-<div class="row">
-  <div class="half">
-    <label for="inspectionType">Inspection Type</label>
-    <select id="inspectionType">
-      <option value="damage" selected>Damage Analysis</option>
-      <option value="tag">Label Verification</option>
-    </select>
-  </div>
-
-  <div class="half">
-    <label>Inspection Standards</label>
-    <div class="standards-wrapper">
-      <div id="standardsBox" class="standards-note"></div>
-    </div>
-  </div>
-</div>
-
-<!-- Upload Image 1 + Image 2 -->
-<div class="row">
-  <div class="half">
-    <label for="damageUpload">ID Tag Upload (Required)</label>
-    <input type="file" id="damageUpload" accept="image/*" />
-  </div>
-
-  <div class="half">
-    <label for="secondaryUpload">Analysis Image (Required)</label>
-    <input type="file" id="secondaryUpload" accept="image/*" />
-  </div>
-</div>
+      <!-- Standards Full Width -->
+      <div class="row">
+        <div class="full-width">
+          <label>Inspection Standards</label>
+          <div class="standards-wrapper">
+            <div id="standardsBox" class="standards-note"></div>
+          </div>
+        </div>
+      </div>
 
       <!-- Image Preview -->
       <div class="row">
@@ -116,7 +99,6 @@
             Clear Signature
           </button>
         </div>
-
         <div class="half" style="display: flex; justify-content: center; align-items: center;">
           <p style="font-size: 14px; color: #444; line-height: 1.6; text-align: justify; margin: 0;">
             If you would like your PDF inspection report to include an electronic signature, please sign in the box provided before downloading. Signed reports can help support documentation in compliance and safety audits.
@@ -137,4 +119,3 @@
   </div>
 </body>
 </html>
-<!-- force vercel redeploy -->
