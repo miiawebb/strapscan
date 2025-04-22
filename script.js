@@ -1,6 +1,7 @@
 window.addEventListener("DOMContentLoaded", () => {
-  let signaturePad;
+  let signaturePad = null;
 
+  // Show the fixed inspection standards
   function showStandards() {
     const box = document.getElementById("standardsBox");
     if (box) {
@@ -11,6 +12,22 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Preview for Image 1 (ID Tag)
+  const fileInput1 = document.getElementById("damageUpload");
+  if (fileInput1) {
+    fileInput1.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        const preview = document.getElementById("damagePreview");
+        if (preview) {
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = "block";
+        }
+      }
+    });
+  }
+
+  // Run Inspection
   async function showResult() {
     const image1 = document.getElementById("damageUpload")?.files[0];
     const image2 = document.getElementById("secondaryUpload")?.files[0];
@@ -21,7 +38,8 @@ window.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    document.getElementById("processingMessage").style.display = "block";
+    const processingMessage = document.getElementById("processingMessage");
+    if (processingMessage) processingMessage.style.display = "block";
 
     const readAsBase64 = (file) =>
       new Promise((resolve, reject) => {
@@ -53,61 +71,60 @@ window.addEventListener("DOMContentLoaded", () => {
       const result = data.result;
 
       const resultBox = document.getElementById("resultBox");
-      resultBox.style.display = "block";
+      if (resultBox) {
+        resultBox.style.display = "block";
+        const cleanedResult = result.replace(/Detected Damage:.*$/im, "").trim();
+        resultBox.innerHTML = `<strong>AI Inspection Result:</strong><br>${cleanedResult}`;
 
-      const cleanedResult = result.replace(/Detected Damage:.*$/im, "").trim();
-      resultBox.innerHTML = `<strong>AI Inspection Result:</strong><br>${cleanedResult}`;
+        const damageMatch = result.match(/Detected Damage:\s*(.+)/i);
+        let detectedList = [];
+        if (damageMatch) {
+          const cleaned = damageMatch[1]
+            .replace(/[\[\]]/g, "")
+            .split(/[\n,]+/)
+            .map((d) => d.trim())
+            .filter(Boolean);
+          const listHtml = cleaned.map((d) => `<li>${d}</li>`).join("");
+          resultBox.innerHTML += `<br><br><strong>Detected Damage Types:</strong><ul>${listHtml}</ul>`;
+          detectedList = cleaned;
+        }
 
-      const damageMatch = result.match(/Detected Damage:\s*(.+)/i);
-      let detectedList = [];
-      if (damageMatch) {
-        const cleaned = damageMatch[1]
-          .replace(/[\[\]]/g, "")
-          .split(/[\n,]+/)
-          .map((d) => d.trim())
-          .filter(Boolean);
-        const listHtml = cleaned.map((d) => `<li>${d}</li>`).join("");
-        resultBox.innerHTML += `<br><br><strong>Detected Damage Types:</strong><ul>${listHtml}</ul>`;
-        detectedList = cleaned;
-      }
+        const cleanResult = result.toUpperCase().replace(/[^A-Z0-9 ]/g, "");
+        if (cleanResult.includes("FAIL")) {
+          resultBox.style.backgroundColor = "#fdecea";
+          resultBox.style.borderColor = "#f5c2c7";
+          resultBox.style.color = "#b02a37";
+        } else if (cleanResult.includes("PASS")) {
+          resultBox.style.backgroundColor = "#e8f5e9";
+          resultBox.style.borderColor = "#c8e6c9";
+          resultBox.style.color = "#256029";
+        } else {
+          resultBox.style.backgroundColor = "#E5EAEF";
+          resultBox.style.borderColor = "#ccc";
+          resultBox.style.color = "#222";
+        }
 
-      const cleanResult = result.toUpperCase().replace(/[^A-Z0-9 ]/g, "");
-      if (cleanResult.includes("FAIL")) {
-        resultBox.style.backgroundColor = "#fdecea";
-        resultBox.style.borderColor = "#f5c2c7";
-        resultBox.style.color = "#b02a37";
-      } else if (cleanResult.includes("PASS")) {
-        resultBox.style.backgroundColor = "#e8f5e9";
-        resultBox.style.borderColor = "#c8e6c9";
-        resultBox.style.color = "#256029";
-      } else {
-        resultBox.style.backgroundColor = "#E5EAEF";
-        resultBox.style.borderColor = "#ccc";
-        resultBox.style.color = "#222";
-      }
+        const downloadBtn = document.getElementById("downloadPdfBtn");
+        if (downloadBtn) {
+          downloadBtn.style.display = "inline-block";
+          downloadBtn.onclick = function () {
+            const signatureData = signaturePad && !signaturePad.isEmpty()
+              ? signaturePad.toDataURL("image/png")
+              : null;
 
-      document.getElementById("processingMessage").style.display = "none";
-
-      const downloadBtn = document.getElementById("downloadPdfBtn");
-      if (downloadBtn) {
-        downloadBtn.style.display = "inline-block";
-        downloadBtn.onclick = function () {
-          const signatureData = signaturePad && !signaturePad.isEmpty()
-            ? signaturePad.toDataURL("image/png")
-            : null;
-
-          generatePdfReport({
-            resultText: cleanedResult,
-            detected: detectedList,
-            image1: image1Base64,
-            image2: image2Base64,
-            material: payload.material,
-            productType: payload.productType,
-            inspectionType: payload.inspectionType,
-            status: cleanResult.includes("FAIL") ? "FAIL" : "PASS",
-            signatureData
-          });
-        };
+            generatePdfReport({
+              resultText: cleanedResult,
+              detected: detectedList,
+              image1: image1Base64,
+              image2: image2Base64,
+              material: payload.material,
+              productType: payload.productType,
+              inspectionType: payload.inspectionType,
+              status: cleanResult.includes("FAIL") ? "FAIL" : "PASS",
+              signatureData
+            });
+          };
+        }
       }
 
     } catch (err) {
@@ -121,22 +138,11 @@ window.addEventListener("DOMContentLoaded", () => {
         resultBox.innerHTML = `<strong>Error:</strong><br>Inspection failed. Try again later.`;
       }
     }
+
+    if (processingMessage) processingMessage.style.display = "none";
   }
 
-  const fileInput = document.getElementById("damageUpload");
-  if (fileInput) {
-    fileInput.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file && file.type.startsWith("image/")) {
-        const preview = document.getElementById("damagePreview");
-        if (preview) {
-          preview.src = URL.createObjectURL(file);
-          preview.style.display = "block";
-        }
-      }
-    });
-  }
-
+  // Signature setup
   const canvas = document.getElementById("signatureCanvas");
   if (canvas) {
     signaturePad = new SignaturePad(canvas, {
@@ -159,6 +165,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   showStandards();
 
+  // Make functions available globally if needed
   window.showResult = showResult;
   window.showStandards = showStandards;
 });
