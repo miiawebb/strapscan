@@ -162,7 +162,7 @@ async function generatePdfReport({ resultText, detected, image, material, produc
 
   bannerImg.onload = function () {
     doc.addImage(bannerImg, "JPEG", 0, 0, 210, 60); // full width, natural height
-    let yPos = 50;
+    let yPos = 70;
 
     doc.setFontSize(18);
     doc.setFont(undefined, "bold");
