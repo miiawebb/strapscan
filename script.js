@@ -46,6 +46,8 @@ window.addEventListener("DOMContentLoaded", () => {
       document.getElementById("damageResultBox")
     ];
 
+    const resultTexts = [];
+
     for (let i = 0; i < payloads.length; i++) {
       const { imageBase64, label } = payloads[i];
       const resultBox = i === 0 ? idResultBox : damageResultBox;
@@ -82,6 +84,8 @@ window.addEventListener("DOMContentLoaded", () => {
           resultBox.style.color = "#222";
         }
 
+        resultTexts.push(cleanedResult);
+
       } catch (err) {
         console.error(`${label} inspection error:`, err);
         resultBox.style.display = "block";
@@ -89,13 +93,35 @@ window.addEventListener("DOMContentLoaded", () => {
         resultBox.style.borderColor = "#ffeeba";
         resultBox.style.color = "#856404";
         resultBox.innerHTML = `<strong>${label} Inspection:</strong><br>Inspection failed. Try again later.`;
+        resultTexts.push("Inspection failed.");
       }
+    }
+
+    const downloadBtn = document.getElementById("downloadPdfBtn");
+    if (downloadBtn) {
+      downloadBtn.style.display = "inline-block";
+      downloadBtn.onclick = function () {
+        const signatureData = signaturePad && !signaturePad.isEmpty()
+          ? signaturePad.toDataURL("image/png")
+          : null;
+
+        generatePdfReport({
+          idTagResult: resultTexts[0],
+          damageResult: resultTexts[1],
+          image1: idBase64,
+          image2: damageBase64,
+          material: document.getElementById("material")?.value,
+          productType: document.getElementById("use")?.value,
+          status: 'INSPECTED',
+          signatureData
+        });
+      };
     }
 
     document.getElementById("processingMessage").style.display = "none";
   }
 
-  // Image Previews
+  // Image Preview
   document.getElementById("damageUpload")?.addEventListener("change", (e) => {
     const file = e.target.files[0];
     const preview = document.getElementById("damagePreview");
@@ -116,6 +142,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Signature pad setup
   const canvas = document.getElementById("signatureCanvas");
   if (canvas) {
     signaturePad = new SignaturePad(canvas, {
