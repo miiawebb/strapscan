@@ -249,3 +249,20 @@ document.getElementById("damageUpload").addEventListener("change", (e) => {
 window.addEventListener("DOMContentLoaded", () => {
   showStandards();
 });
+// Preview uploaded image
+document.getElementById("damageUpload").addEventListener("change", (e) => {
+  const file = e.target.files[0];
+  if (file && file.type.startsWith("image/")) {
+    const preview = document.getElementById("damagePreview");
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = "block";
+  }
+});
+
+// Make sure standards load on page ready
+window.addEventListener("DOMContentLoaded", () => {
+  showStandards();
+  document.getElementById("region").addEventListener("change", showStandards);
+  document.getElementById("use").addEventListener("change", showStandards);
+});
+
