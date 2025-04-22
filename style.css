@@ -178,6 +178,11 @@ button:focus {
   outline-offset: 2px;
 }
 
+#downloadPdfBtn {
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+
 /* Mobile */
 @media (max-width: 600px) {
   .row {
