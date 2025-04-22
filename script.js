@@ -3,17 +3,18 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function showStandards() {
     const box = document.getElementById("standardsBox");
-
-    box.innerHTML = `
-      <strong>Tie-Down Inspection Standards:</strong><br>
-      • WSTDA, FMCSA, OSHA, CVSA, DOT, CSA Z150, CCMTA
-    `;
+    if (box) {
+      box.innerHTML = `
+        <strong>Tie-Down Inspection Standards:</strong><br>
+        • WSTDA, FMCSA, OSHA, CVSA, DOT, CSA Z150, CCMTA
+      `;
+    }
   }
 
   async function showResult() {
-    const image1 = document.getElementById("damageUpload").files[0];
-    const image2 = document.getElementById("secondaryUpload").files[0];
-    const inspectionType = document.getElementById("inspectionType").value;
+    const image1 = document.getElementById("damageUpload")?.files[0];
+    const image2 = document.getElementById("secondaryUpload")?.files[0];
+    const inspectionType = document.getElementById("inspectionType")?.value;
 
     if (!image1 || !image2) {
       alert("Please upload both required images.");
@@ -33,17 +34,11 @@ window.addEventListener("DOMContentLoaded", () => {
     const image1Base64 = await readAsBase64(image1);
     const image2Base64 = await readAsBase64(image2);
 
-    if (!image1Base64.startsWith("data:image") || !image2Base64.startsWith("data:image")) {
-      alert("Both files must be valid images.");
-      document.getElementById("processingMessage").style.display = "none";
-      return;
-    }
-
     const payload = {
       imageBase64: image2Base64,
       labelImageBase64: image1Base64,
-      material: document.getElementById("material").value,
-      productType: document.getElementById("use").value,
+      material: document.getElementById("material")?.value,
+      productType: document.getElementById("use")?.value,
       inspectionType
     };
 
@@ -93,58 +88,75 @@ window.addEventListener("DOMContentLoaded", () => {
 
       document.getElementById("processingMessage").style.display = "none";
 
-      document.getElementById("downloadPdfBtn").style.display = "inline-block";
-      document.getElementById("downloadPdfBtn").onclick = function () {
-        const signatureData = signaturePad.isEmpty()
-          ? null
-          : signaturePad.toDataURL("image/png");
+      const downloadBtn = document.getElementById("downloadPdfBtn");
+      if (downloadBtn) {
+        downloadBtn.style.display = "inline-block";
+        downloadBtn.onclick = function () {
+          const signatureData = signaturePad && !signaturePad.isEmpty()
+            ? signaturePad.toDataURL("image/png")
+            : null;
 
-        generatePdfReport({
-          resultText: cleanedResult,
-          detected: detectedList,
-          image1: image1Base64,
-          image2: image2Base64,
-          material: payload.material,
-          productType: payload.productType,
-          inspectionType: payload.inspectionType,
-          status: cleanResult.includes("FAIL") ? "FAIL" : "PASS",
-          signatureData
-        });
-      };
+          generatePdfReport({
+            resultText: cleanedResult,
+            detected: detectedList,
+            image1: image1Base64,
+            image2: image2Base64,
+            material: payload.material,
+            productType: payload.productType,
+            inspectionType: payload.inspectionType,
+            status: cleanResult.includes("FAIL") ? "FAIL" : "PASS",
+            signatureData
+          });
+        };
+      }
+
     } catch (err) {
       console.error("Fetch failed:", err);
-      document.getElementById("processingMessage").style.display = "none";
       const resultBox = document.getElementById("resultBox");
-      resultBox.style.display = "block";
-      resultBox.style.backgroundColor = "#fff3cd";
-      resultBox.style.borderColor = "#ffeeba";
-      resultBox.style.color = "#856404";
-      resultBox.innerHTML = `<strong>Error:</strong><br>Inspection failed. Try again later.`;
+      if (resultBox) {
+        resultBox.style.display = "block";
+        resultBox.style.backgroundColor = "#fff3cd";
+        resultBox.style.borderColor = "#ffeeba";
+        resultBox.style.color = "#856404";
+        resultBox.innerHTML = `<strong>Error:</strong><br>Inspection failed. Try again later.`;
+      }
     }
   }
 
-  // Image preview for main image (image 2)
-  document.getElementById("damageUpload").addEventListener("change", (e) => {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith("image/")) {
-      const preview = document.getElementById("damagePreview");
-      preview.src = URL.createObjectURL(file);
-      preview.style.display = "block";
-    }
-  });
+  const fileInput = document.getElementById("damageUpload");
+  if (fileInput) {
+    fileInput.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        const preview = document.getElementById("damagePreview");
+        if (preview) {
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = "block";
+        }
+      }
+    });
+  }
 
-  // Initialize signature pad
   const canvas = document.getElementById("signatureCanvas");
-  signaturePad = new SignaturePad(canvas, {
-    backgroundColor: "#f8f8f8"
-  });
+  if (canvas) {
+    signaturePad = new SignaturePad(canvas, {
+      backgroundColor: "#f8f8f8"
+    });
+  }
 
-  document.getElementById("clearSignatureBtn").addEventListener("click", () => {
-    signaturePad.clear();
-  });
+  const clearBtn = document.getElementById("clearSignatureBtn");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      if (signaturePad) signaturePad.clear();
+    });
+  }
 
-  document.getElementById("use").addEventListener("change", showStandards);
-  document.getElementById("inspectionType").addEventListener("change", showStandards);
+  const useSelect = document.getElementById("use");
+  const inspectionTypeSelect = document.getElementById("inspectionType");
+
+  if (useSelect) useSelect.addEventListener("change", showStandards);
+  if (inspectionTypeSelect) inspectionTypeSelect.addEventListener("change", showStandards);
+
   showStandards();
 
   window.showResult = showResult;
