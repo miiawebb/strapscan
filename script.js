@@ -5,7 +5,6 @@ function showStandards() {
 
   let html = "";
 
-  // ✅ Updated for current dropdown options
   const isTieDown = use === "Tie Down / Ratchet Strap";
   const isSling = use === "Lifting Sling";
   const isTow = use === "Tow Strap / Recovery Strap";
@@ -49,7 +48,6 @@ function showStandards() {
 
   box.innerHTML = html;
 }
-
 
 async function showResult() {
   const damageFile = document.getElementById("damageUpload").files[0];
@@ -97,14 +95,18 @@ async function showResult() {
 
     const resultBox = document.getElementById("resultBox");
     resultBox.style.display = "block";
-    resultBox.innerHTML = `<strong>AI Inspection Result:</strong><br>${result}`;
-    // Add damage type breakdown if available
-const damageMatch = result.match(/Detected Damage:\s*(.+)/i);
-if (damageMatch) {
-  const damageList = damageMatch[1].split(',').map(d => d.trim());
-  const listHtml = damageList.map(d => `<li>${d}</li>`).join('');
-  resultBox.innerHTML += `<br><br><strong>Detected Damage Types:</strong><ul>${listHtml}</ul>`;
-}
+
+    // Strip the "Detected Damage: ..." line from raw result
+    const cleanedResult = result.replace(/Detected Damage:.*$/im, "").trim();
+    resultBox.innerHTML = `<strong>AI Inspection Result:</strong><br>${cleanedResult}`;
+
+    // Parse and display structured Detected Damage list
+    const damageMatch = result.match(/Detected Damage:\s*(.+)/i);
+    if (damageMatch) {
+      const damageList = damageMatch[1].split(',').map(d => d.trim());
+      const listHtml = damageList.map(d => `<li>${d}</li>`).join('');
+      resultBox.innerHTML += `<br><br><strong>Detected Damage Types:</strong><ul>${listHtml}</ul>`;
+    }
 
     const cleanResult = result.toUpperCase().replace(/[^A-Z0-9 ]/g, "");
 
