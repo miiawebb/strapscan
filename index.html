@@ -23,32 +23,32 @@
 
       <!-- Intro Text -->
       <p class="subtext">
-        Submit your strap or sling for inspection. StrapScan uses AI-powered visual analysis aligned with international safety standards. Upload a photo of the damaged area for AI-powered inspection.
+        Submit your strap or sling for inspection. StrapScan uses AI-powered visual analysis aligned with international safety standards. Upload a photo of the damaged area or tag for AI-powered inspection.
       </p>
 
-<!-- Webbing Material + Product Type -->
-<div class="row"> <!-- ✅ This wrapper was missing -->
-  <div class="half">
-    <label for="material">Webbing Material</label>
-    <select id="material">
-      <option>Polyester</option>
-      <option>Nylon</option>
-      <option>Polypropylene</option>
-      <option>Other</option>
-    </select>
-  </div>
+      <!-- Webbing Material + Product Type -->
+      <div class="row">
+        <div class="half">
+          <label for="material">Webbing Material</label>
+          <select id="material">
+            <option>Polyester</option>
+            <option>Nylon</option>
+            <option>Polypropylene</option>
+            <option>Other</option>
+          </select>
+        </div>
 
-  <div class="half">
-    <label for="use">Product Type</label>
-    <select id="use" onchange="showStandards()">
-      <option>Tie Down / Ratchet Strap</option>
-      <option>Tow Strap / Recovery Strap</option>
-      <option>Lifting Sling</option>
-    </select>
-  </div>
-</div>
+        <div class="half">
+          <label for="use">Product Type</label>
+          <select id="use" onchange="showStandards()">
+            <option>Tie Down / Ratchet Strap</option>
+            <option>Tow Strap / Recovery Strap</option>
+            <option>Lifting Sling</option>
+          </select>
+        </div>
+      </div>
 
-      <!-- Region + Notes -->
+      <!-- Region + Inspection Type -->
       <div class="row">
         <div class="half">
           <label for="region">Region</label>
@@ -59,15 +59,18 @@
         </div>
 
         <div class="half">
-          <label for="additional">Additional Information (optional)</label>
-          <textarea id="additional" rows="3" placeholder="Exposure to chemicals, unusual loading, wear history, last inspection date..."></textarea>
+          <label for="inspectionType">Inspection Type</label>
+          <select id="inspectionType">
+            <option value="damage" selected>Damage Area</option>
+            <option value="tag">Product Tag / Label</option>
+          </select>
         </div>
       </div>
 
       <!-- Upload + Standards -->
       <div class="row">
         <div class="half">
-          <label for="damageUpload">Upload Damaged Area Photo (Required)</label>
+          <label for="damageUpload">Upload Photo (Required)</label>
           <input type="file" id="damageUpload" accept="image/*" />
         </div>
 
