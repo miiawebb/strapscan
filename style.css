@@ -1,4 +1,4 @@
-/* Reset + base layout */
+/* Reset + base layout */ 
 html, body {
   padding: 0;
   margin: 0;
@@ -7,11 +7,12 @@ html, body {
   font-family: 'Segoe UI', sans-serif;
 }
 
+/* Subtext */
 .subtext {
   font-size: 0.9em;
   color: #555;
-  margin: 10px 0; /* reduce top/bottom spacing */
-  line-height: 1.4; /* tighter vertical line spacing */
+  margin: 10px 0;
+  line-height: 1.4;
 }
 
 /* Box sizing reset */
@@ -50,13 +51,6 @@ html, body {
   display: block;
   border-radius: 8px;
   object-fit: cover;
-}
-
-/* Subtext */
-.subtext {
-  font-size: 0.9em;
-  color: #555;
-  margin-bottom: 20px;
 }
 
 /* Labels */
@@ -122,7 +116,7 @@ textarea {
   border-radius: 6px;
   margin: 15px 0;
   width: 100%;
-  margin-top: 31px; /* 👈 tweak this manually to align with upload box */
+  margin-top: 31px;
 }
 
 /* Submit button */
@@ -136,7 +130,7 @@ button {
   border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
-  margin: 30px 0 15px; /* 👈 push it down from preview image */
+  margin: 30px 0 15px;
   transition: background-color 0.2s ease;
 }
 
@@ -183,6 +177,50 @@ button:focus {
   margin-bottom: 0px;
 }
 
+/* Signature section */
+.signature-section {
+  margin-top: 25px;
+}
+
+.signature-section label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.signature-pad-wrapper {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #f8f8f8;
+  padding: 10px;
+  position: relative;
+}
+
+#signatureCanvas {
+  width: 100%;
+  height: 150px;
+  background-color: #fff;
+  border-radius: 4px;
+  border: 1px solid #bbb;
+}
+
+#clearSignatureBtn {
+  margin-top: 12px;
+  background-color: #888;
+  color: white;
+  font-size: 13px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#clearSignatureBtn:hover {
+  background-color: #555;
+}
+
 /* Mobile */
 @media (max-width: 600px) {
   .row {
@@ -196,5 +234,9 @@ button:focus {
 
   .preview {
     max-height: 240px;
+  }
+
+  #signatureCanvas {
+    height: 120px;
   }
 }
