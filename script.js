@@ -151,3 +151,58 @@ document.getElementById("damageUpload").addEventListener("change", (e) => {
 window.addEventListener("DOMContentLoaded", () => {
   showStandards();
 });
+
+async function generatePdfReport({ resultText, detected, image, material, productType, region, notes, status }) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const dateStr = new Date().toLocaleString();
+
+  doc.setFontSize(18);
+  doc.text("StrapScan Inspection Report", 14, 20);
+
+  doc.setFontSize(12);
+  doc.text(`Date: ${dateStr}`, 14, 30);
+  doc.text(`Result: ${status}`, 14, 38);
+  doc.text(`Webbing Type: ${material}`, 14, 46);
+  doc.text(`Product Type: ${productType}`, 14, 54);
+  doc.text(`Region: ${region}`, 14, 62);
+
+  doc.setFont(undefined, "bold");
+  doc.text("Inspection Summary:", 14, 74);
+  doc.setFont(undefined, "normal");
+  doc.text(doc.splitTextToSize(resultText, 180), 14, 80);
+
+  if (detected.length > 0) {
+    const yStart = 90 + (doc.splitTextToSize(resultText, 180).length * 6);
+    doc.setFont(undefined, "bold");
+    doc.text("Detected Damage Types:", 14, yStart);
+    doc.setFont(undefined, "normal");
+    detected.forEach((d, i) => {
+      doc.text(`• ${d}`, 18, yStart + 8 + (i * 6));
+    });
+  }
+
+  if (notes) {
+    const noteStart = 120 + (detected.length * 6);
+    doc.setFont(undefined, "bold");
+    doc.text("User Notes:", 14, noteStart);
+    doc.setFont(undefined, "normal");
+    doc.text(doc.splitTextToSize(notes, 180), 14, noteStart + 6);
+  }
+
+  // Image preview
+  if (image && image.startsWith("data:image")) {
+    const imgY = 180;
+    doc.setFont(undefined, "bold");
+    doc.text("Uploaded Image:", 14, imgY - 6);
+    doc.addImage(image, "JPEG", 14, imgY, 60, 60);
+  }
+
+  // Footer
+  doc.setFontSize(10);
+  doc.setTextColor(100);
+  doc.text("This report was generated using AI-assisted visual inspection. Final safety assessment must be made by a qualified professional.", 14, 280);
+
+  doc.save(`StrapScan_Report_${status}_${Date.now()}.pdf`);
+}
