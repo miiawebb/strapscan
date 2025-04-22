@@ -14,19 +14,19 @@ window.addEventListener("DOMContentLoaded", () => {
 
     if (region === "us") {
       if (isTieDown) {
-        html = `<strong>🇺🇸 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>• FMCSA, DOT, NHTSA, WSTDA, OSHA`;
+        html = `<strong>Tie-Down / Ratchet Strap Inspection Standards (US):</strong><br>• FMCSA, DOT, NHTSA, WSTDA, OSHA`;
       } else if (isSling) {
-        html = `<strong>🇺🇸 Lifting Sling Inspection Standards:</strong><br>• OSHA, ASME B30, ANSI, WSTDA, NACM, ASTM`;
+        html = `<strong>Lifting Sling Inspection Standards (US):</strong><br>• OSHA, ASME B30, ANSI, WSTDA, NACM, ASTM`;
       } else if (isTow) {
-        html = `<strong>🇺🇸 Towing / Recovery Strap Best Practices:</strong><br>• Recommended: OSHA, ASME B30, WSTDA`;
+        html = `<strong>Towing / Recovery Strap Best Practices (US):</strong><br>• Recommended: OSHA, ASME B30, WSTDA`;
       }
     } else if (region === "ca") {
       if (isTieDown) {
-        html = `<strong>🇨🇦 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>• Transport Canada, CCMTA, NSC 10, CVSA, CSA`;
+        html = `<strong>Tie-Down / Ratchet Strap Inspection Standards (CA):</strong><br>• Transport Canada, CCMTA, NSC 10, CVSA, CSA`;
       } else if (isSling) {
-        html = `<strong>🇨🇦 Lifting Sling Inspection Standards:</strong><br>• CSA B167, ASME B30, ANSI, CCOHS`;
+        html = `<strong>Lifting Sling Inspection Standards (CA):</strong><br>• CSA B167, ASME B30, ANSI, CCOHS`;
       } else if (isTow) {
-        html = `<strong>🇨🇦 Towing / Recovery Strap Best Practices:</strong><br>No specific federal regs.<br>Recommended: CSA B167, ASME B30, Provincial OHS`;
+        html = `<strong>Towing / Recovery Strap Best Practices (CA):</strong><br>No specific federal regs. Recommended: CSA B167, ASME B30, Provincial OHS`;
       }
     }
 
@@ -35,8 +35,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   async function showResult() {
     const damageFile = document.getElementById("damageUpload").files[0];
-    const inspectionType = document.getElementById("inspectionType").value;
-
     if (!damageFile) {
       alert("Please upload the damaged area photo.");
       return;
@@ -53,7 +51,6 @@ window.addEventListener("DOMContentLoaded", () => {
       });
 
     const damageBase64 = await readAsBase64(damageFile);
-
     if (!damageBase64.startsWith("data:image")) {
       alert("The uploaded file is not a valid image.");
       document.getElementById("processingMessage").style.display = "none";
@@ -65,7 +62,7 @@ window.addEventListener("DOMContentLoaded", () => {
       material: document.getElementById("material").value,
       productType: document.getElementById("use").value,
       region: document.getElementById("region").value,
-      inspectionType
+      inspectionType: document.getElementById("inspectionType")?.value || "damage"
     };
 
     try {
@@ -77,7 +74,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
       const data = await res.json();
       const result = data.result;
-
       const resultBox = document.getElementById("resultBox");
       resultBox.style.display = "block";
 
@@ -85,53 +81,51 @@ window.addEventListener("DOMContentLoaded", () => {
       resultBox.innerHTML = `<strong>AI Inspection Result:</strong><br>${cleanedResult}`;
 
       const damageMatch = result.match(/Detected Damage:\s*(.+)/i);
-      let detectedList = [];
-      if (damageMatch) {
-        const cleaned = damageMatch[1]
-          .replace(/[\[\]]/g, '')
-          .split(/[\n,]+/)
-          .map(d => d.trim())
-          .filter(Boolean);
+      const detectedList = damageMatch
+        ? damageMatch[1]
+            .replace(/[\[\]]/g, '')
+            .split(/[\n,]+/)
+            .map((d) => d.trim())
+            .filter(Boolean)
+        : [];
 
-        const listHtml = cleaned.map(d => `<li>${d}</li>`).join('');
+      if (detectedList.length > 0) {
+        const listHtml = detectedList.map((d) => `<li>${d}</li>`).join('');
         resultBox.innerHTML += `<br><br><strong>Detected Damage Types:</strong><ul>${listHtml}</ul>`;
-        detectedList = cleaned;
       }
 
       const cleanResult = result.toUpperCase().replace(/[^A-Z0-9 ]/g, "");
-      if (cleanResult.includes("FAIL")) {
-        resultBox.style.backgroundColor = "#fdecea";
-        resultBox.style.borderColor = "#f5c2c7";
-        resultBox.style.color = "#b02a37";
-      } else if (cleanResult.includes("PASS")) {
-        resultBox.style.backgroundColor = "#e8f5e9";
-        resultBox.style.borderColor = "#c8e6c9";
-        resultBox.style.color = "#256029";
-      } else {
-        resultBox.style.backgroundColor = "#E5EAEF";
-        resultBox.style.borderColor = "#ccc";
-        resultBox.style.color = "#222";
-      }
+      const status = cleanResult.includes("FAIL") ? "FAIL" : "PASS";
+      resultBox.style.backgroundColor = status === "FAIL" ? "#fdecea" : "#e8f5e9";
+      resultBox.style.borderColor = status === "FAIL" ? "#f5c2c7" : "#c8e6c9";
+      resultBox.style.color = status === "FAIL" ? "#b02a37" : "#256029";
 
       document.getElementById("processingMessage").style.display = "none";
 
       document.getElementById("downloadPdfBtn").style.display = "inline-block";
-      document.getElementById("downloadPdfBtn").onclick = function () {
-        const signatureData = signaturePad.isEmpty()
-          ? null
-          : signaturePad.toDataURL("image/png");
+      document.getElementById("downloadPdfBtn").onclick = async function () {
+        const signatureData = signaturePad && !signaturePad.isEmpty()
+          ? signaturePad.toDataURL("image/png")
+          : null;
 
-        generatePdfReport({
-          resultText: cleanedResult,
-          detected: detectedList,
-          image: document.getElementById("damagePreview").src,
-          material: payload.material,
-          productType: payload.productType,
-          region: payload.region,
-          inspectionType: payload.inspectionType,
-          status: cleanResult.includes("FAIL") ? "FAIL" : "PASS",
-          signatureData
-        });
+        const imageElement = document.getElementById("damagePreview");
+        const finalImage = new Image();
+        finalImage.crossOrigin = "anonymous";
+        finalImage.src = imageElement.src;
+
+        finalImage.onload = () => {
+          generatePdfReport({
+            resultText: cleanedResult,
+            detected: detectedList,
+            image: finalImage,
+            material: payload.material,
+            productType: payload.productType,
+            region: payload.region,
+            inspectionType: payload.inspectionType,
+            status,
+            signatureData
+          });
+        };
       };
     } catch (err) {
       console.error("Fetch failed:", err);
@@ -149,102 +143,90 @@ window.addEventListener("DOMContentLoaded", () => {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
-    const banner = new Image();
-    banner.crossOrigin = "anonymous";
-    banner.src = "https://i.imgur.com/xCVtL06.jpeg";
+    const timestamp = new Date();
+    const formattedDate = timestamp.toLocaleDateString();
+    const formattedTime = timestamp.toLocaleTimeString();
 
-    banner.onload = () => {
-      doc.addImage(banner, "JPEG", 0, 0, 210, 60);
-      let yPos = 70;
+    const isPortrait = image.height > image.width;
+    const maxImageWidth = isPortrait ? 160 : 90;
+    const maxImageHeight = isPortrait ? 90 : 70;
 
-      const timestamp = new Date();
-      const formattedDate = timestamp.toLocaleDateString();
-      const formattedTime = timestamp.toLocaleTimeString();
+    // Header
+    doc.setFontSize(18);
+    doc.setFont(undefined, "bold");
+    doc.text("StrapScan Inspection Report", 14, 20);
 
-      doc.setFontSize(18);
+    // Table-style layout
+    doc.setFontSize(12);
+    doc.setFont(undefined, "normal");
+
+    let y = 30;
+
+    if (!isPortrait) {
+      // Landscape layout: table left, image right
+      doc.text(`Date: ${formattedDate}`, 14, y);
+      doc.text(`Time: ${formattedTime}`, 14, y + 6);
+      doc.text(`Material: ${material}`, 14, y + 12);
+      doc.text(`Type: ${productType}`, 14, y + 18);
+      doc.text(`Region: ${region}`, 14, y + 24);
+      doc.text(`Inspection: ${inspectionType}`, 14, y + 30);
+      doc.addImage(image, "JPEG", 120, y, maxImageWidth, maxImageHeight);
+      y += 42;
+    } else {
+      // Portrait layout: table full-width, image below
+      doc.text(`Date: ${formattedDate}    Time: ${formattedTime}`, 14, y);
+      y += 8;
+      doc.text(`Material: ${material}`, 14, y += 6);
+      doc.text(`Type: ${productType}`, 14, y += 6);
+      doc.text(`Region: ${region}`, 14, y += 6);
+      doc.text(`Inspection: ${inspectionType}`, 14, y += 6);
+      doc.addImage(image, "JPEG", 14, y += 10, maxImageWidth, maxImageHeight);
+      y += maxImageHeight + 4;
+    }
+
+    // Outcome + Summary
+    doc.setFont(undefined, "bold");
+    doc.text("Inspection Outcome:", 14, y += 10);
+    doc.setFont(undefined, "normal");
+    doc.text(status === "FAIL" ? "FAIL – should be removed from service" : "PASS – suitable for continued use", 14, y += 6);
+
+    doc.setFont(undefined, "bold");
+    doc.text("Summary", 14, y += 10);
+    doc.setFont(undefined, "normal");
+    const summaryLines = doc.splitTextToSize(resultText, 180);
+    doc.text(summaryLines, 14, y += 6);
+    y += summaryLines.length * 6;
+
+    if (detected.length > 0) {
       doc.setFont(undefined, "bold");
-      doc.text("StrapScan Inspection Report", 14, yPos);
-      yPos += 12;
-
-      doc.setFontSize(12);
+      doc.text("Detected Damage", 14, y += 8);
       doc.setFont(undefined, "normal");
-      doc.text(`Inspection Timestamp:`, 14, yPos);
-      doc.text(`${formattedDate} – ${formattedTime}`, 60, yPos);
-      yPos += 10;
+      detected.forEach(d => doc.text(`• ${d}`, 18, y += 6));
+    }
 
+    // Signature
+    if (signatureData) {
       doc.setFont(undefined, "bold");
-      doc.text("Inspection Outcome:", 14, yPos);
-      doc.setFont(undefined, "normal");
-      doc.text(status === "FAIL" ? "FAIL" : "PASS", 60, yPos);
-      yPos += 10;
+      doc.text("Inspector Signature", 14, y += 12);
+      doc.addImage(signatureData, "PNG", 14, y += 4, 80, 20);
+      y += 30;
+    }
 
-      doc.setFont(undefined, "bold");
-      doc.text("Item Details", 14, yPos);
-      yPos += 8;
-      doc.setFont(undefined, "normal");
-      doc.text(`Webbing Type: ${material}`, 14, yPos);
-      yPos += 6;
-      doc.text(`Product Classification: ${productType}`, 14, yPos);
-      yPos += 6;
-      doc.text(`Inspection Region: ${region}`, 14, yPos);
-      yPos += 10;
+    // Disclaimer
+    doc.setFontSize(9);
+    doc.setTextColor(100);
+    doc.setFont(undefined, "normal");
+    const disclaimer = `This inspection report was automatically generated using AI-assisted image analysis technology provided by StrapScan. It is designed to assist in preliminary visual evaluations of synthetic webbing products.\n\nStrapScan is not a certified inspection method and should not replace formal evaluations by qualified professionals. This result is based solely on visible image data and may not reflect internal damage or degradation.\n\nUse this report as part of a broader, standards-compliant inspection program. © 2025 StrapScan. All rights reserved.`;
+    const disclaimerLines = doc.splitTextToSize(disclaimer, 180);
+    doc.text(disclaimerLines, 14, Math.min(y + 12, 270));
 
-      doc.setFont(undefined, "bold");
-      doc.text("Inspection Focus", 14, yPos);
-      doc.setFont(undefined, "normal");
-      doc.text(inspectionType === "tag" ? "Product Tag / Label" : "Damage Area", 14, yPos += 6);
-      yPos += 8;
-
-      doc.setFont(undefined, "bold");
-      doc.text("Inspection Summary", 14, yPos);
-      yPos += 8;
-      doc.setFont(undefined, "normal");
-      const resultLines = doc.splitTextToSize(`Result: Inspection ${status === "FAIL" ? "Failed" : "Passed"}\n${resultText}`, 180);
-      doc.text(resultLines, 14, yPos);
-      yPos += resultLines.length * 6;
-
-      if (status === "FAIL" && detected.length > 0) {
-        doc.setFont(undefined, "bold");
-        doc.text("Detected Damage Types", 14, yPos += 10);
-        doc.setFont(undefined, "normal");
-        detected.forEach((d) => {
-          doc.text(`• ${d}`, 18, yPos += 6);
-        });
-      }
-
-      doc.setFont(undefined, "bold");
-      doc.text("Final Recommendation", 14, yPos += 12);
-      doc.setFont(undefined, "normal");
-      const recommendation = status === "FAIL"
-        ? "Action Required: This strap is not safe for continued use. It must be taken out of service and replaced. Use of damaged webbing can result in catastrophic failure under load, posing serious risk to personnel and equipment."
-        : "No action required: This strap passed the visual inspection and shows no signs of critical damage. Continue regular monitoring as part of your safety protocol.";
-      const recLines = doc.splitTextToSize(recommendation, 180);
-      doc.text(recLines, 14, yPos += 8);
-      yPos += recLines.length * 6;
-
-      if (signatureData) {
-        doc.setFont(undefined, "bold");
-        doc.text("Inspector Signature", 14, yPos += 12);
-        doc.addImage(signatureData, "PNG", 14, yPos + 4, 80, 20);
-        yPos += 30;
-      }
-
-      doc.setFontSize(9);
-      doc.setTextColor(100);
-      doc.setFont(undefined, "normal");
-      const disclaimer = `This inspection report was automatically generated using AI-assisted image analysis technology provided by StrapScan. It is designed to assist in preliminary visual evaluations of synthetic webbing products.\n\nStrapScan is not a certified inspection method and should not replace formal evaluations by qualified professionals. This result is based solely on visible image data and may not reflect internal damage or degradation.\n\nUse this report as part of a broader, standards-compliant inspection program. © 2025 StrapScan. All rights reserved.`;
-      const disclaimerLines = doc.splitTextToSize(disclaimer, 180);
-      doc.text(disclaimerLines, 14, Math.min(yPos + 12, 270));
-
-      doc.save(`StrapScan_Report_${status}_${Date.now()}.pdf`);
-    };
+    doc.save(`StrapScan_Report_${status}_${Date.now()}.pdf`);
   }
 
-  // Expose core functions
+  // Hook everything up
   window.showResult = showResult;
   window.showStandards = showStandards;
 
-  // Preview uploaded image
   document.getElementById("damageUpload").addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -254,15 +236,15 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Initialize Signature Pad
   const canvas = document.getElementById("signatureCanvas");
-  signaturePad = new SignaturePad(canvas, {
-    backgroundColor: "#f8f8f8"
-  });
-
-  document.getElementById("clearSignatureBtn").addEventListener("click", () => {
-    signaturePad.clear();
-  });
+  if (canvas) {
+    signaturePad = new SignaturePad(canvas, {
+      backgroundColor: "#fff"
+    });
+    document.getElementById("clearSignatureBtn").addEventListener("click", () => {
+      signaturePad.clear();
+    });
+  }
 
   document.getElementById("region").addEventListener("change", showStandards);
   document.getElementById("use").addEventListener("change", showStandards);
