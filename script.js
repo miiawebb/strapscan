@@ -1,7 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
   let signaturePad = null;
 
-  // Show the fixed inspection standards
   function showStandards() {
     const box = document.getElementById("standardsBox");
     if (box) {
@@ -12,29 +11,12 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Preview for Image 1 (ID Tag)
-  const fileInput1 = document.getElementById("damageUpload");
-  if (fileInput1) {
-    fileInput1.addEventListener("change", (e) => {
-      const file = e.target.files[0];
-      if (file && file.type.startsWith("image/")) {
-        const preview = document.getElementById("damagePreview");
-        if (preview) {
-          preview.src = URL.createObjectURL(file);
-          preview.style.display = "block";
-        }
-      }
-    });
-  }
-
-  // Run Inspection
   async function showResult() {
     const image1 = document.getElementById("damageUpload")?.files[0];
-    const image2 = document.getElementById("secondaryUpload")?.files[0];
     const inspectionType = document.getElementById("inspectionType")?.value;
 
-    if (!image1 || !image2) {
-      alert("Please upload both required images.");
+    if (!image1) {
+      alert("Please upload the required image.");
       return;
     }
 
@@ -50,11 +32,9 @@ window.addEventListener("DOMContentLoaded", () => {
       });
 
     const image1Base64 = await readAsBase64(image1);
-    const image2Base64 = await readAsBase64(image2);
 
     const payload = {
-      imageBase64: image2Base64,
-      labelImageBase64: image1Base64,
+      imageBase64: image1Base64,
       material: document.getElementById("material")?.value,
       productType: document.getElementById("use")?.value,
       inspectionType
@@ -116,7 +96,6 @@ window.addEventListener("DOMContentLoaded", () => {
               resultText: cleanedResult,
               detected: detectedList,
               image1: image1Base64,
-              image2: image2Base64,
               material: payload.material,
               productType: payload.productType,
               inspectionType: payload.inspectionType,
@@ -142,7 +121,30 @@ window.addEventListener("DOMContentLoaded", () => {
     if (processingMessage) processingMessage.style.display = "none";
   }
 
-  // Signature setup
+  // Preview for primary image
+  const fileInput1 = document.getElementById("damageUpload");
+  if (fileInput1) {
+    fileInput1.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith("image/")) {
+        const preview = document.getElementById("damagePreview");
+        if (preview) {
+          preview.src = URL.createObjectURL(file);
+          preview.style.display = "block";
+        }
+      }
+    });
+  }
+
+  // Placeholder for secondary image (not active yet)
+  const secondaryInput = document.getElementById("secondaryUpload");
+  if (secondaryInput) {
+    secondaryInput.addEventListener("change", () => {
+      console.log("Secondary image uploaded (placeholder only)");
+    });
+  }
+
+  // Signature capture
   const canvas = document.getElementById("signatureCanvas");
   if (canvas) {
     signaturePad = new SignaturePad(canvas, {
@@ -165,7 +167,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   showStandards();
 
-  // Make functions available globally if needed
   window.showResult = showResult;
   window.showStandards = showStandards;
 });
