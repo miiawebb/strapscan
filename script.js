@@ -121,7 +121,7 @@ window.addEventListener("DOMContentLoaded", () => {
     if (processingMessage) processingMessage.style.display = "none";
   }
 
-  // Preview for primary image
+  // Primary image preview
   const fileInput1 = document.getElementById("damageUpload");
   if (fileInput1) {
     fileInput1.addEventListener("change", (e) => {
@@ -136,15 +136,15 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Placeholder for secondary image (not active yet)
+  // Placeholder handler for secondary image
   const secondaryInput = document.getElementById("secondaryUpload");
   if (secondaryInput) {
     secondaryInput.addEventListener("change", () => {
-      console.log("Secondary image uploaded (placeholder only)");
+      console.log("Secondary image selected (placeholder only)");
     });
   }
 
-  // Signature capture
+  // Signature pad setup
   const canvas = document.getElementById("signatureCanvas");
   if (canvas) {
     signaturePad = new SignaturePad(canvas, {
