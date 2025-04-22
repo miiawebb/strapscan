@@ -16,19 +16,19 @@ window.addEventListener("DOMContentLoaded", () => {
 
     if (region === "us") {
       if (isTieDown) {
-        html = "<strong>Tie-Down / Ratchet Strap Inspection Standards (US):</strong><br>• FMCSA, DOT, NHTSA, WSTDA, OSHA";
+        html = "<strong>🇺🇸 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>• FMCSA, DOT, NHTSA, WSTDA, OSHA";
       } else if (isSling) {
-        html = "<strong>Lifting Sling Inspection Standards (US):</strong><br>• OSHA, ASME B30, ANSI, WSTDA, NACM, ASTM";
+        html = "<strong>🇺🇸 Lifting Sling Inspection Standards:</strong><br>• OSHA, ASME B30, ANSI, WSTDA, NACM, ASTM";
       } else if (isTow) {
-        html = "<strong>Towing / Recovery Strap Best Practices (US):</strong><br>• Recommended: OSHA, ASME B30, WSTDA";
+        html = "<strong>🇺🇸 Towing / Recovery Strap Best Practices:</strong><br>• Recommended: OSHA, ASME B30, WSTDA";
       }
     } else if (region === "ca") {
       if (isTieDown) {
-        html = "<strong>Tie-Down / Ratchet Strap Inspection Standards (CA):</strong><br>• Transport Canada, CCMTA, NSC 10, CVSA, CSA";
+        html = "<strong>🇨🇦 Tie-Down / Ratchet Strap Inspection Standards:</strong><br>• Transport Canada, CCMTA, NSC 10, CVSA, CSA";
       } else if (isSling) {
-        html = "<strong>Lifting Sling Inspection Standards (CA):</strong><br>• CSA B167, ASME B30, ANSI, CCOHS";
+        html = "<strong>🇨🇦 Lifting Sling Inspection Standards:</strong><br>• CSA B167, ASME B30, ANSI, CCOHS";
       } else if (isTow) {
-        html = "<strong>Towing / Recovery Strap Best Practices (CA):</strong><br>No specific federal regs. Recommended: CSA B167, ASME B30, Provincial OHS";
+        html = "<strong>🇨🇦 Towing / Recovery Strap Best Practices:</strong><br>No specific federal regs.<br>Recommended: CSA B167, ASME B30, Provincial OHS";
       }
     }
 
@@ -36,8 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   async function showResult() {
-    const fileInput = document.getElementById("damageUpload");
-    const damageFile = fileInput?.files?.[0];
+    const damageFile = document.getElementById("damageUpload")?.files?.[0];
     if (!damageFile) {
       alert("Please upload the damaged area photo.");
       return;
@@ -139,10 +138,7 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("processingMessage").style.display = "none";
   }
 
-  // Generate PDF function placeholder (already built in previous step)
-  window.generatePdfReport = generatePdfReport;
-
-  // Hook image preview
+  // Show image preview
   document.getElementById("damageUpload").addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -152,15 +148,21 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Signature pad
   const canvas = document.getElementById("signatureCanvas");
   if (canvas) {
     signaturePad = new SignaturePad(canvas, { backgroundColor: "#fff" });
     document.getElementById("clearSignatureBtn").addEventListener("click", () => signaturePad.clear());
   }
 
+  // Event bindings
   document.getElementById("region").addEventListener("change", showStandards);
   document.getElementById("use").addEventListener("change", showStandards);
+  document.getElementById("inspectionType").addEventListener("change", showStandards);
+
+  // Expose functions
   window.showResult = showResult;
   window.showStandards = showStandards;
-  showStandards();
+
+  showStandards(); // init
 });
