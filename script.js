@@ -1,4 +1,6 @@
 window.addEventListener("DOMContentLoaded", () => {
+  let signaturePad;
+
   function showStandards() {
     const region = document.getElementById("region").value;
     const use = document.getElementById("use").value;
@@ -83,15 +85,17 @@ window.addEventListener("DOMContentLoaded", () => {
       resultBox.innerHTML = `<strong>AI Inspection Result:</strong><br>${cleanedResult}`;
 
       const damageMatch = result.match(/Detected Damage:\s*(.+)/i);
+      let detectedList = [];
       if (damageMatch) {
         const cleaned = damageMatch[1]
-          .replace(/[\[\]]/g, '')       // remove square brackets
-          .split(/[\n,]+/)              // split by newline or comma
+          .replace(/[\[\]]/g, '')
+          .split(/[\n,]+/)
           .map(d => d.trim())
-          .filter(Boolean);             // remove any empty entries
+          .filter(Boolean);
 
         const listHtml = cleaned.map(d => `<li>${d}</li>`).join('');
         resultBox.innerHTML += `<br><br><strong>Detected Damage Types:</strong><ul>${listHtml}</ul>`;
+        detectedList = cleaned;
       }
 
       const cleanResult = result.toUpperCase().replace(/[^A-Z0-9 ]/g, "");
@@ -113,21 +117,20 @@ window.addEventListener("DOMContentLoaded", () => {
 
       document.getElementById("downloadPdfBtn").style.display = "inline-block";
       document.getElementById("downloadPdfBtn").onclick = function () {
+        const signatureData = signaturePad.isEmpty()
+          ? null
+          : signaturePad.toDataURL("image/png");
+
         generatePdfReport({
           resultText: cleanedResult,
-          detected: damageMatch
-            ? damageMatch[1]
-                .replace(/[\[\]]/g, '')
-                .split(/[\n,]+/)
-                .map(d => d.trim())
-                .filter(Boolean)
-            : [],
+          detected: detectedList,
           image: document.getElementById("damagePreview").src,
           material: payload.material,
           productType: payload.productType,
           region: payload.region,
           inspectionType: payload.inspectionType,
-          status: cleanResult.includes("FAIL") ? "FAIL" : "PASS"
+          status: cleanResult.includes("FAIL") ? "FAIL" : "PASS",
+          signatureData
         });
       };
     } catch (err) {
@@ -142,7 +145,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function generatePdfReport({ resultText, detected, image, material, productType, region, inspectionType, status }) {
+  function generatePdfReport({ resultText, detected, image, material, productType, region, inspectionType, status, signatureData }) {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF();
 
@@ -219,6 +222,13 @@ window.addEventListener("DOMContentLoaded", () => {
       doc.text(recLines, 14, yPos += 8);
       yPos += recLines.length * 6;
 
+      if (signatureData) {
+        doc.setFont(undefined, "bold");
+        doc.text("Inspector Signature", 14, yPos += 12);
+        doc.addImage(signatureData, "PNG", 14, yPos + 4, 80, 20);
+        yPos += 30;
+      }
+
       doc.setFontSize(9);
       doc.setTextColor(100);
       doc.setFont(undefined, "normal");
@@ -230,9 +240,11 @@ window.addEventListener("DOMContentLoaded", () => {
     };
   }
 
+  // Expose core functions
   window.showResult = showResult;
   window.showStandards = showStandards;
 
+  // Preview uploaded image
   document.getElementById("damageUpload").addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -240,6 +252,16 @@ window.addEventListener("DOMContentLoaded", () => {
       preview.src = URL.createObjectURL(file);
       preview.style.display = "block";
     }
+  });
+
+  // Initialize Signature Pad
+  const canvas = document.getElementById("signatureCanvas");
+  signaturePad = new SignaturePad(canvas, {
+    backgroundColor: "#f8f8f8"
+  });
+
+  document.getElementById("clearSignatureBtn").addEventListener("click", () => {
+    signaturePad.clear();
   });
 
   document.getElementById("region").addEventListener("change", showStandards);
