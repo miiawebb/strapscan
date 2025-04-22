@@ -1,4 +1,4 @@
-/* Reset + base layout */ 
+/* Reset + Base Layout */
 html, body {
   padding: 0;
   margin: 0;
@@ -7,27 +7,17 @@ html, body {
   font-family: 'Segoe UI', sans-serif;
 }
 
-/* Subtext */
-.subtext {
-  font-size: 0.9em;
-  color: #555;
-  margin: 10px 0;
-  line-height: 1.4;
-}
-
-/* Box sizing reset */
 *, *::before, *::after {
   box-sizing: border-box;
 }
 
-/* Wrapper to center everything */
+/* Page Layout */
 .flex-wrapper {
   display: flex;
   justify-content: center;
   padding: 30px;
 }
 
-/* Main container */
 .ai-inspector {
   background: #fff;
   padding: 24px;
@@ -37,7 +27,7 @@ html, body {
   border-radius: 12px;
 }
 
-/* Banner image */
+/* Banner */
 .strapscan-header {
   width: 100%;
   overflow: hidden;
@@ -53,7 +43,14 @@ html, body {
   object-fit: cover;
 }
 
-/* Labels */
+/* Text */
+.subtext {
+  font-size: 0.9em;
+  color: #555;
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
 label {
   font-weight: 600;
   margin-top: 14px;
@@ -61,7 +58,7 @@ label {
   font-size: 14px;
 }
 
-/* Inputs */
+/* Form Inputs */
 input[type="file"],
 select,
 textarea {
@@ -77,7 +74,7 @@ textarea {
   resize: vertical;
 }
 
-/* Grid layout */
+/* Layout Grid */
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -95,18 +92,27 @@ textarea {
   flex: 1 1 100%;
 }
 
-/* Image preview */
-.preview {
-  display: block;
+/* Preview Images (Optimized) */
+.preview-box {
+  height: 240px;
   width: 100%;
-  max-height: 300px;
-  border-radius: 8px;
   border: 1px solid #bbb;
-  object-fit: contain;
+  border-radius: 8px;
   background-color: #f2f2f2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
-/* Standards note */
+.preview-box img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* Standards Box */
 .standards-note {
   background: #E5EAEF;
   border-left: 4px solid #000;
@@ -114,12 +120,11 @@ textarea {
   font-size: 13px;
   color: #222;
   border-radius: 6px;
-  margin: 15px 0;
+  margin: 10px 0 0;
   width: 100%;
-  margin-top: 10px;
 }
 
-/* Submit button */
+/* Buttons */
 button {
   background-color: #000;
   color: #fff;
@@ -138,7 +143,11 @@ button:hover {
   background-color: #222;
 }
 
-/* Result box */
+#downloadPdfBtn {
+  margin-top: 15px;
+}
+
+/* Result Box */
 .result-box {
   margin: 15px 0;
   padding: 16px;
@@ -148,10 +157,9 @@ button:hover {
   display: none;
   font-size: 14px;
   color: #222;
-  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }
 
-/* Disclaimer box */
+/* Disclaimer */
 .disclaimer-box {
   background: #E5EAEF;
   border: 1px solid #ccc;
@@ -163,46 +171,17 @@ button:hover {
   line-height: 1.6;
 }
 
-/* Accessibility */
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
-  outline: 2px solid #66afe9;
-  outline-offset: 2px;
-}
-
-#downloadPdfBtn {
-  margin-top: 15px;
-  margin-bottom: 0px;
-}
-
-/* Signature section */
+/* Signature Pad */
 .signature-section {
   margin-top: 25px;
-}
-
-.signature-section label {
-  font-weight: 600;
-  font-size: 14px;
-  margin-bottom: 8px;
-  display: block;
-}
-
-.signature-pad-wrapper {
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #f8f8f8;
-  padding: 10px;
-  position: relative;
 }
 
 #signatureCanvas {
   width: 100%;
   height: 150px;
   background-color: #fff;
-  border-radius: 4px;
   border: 1px solid #bbb;
+  border-radius: 4px;
 }
 
 #clearSignatureBtn {
@@ -221,7 +200,16 @@ button:focus {
   background-color: #555;
 }
 
-/* Mobile */
+/* Accessibility */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: 2px solid #66afe9;
+  outline-offset: 2px;
+}
+
+/* Mobile Adjustments */
 @media (max-width: 600px) {
   .row {
     flex-direction: column;
@@ -232,31 +220,11 @@ button:focus {
     flex: 1 1 100%;
   }
 
-  .preview {
-    max-height: 240px;
-  }
-
   #signatureCanvas {
     height: 120px;
   }
 
-  /* Preview container */
-.preview-container {
-  height: 250px;
-  background: #f2f2f2;
-  border: 1px solid #bbb;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
-
-/* Image inside preview box */
-.preview {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
+  .preview-box {
+    height: 200px;
+  }
 }
