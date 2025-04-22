@@ -9,10 +9,10 @@
   <!-- jsPDF for PDF export functionality -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-  <!-- Signature Pad for capturing signatures -->
+  <!-- Signature Pad for digital signature capture -->
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.6/dist/signature_pad.umd.min.js"></script>
 
-  <!-- Custom app script -->
+  <!-- App Logic -->
   <script defer src="script.js"></script>
 </head>
 <body>
@@ -24,7 +24,7 @@
         <img src="https://i.imgur.com/xCVtL06.jpeg" alt="StrapScan Banner" />
       </div>
 
-      <!-- Instructions -->
+      <!-- Intro Text -->
       <div class="subtext" style="margin-top: 1rem;">
         <p><strong>StrapScan Instructions:</strong></p>
         <ul style="margin: 0.5rem 0 0.5rem 1.25rem; padding: 0; list-style-type: disc;">
@@ -95,7 +95,7 @@
         </div>
       </div>
 
-      <!-- Preview -->
+      <!-- Image Preview -->
       <div class="row">
         <div class="full-width">
           <label>Preview</label>
@@ -103,27 +103,38 @@
         </div>
       </div>
 
-      <!-- Signature -->
-      <div class="row signature-section">
-        <div class="full-width">
-          <label for="signatureCanvas">Digital Signature (Required for PDF)</label>
-          <div class="signature-pad-wrapper">
-            <canvas id="signatureCanvas" width="600" height="150"></canvas>
-            <button type="button" id="clearSignatureBtn">Clear Signature</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Inspection Button -->
+      <!-- Run Inspection Button -->
       <button onclick="showResult()">Run Inspection</button>
       <div id="processingMessage" style="display:none;margin-top:10px;font-weight:bold;">
         Processing image, please wait...
       </div>
 
-      <!-- AI Result -->
+      <!-- AI Result Output -->
       <div class="result-box" id="resultBox"></div>
 
-      <!-- Download PDF -->
+      <!-- Signature Section (new layout) -->
+      <div class="row" style="margin-top: 15px;">
+        <!-- Signature Canvas -->
+        <div class="half">
+          <label for="signatureCanvas">Digital Signature</label>
+          <canvas id="signatureCanvas" width="400" height="100" style="width: 100%; height: 100px; border: 1px solid #bbb; border-radius: 6px; background-color: #fff;"></canvas>
+          <button
+            type="button"
+            id="clearSignatureBtn"
+            style="margin-top: 10px; background-color: #888; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer;">
+            Clear Signature
+          </button>
+        </div>
+
+        <!-- Signature Note -->
+        <div class="half" style="display: flex; align-items: flex-start; padding-top: 8px;">
+          <p style="font-size: 14px; color: #444; line-height: 1.6; margin: 0;">
+            If you would like your PDF inspection report to include an electronic signature, please sign in the box provided before downloading. Signed reports can help support documentation in compliance and safety audits.
+          </p>
+        </div>
+      </div>
+
+      <!-- PDF Download Button -->
       <button id="downloadPdfBtn" style="display: none;">Download FREE PDF Report</button>
 
       <!-- Disclaimer -->
@@ -131,7 +142,7 @@
         <strong>Disclaimer:</strong><br>
         StrapScan is an AI-assisted tool designed to support preliminary visual assessments of straps and slings. It does not replace a certified inspection. Final decisions must be made by a qualified professional under applicable standards.
       </div>
-      
+
     </div>
   </div>
 </body>
