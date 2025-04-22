@@ -63,8 +63,9 @@ Then give a brief technical justification (one sentence).
 Then, if you are confident, include this additional line:
 Detected Damage: [list of specific types, e.g., Abrasion, UV Degradation]
 
-Only include this line if the result is FAIL.  
-If the result is PASS, do not list any damage types — assume the item has no visible damage worth reporting.
+Only include the “Detected Damage” line if the result is FAIL.  
+If the result is PASS, do not include this line at all — not even to say “None visible.”  
+Do not include any variation of this line unless specific damage types are present and the result is FAIL.
 
 Do not list damage types unless there is clear, visible evidence. Do not infer or assume wear based on lighting, texture, or general appearance.
 
