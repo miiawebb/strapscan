@@ -75,7 +75,7 @@ select {
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  background-color: #ffffff;
+  background-color: #ccc;
   color: #000;
   box-sizing: border-box;
 }
