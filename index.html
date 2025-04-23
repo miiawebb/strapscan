@@ -22,25 +22,31 @@
       <div class="subtext" style="margin-top: 1rem;">
         <p><strong>StrapScan – AI-Powered Tie-Down Inspection Tool</strong></p>
         <ul style="margin: 0.5rem 0 0.5rem 1.25rem; padding: 0; list-style-type: disc;">
-          <li>Select the strap material and tie-down type to begin.</li>
-          <li>Upload a clear, close-up photo of the ID tag (must include serial, WLL, or rating).</li>
-          <li>Upload a second photo showing the webbing damage area for evaluation.</li>
+          <li style="margin-bottom: 0.4rem;">Select the webbing material, width, and product type.</li>
+          <li style="margin-bottom: 0.4rem;">Upload a clear photo of the ID tag and damage area.</li>
+          <li style="margin-bottom: 0.4rem;">StrapScan uses AI to analyze condition and compliance within seconds.</li>
         </ul>
-        <p style="margin-top: 0.6rem;">
-          This AI tool uses U.S. and Canadian compliance logic for tie-down strap evaluation. Results appear instantly below.
-        </p>
       </div>
 
-      <!-- Material + Type -->
+      <!-- Webbing Material + Width + Product Type -->
       <div class="row">
-        <div class="half">
+        <div class="third">
           <label for="material">Webbing Material</label>
           <select id="material">
             <option>Polyester</option>
             <option>Nylon</option>
           </select>
         </div>
-        <div class="half">
+        <div class="third">
+          <label for="width">Webbing Width</label>
+          <select id="width">
+            <option value="1">1 inch</option>
+            <option value="2">2 inch</option>
+            <option value="3">3 inch</option>
+            <option value="4">4 inch</option>
+          </select>
+        </div>
+        <div class="third">
           <label for="use">Product Type</label>
           <select id="use">
             <option>Winch Strap</option>
@@ -50,19 +56,19 @@
         </div>
       </div>
 
-      <!-- Upload Images -->
+      <!-- Image Uploads -->
       <div class="row">
         <div class="half">
-          <label for="damageUpload">Upload ID Tag</label>
+          <label for="damageUpload">ID Tag Upload (Required)</label>
           <input type="file" id="damageUpload" accept="image/*" />
         </div>
         <div class="half">
-          <label for="secondaryUpload">Upload Damage Area</label>
+          <label for="secondaryUpload">Analysis Image (Required)</label>
           <input type="file" id="secondaryUpload" accept="image/*" />
         </div>
       </div>
 
-      <!-- Standards Box -->
+      <!-- Standards Info -->
       <div class="row">
         <div class="full-width">
           <label>Inspection Standards</label>
@@ -72,7 +78,7 @@
         </div>
       </div>
 
-      <!-- Previews + Results -->
+      <!-- Image Previews + Dual AI Results -->
       <div class="row" id="previewRow" style="display: none;">
         <div class="half">
           <label>Preview – ID Tag</label>
@@ -90,42 +96,40 @@
         </div>
       </div>
 
-      <!-- Inspect Button -->
+      <!-- Run Inspection -->
       <button onclick="showResult()">Run Inspection</button>
-      <div id="processingMessage" style="display:none; margin-top:10px; font-weight:bold;">
+      <div id="processingMessage" style="display:none;margin-top:10px;font-weight:bold;">
         Processing image, please wait...
       </div>
 
-      <!-- Signature Section -->
-<div class="row" style="margin-top: 15px; align-items: stretch;">
-  <div class="half" style="display: flex; flex-direction: column;">
-    <label for="signatureCanvas">Digital Signature</label>
-    <canvas id="signatureCanvas" width="400" height="100" style="width: 100%; height: 100px; border: 1px solid #bbb; border-radius: 6px; background-color: #fff;"></canvas>
-    <button type="button" id="clearSignatureBtn"
-      style="margin-top: 10px; background-color: #888; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer;">
-      Clear Signature
-    </button>
-  </div>
-  <div class="half signature-note">
-  <p>
-    If you would like your PDF inspection report to include an electronic signature, please sign in the box provided before downloading. Signed reports can help support documentation in compliance and safety audits.
-    <br><br>
-    If the ID tag is missing or unreadable, this report cannot be reliably linked to a specific tie-down for documentation or traceability purposes.
-  </p>
-</div>
-</div>
+      <!-- Signature Capture -->
+      <div class="row" style="margin-top: 15px; align-items: stretch;">
+        <div class="half" style="display: flex; flex-direction: column;">
+          <label for="signatureCanvas">Digital Signature</label>
+          <canvas id="signatureCanvas" width="400" height="100" style="width: 100%; height: 100px; border: 1px solid #bbb; border-radius: 6px; background-color: #fff;"></canvas>
+          <button type="button" id="clearSignatureBtn"
+            style="margin-top: 10px; background-color: #888; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer;">
+            Clear Signature
+          </button>
+        </div>
+        <div class="half signature-note">
+          <p>
+            If you would like your PDF inspection report to include an electronic signature, please sign in the box provided before downloading. Signed reports can help support documentation in compliance and safety audits.
+          </p>
+          <br />
+          <p>
+            <strong>Note:</strong> If the ID tag is missing or unreadable, the inspection report cannot be definitively linked to a specific strap. Traceability may not be guaranteed.
+          </p>
+        </div>
+      </div>
 
-      <!-- PDF Download Button -->
-      <button id="downloadPdfBtn" style="display: none;">Download Inspection Report (PDF)</button>
+      <!-- PDF Button -->
+      <button id="downloadPdfBtn" style="display: none;">Download FREE PDF Report</button>
 
       <!-- Disclaimer -->
       <div class="disclaimer-box">
         <strong>Disclaimer:</strong><br>
-        StrapScan is an AI-powered inspection aid intended solely for preliminary visual assessment of synthetic tie-down straps. It is <strong>not a certified inspection tool</strong> and must <strong>not</strong> be used as the sole basis for determining product safety, compliance, or serviceability.
-        <br><br>
-        All final decisions regarding strap integrity, certification, and fitness for use must be made by a qualified person in accordance with applicable regulations and manufacturer specifications.
-        <br><br>
-        Use of this tool does not exempt users from responsibilities under FMCSA, OSHA, WSTDA, CVSA, CSA, or other applicable regulatory frameworks. StrapScan is not liable for misuse, misinterpretation, or failure to follow formal inspection protocols.
+        StrapScan is an AI-powered inspection tool for preliminary assessments of synthetic tie-downs. It is not a certified inspection device. Final decisions must be made by qualified personnel under local regulations.
       </div>
 
     </div>
