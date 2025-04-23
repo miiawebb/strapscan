@@ -1,10 +1,63 @@
+// /api/inspect.js – full GPT-4 Turbo endpoint with dual mode logic
 
-// inspect.js — AI prompt logic (GPT-4 Turbo, region-aware)
+import OpenAI from "openai";
 
-export async function generateInspectionPrompt({ imageType, material, productType, region, webbingWidth }) {
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
+
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  try {
+    const { imageBase64, material, productType } = req.body;
+    const isTag = !!req.query.idTag;
+    const isDamage = !!req.query.damage;
+    const region = "US"; // optional future enhancement: detect or let user choose
+    const webbingWidth = req.body.webbingWidth || "2 inch";
+
+    if (!imageBase64 || !material || !productType) {
+      return res.status(400).json({ error: "Missing input fields" });
+    }
+
+    const prompt = await generateInspectionPrompt({
+      imageType: isTag ? "tag" : "damage",
+      material,
+      productType,
+      region,
+      webbingWidth
+    });
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "You are a highly trained synthetic webbing inspector."
+        },
+        {
+          role: "user",
+          content: `Here is the image to inspect: ${imageBase64}\n\n${prompt}`
+        }
+      ],
+      temperature: 0.4
+    });
+
+    const result = response.choices?.[0]?.message?.content || "No response from AI model.";
+    res.status(200).json({ result });
+
+  } catch (err) {
+    console.error("Inspection error:", err);
+    res.status(500).json({ error: "A server error occurred during inspection." });
+  }
+}
+
+// Prompt logic is imported below or pasted inline if needed
+async function generateInspectionPrompt({ imageType, material, productType, region, webbingWidth }) {
   if (imageType === "tag") {
     return `
-
 Agent 1: ID Tag Compliance Evaluation
 
 Instruction:
@@ -42,7 +95,6 @@ Canada: Non-compliant
     `.trim();
   }
 
-  // Webbing Damage Inspection
   return `
 Agent 2: Webbing Damage Assessment Specialist
 
@@ -68,25 +120,25 @@ Do not flag cosmetic surface dirt, oil, or minor discoloration as damage unless 
 Defect Thresholds (WSTDA Guidelines):
 Strap must be removed from service if a single or cumulative cut/tear exceeds:
 
-- 1-inch strap → > ⅜ inch
-- 2-inch strap → > ⅜ inch
-- 3-inch strap → > ⅝ inch
-- 4-inch strap → > ¾ inch
+- 1-inch strap → > ⅜ inch  
+- 2-inch strap → > ⅜ inch  
+- 3-inch strap → > ⅝ inch  
+- 4-inch strap → > ¾ inch  
 
 Edge Rule:
-- Multiple defects on same edge = use only the deepest one.
+- Multiple defects on the same edge = use only the deepest one.  
 - Defects on opposite edges or across the web = add them together.
 
 Output Format:
-→ PASS – Suitable for continued use  (green background)
-→ FAIL – Should be removed from service (red background)
-→ WARNING – Shows signs of wear and deterioration – advice for a full manual inspection (orange background)
+→ PASS – Suitable for continued use  
+→ FAIL – Should be removed from service  
+→ WARNING – Signs of early wear or deterioration; recommend full manual inspection
 
-Then give a short technical justification.
+Follow with a concise professional justification.
 
 If damage is clearly visible, include:
 Detected Damage: [abrasion, broken stitching]
 
-Only list damage types that are visibly confirmed. Do not guess.
-    `.trim();
+Only list confirmed damage types. Do not guess or assume.
+  `.trim();
 }
