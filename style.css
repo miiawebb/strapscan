@@ -244,16 +244,16 @@ button:focus {
     height: 200px;
   }
 
-  .third {
-  flex: 1 1 calc(33.333% - 13.33px);
-  min-width: 200px;
-}
-
-.row {
+ /* Clean 3-column dropdown row */
+.row.three-cols {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-between;
   gap: 20px;
-  margin-top: 15px;
-  align-items: flex-start;
+}
+
+.form-col {
+  flex: 1 1 30%;
+  min-width: 200px;
 }
 }
