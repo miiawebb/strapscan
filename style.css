@@ -195,6 +195,10 @@ button:hover {
   margin-top: 25px;
 }
 
+.signature-description {
+  margin-top: 10px; /* Adjust as needed */
+}
+
 .signature-note {
   display: flex;
   justify-content: center;
