@@ -1,76 +1,41 @@
-/* === Container for consistent max-width layout === */
-.container {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 20px;
-  box-sizing: border-box;
+/* === Global Background and Typography Colors === */
+body {
+  background-color: #000;      /* Black background */
+  color: #fff;                 /* White default text */
+  font-family: 'Segoe UI', sans-serif;
 }
 
-/* === 3-Column Input Row Layout === */
-.row.input-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin: 20px 0;
+/* === Header Text (e.g., h1, strong in header) === */
+h1, h2, h3, h4, h5, h6,
+.strapscan-header strong,
+.subtext strong {
+  color: #ff6600;  /* Orange headers */
 }
 
-.input-box {
-  flex: 1 1 calc(33.333% - 13.333px);
-  min-width: 220px;
-  display: flex;
-  flex-direction: column;
+/* === Labels === */
+label {
+  color: #fff;
 }
 
-/* === Input & Select Styling === */
+/* === Input Fields and Select Dropdowns === */
 input[type="file"],
 select {
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-sizing: border-box;
-}
-
-/* === Label Styling === */
-label {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
-
-/* === Run Button Styling === */
-#inspectButton {
-  margin: 24px auto 0 auto;
-  display: block;
-  background-color: #003366;
+  background-color: #222;   /* Darker input field */
   color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 12px 28px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
+  border: 1px solid #555;
+}
+
+/* === Button Styling === */
+#inspectButton {
+  background-color: #ff6600;  /* Orange button */
+  color: #000;                /* Black text on orange */
 }
 
 #inspectButton:hover {
-  background-color: #002244;
+  background-color: #cc5200;
 }
 
-/* === Banner Styling === */
-.strapscan-header {
-  width: 100%;
-  overflow: hidden;
-  border-radius: 8px;
-  margin-bottom: 24px;
-}
-
-.strapscan-header img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: cover;
-  border-radius: 8px;
+/* === Optional: List Item Styling === */
+.subtext li {
+  color: #fff;
 }
