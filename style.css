@@ -1,73 +1,4 @@
-/* === Banner Styling === */
-.strapscan-header {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto 24px auto;
-  overflow: hidden;
-  border-radius: 8px;
-}
-
-.strapscan-header img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 8px;
-  object-fit: cover;
-}
-
-/* === 3-Column Input Layout === */
-.row.input-row {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 20px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-.input-box {
-  flex: 1 1 calc(33.333% - 13.333px);
-  min-width: 220px;
-  box-sizing: border-box;
-}
-
-/* === Input & Select Styling === */
-input[type="file"],
-select {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  line-height: 1.4;
-  margin-top: 6px;
-}
-
-/* === Label Styling === */
-label {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 6px;
-  display: block;
-  line-height: 1.4;
-}
-
-/* === Button Styling === */
-button#inspectButton {
-  display: block;
-  width: 100%;
-  max-width: 320px;
-  margin: 24px auto;
-  padding: 12px 20px;
-  font-size: 16px;
-  background-color: #004080;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
+/* === Container for consistent max-width layout === */
 .container {
   width: 100%;
   max-width: 900px;
@@ -76,24 +7,70 @@ button#inspectButton {
   box-sizing: border-box;
 }
 
-button#inspectButton:hover {
-  background-color: #002a5c;
+/* === 3-Column Input Row Layout === */
+.row.input-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin: 20px 0;
 }
 
-/* === Disclaimer Box Styling === */
-.disclaimer-box {
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  padding: 20px;
-  margin-top: 40px;
-  border-radius: 6px;
-  font-size: 13px;
-  line-height: 1.5;
+.input-box {
+  flex: 1 1 calc(33.333% - 13.333px);
+  min-width: 220px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* === Global Typography === */
-body, html, p, select, input, label, button {
-  font-family: 'Segoe UI', sans-serif;
+/* === Input & Select Styling === */
+input[type="file"],
+select {
+  width: 100%;
+  padding: 10px;
   font-size: 14px;
-  line-height: 1.4;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* === Label Styling === */
+label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* === Run Button Styling === */
+#inspectButton {
+  margin: 24px auto 0 auto;
+  display: block;
+  background-color: #003366;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 28px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+#inspectButton:hover {
+  background-color: #002244;
+}
+
+/* === Banner Styling === */
+.strapscan-header {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.strapscan-header img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  border-radius: 8px;
 }
