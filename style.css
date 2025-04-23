@@ -215,13 +215,13 @@ button:hover {
 
 .signature-note {
   display: flex;
-  align-items: center;       /* vertically centers the text */
-  justify-content: center;   /* optional: centers horizontally if needed */
+  align-items: center;
+  justify-content: center;
   text-align: justify;
   font-size: 14px;
   color: #444;
   line-height: 1.6;
-  min-height: 160px;         /* ensures there's space to center vertically */
+  min-height: 160px;
   padding: 10px;
 }
 
