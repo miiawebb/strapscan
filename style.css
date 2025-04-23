@@ -1,0 +1,235 @@
+/* Reset + Base Layout */
+html, body {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  background: #f4f6f9;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Page Layout */
+.flex-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+}
+
+.ai-inspector {
+  background: #fff;
+  padding: 24px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+  border-radius: 12px;
+}
+
+/* Banner */
+.strapscan-header {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.strapscan-header img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Text */
+.subtext {
+  font-size: 0.9em;
+  color: #555;
+  margin: 10px 0;
+  line-height: 1.4;
+}
+
+label {
+  font-weight: 600;
+  margin-top: 14px;
+  display: block;
+  font-size: 14px;
+}
+
+/* Form Inputs */
+input[type="file"],
+select,
+textarea {
+  width: 100%;
+  margin: 6px 0 16px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Layout Grid */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 15px;
+  align-items: flex-start;
+}
+
+.half {
+  flex: 1 1 calc(50% - 10px);
+  min-width: 240px;
+}
+
+.full-width {
+  flex: 1 1 100%;
+}
+
+/* Preview Container */
+.preview-box {
+  height: 250px;
+  background: #fff;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 4px;
+  margin-top: 10px;
+}
+
+/* Hide preview images by default */
+.preview {
+  display: none;
+  width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+  border: 1px solid #bbb;
+  object-fit: contain;
+  background-color: transparent;
+}
+
+/* Standards Box */
+.standards-note {
+  background: #E5EAEF;
+  border-left: 4px solid #000;
+  padding: 12px;
+  font-size: 13px;
+  color: #222;
+  border-radius: 6px;
+  margin: 10px 0 0;
+  width: 100%;
+}
+
+/* Buttons */
+button {
+  background-color: #000;
+  color: #fff;
+  font-weight: bold;
+  padding: 12px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 30px 0 15px;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #222;
+}
+
+#downloadPdfBtn {
+  margin-top: 15px;
+}
+
+/* Result Box */
+.result-box {
+  margin: 15px 0;
+  padding: 16px;
+  border-radius: 8px;
+  background: #E5EAEF;
+  border: 1px solid #ccc;
+  display: none;
+  font-size: 14px;
+  color: #222;
+}
+
+/* Disclaimer */
+.disclaimer-box {
+  background: #E5EAEF;
+  border: 1px solid #ccc;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 15px 0;
+  font-size: 13px;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* Signature Pad */
+.signature-section {
+  margin-top: 25px;
+}
+
+#signatureCanvas {
+  width: 100%;
+  height: 150px;
+  background-color: #fff;
+  border: 1px solid #bbb;
+  border-radius: 4px;
+}
+
+#clearSignatureBtn {
+  margin-top: 12px;
+  background-color: #888;
+  color: white;
+  font-size: 13px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#clearSignatureBtn:hover {
+  background-color: #555;
+}
+
+/* Accessibility */
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: 2px solid #66afe9;
+  outline-offset: 2px;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 600px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .half,
+  .full-width {
+    flex: 1 1 100%;
+  }
+
+  #signatureCanvas {
+    height: 120px;
+  }
+
+  .preview-box {
+    height: 200px;
+  }
+}
