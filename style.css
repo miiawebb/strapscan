@@ -1,15 +1,25 @@
 /* === Container + Layout === */
+body {
+  background-color: #191919;
+  color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
 .flex-wrapper {
   display: flex;
   justify-content: center;
-  padding: 30px;
+  padding: 40px 20px;
 }
 
 .container {
   max-width: 900px;
   width: 100%;
-  margin: 0 auto;
-  padding: 0 20px;
+  background: #191919;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 30px 20px;
   box-sizing: border-box;
 }
 
@@ -30,15 +40,16 @@
 /* === Text Blocks === */
 .subtext {
   font-size: 14px;
-  color: #333;
+  color: #ffffff;
   margin-bottom: 20px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 label {
   font-weight: 600;
   margin-bottom: 6px;
   font-size: 14px;
+  color: #ff6600;
 }
 
 /* === Input Rows === */
@@ -64,6 +75,8 @@ select {
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  background-color: #ffffff;
+  color: #000;
   box-sizing: border-box;
 }
 
@@ -94,8 +107,8 @@ select {
 
 .preview-box {
   flex: 1 1 calc(50% - 10px);
-  background: #f9f9f9;
-  border: 1px solid #ccc;
+  background: #2a2a2a;
+  border: 1px solid #555;
   border-radius: 8px;
   padding: 12px;
   box-sizing: border-box;
@@ -111,11 +124,12 @@ select {
   border-radius: 6px;
   margin-bottom: 10px;
   border: 1px solid #aaa;
+  background-color: #fff;
 }
 
 .ai-result {
-  background: #e6f0ff;
-  color: #003366;
+  background: #333;
+  color: #00ccff;
   padding: 10px;
   border-radius: 6px;
   font-size: 14px;
@@ -145,12 +159,12 @@ select {
 
 /* === Disclaimer === */
 .disclaimer-box {
-  background: #f2f2f2;
-  border: 1px solid #ccc;
+  background: #2a2a2a;
+  border: 1px solid #555;
   padding: 16px;
   border-radius: 8px;
   font-size: 13px;
-  color: #222;
+  color: #ccc;
   margin-top: 30px;
   line-height: 1.6;
 }
