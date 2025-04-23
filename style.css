@@ -1,3 +1,20 @@
+/* === Banner Styling Fix === */
+.strapscan-header {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 24px auto;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.strapscan-header img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
 /* === 3-Column Form Layout === */
 .row.three-col {
   display: flex;
