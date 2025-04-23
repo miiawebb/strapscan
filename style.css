@@ -5,6 +5,13 @@ body {
   font-family: 'Segoe UI', sans-serif;
 }
 
+/* === Contain All Content Within a Max-Width Layout === */
+.flex-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px; /* Optional: left/right padding */
+}
+
 /* === Header Text (e.g., h1, strong in header) === */
 h1, h2, h3, h4, h5, h6,
 .strapscan-header strong,
