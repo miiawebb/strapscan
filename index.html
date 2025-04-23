@@ -8,99 +8,101 @@
 </head>
 <body>
   <div class="flex-wrapper">
-    <div class="ai-inspector">
+    <div class="container"> <!-- NEW CONTAINER ADDED -->
+      <div class="ai-inspector">
 
-      <!-- Banner -->
-      <div class="strapscan-header">
-        <img src="https://i.imgur.com/xCVtL06.jpeg" alt="StrapScan Banner" />
-      </div>
-
-      <!-- Intro Text -->
-      <div class="subtext">
-        <p><strong>StrapScan – AI-Powered Tie-Down Inspection Tool</strong></p>
-        <ol>
-          <li>Select the strap material and tie-down type to begin.</li>
-          <li>Upload a clear, close-up photo of the ID tag. Ensure manufacturer and WLL are visible.</li>
-          <li>Upload a close-up photo of the suspected damage area. Focus clearly on any cuts, abrasion, fraying, or deformation.</li>
-        </ol>
-        <p>
-          <strong>StrapScan</strong> utilizes advanced AI-driven computer vision technology to assess the condition and regulatory compliance of tie-downs and slings in seconds.
-        </p>
-      </div>
-
-      <!-- Dropdowns Row -->
-      <div class="row input-row">
-        <div class="input-box">
-          <label for="use">Tie Down Type</label>
-          <select id="use">
-            <option>Ratchet Strap</option>
-            <option>Logistics Strap</option>
-            <option>Winch Strap</option>
-          </select>
+        <!-- Banner -->
+        <div class="strapscan-header">
+          <img src="https://i.imgur.com/xCVtL06.jpeg" alt="StrapScan Banner" />
         </div>
-        <div class="input-box">
-          <label for="material">Webbing Material</label>
-          <select id="material">
-            <option>Polyester</option>
-            <option>Nylon</option>
-          </select>
-        </div>
-        <div class="input-box">
-          <label for="width">Webbing Width</label>
-          <select id="width">
-            <option>1 inch</option>
-            <option>2 inch</option>
-            <option>3 inch</option>
-            <option>4 inch</option>
-          </select>
-        </div>
-      </div>
 
-      <!-- File Uploads + Standards -->
-      <div class="row input-row">
-        <div class="input-box">
-          <label for="damageUpload">ID Tag Upload (Required)</label>
-          <input type="file" id="damageUpload" accept="image/*" />
+        <!-- Intro Text -->
+        <div class="subtext">
+          <p><strong>StrapScan – AI-Powered Tie-Down Inspection Tool</strong></p>
+          <ol>
+            <li>Select the strap material and tie-down type to begin.</li>
+            <li>Upload a clear, close-up photo of the ID tag. Ensure manufacturer and WLL are visible.</li>
+            <li>Upload a close-up photo of the suspected damage area. Focus clearly on any cuts, abrasion, fraying, or deformation.</li>
+          </ol>
+          <p>
+            <strong>StrapScan</strong> utilizes advanced AI-driven computer vision technology to assess the condition and regulatory compliance of tie-downs and slings in seconds.
+          </p>
         </div>
-        <div class="input-box">
-          <label for="secondaryUpload">Analysis Image (Required)</label>
-          <input type="file" id="secondaryUpload" accept="image/*" />
+
+        <!-- Dropdowns Row -->
+        <div class="row input-row">
+          <div class="input-box">
+            <label for="use">Tie Down Type</label>
+            <select id="use">
+              <option>Ratchet Strap</option>
+              <option>Logistics Strap</option>
+              <option>Winch Strap</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <label for="material">Webbing Material</label>
+            <select id="material">
+              <option>Polyester</option>
+              <option>Nylon</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <label for="width">Webbing Width</label>
+            <select id="width">
+              <option>1 inch</option>
+              <option>2 inch</option>
+              <option>3 inch</option>
+              <option>4 inch</option>
+            </select>
+          </div>
         </div>
-        <div class="input-box">
-          <label for="standards">Standards (Downloadable)</label>
-          <select id="standards">
-            <option>WSTDA T-1</option>
-            <option>WSTDA T-2</option>
-          </select>
+
+        <!-- File Uploads + Standards -->
+        <div class="row input-row">
+          <div class="input-box">
+            <label for="damageUpload">ID Tag Upload (Required)</label>
+            <input type="file" id="damageUpload" accept="image/*" />
+          </div>
+          <div class="input-box">
+            <label for="secondaryUpload">Analysis Image (Required)</label>
+            <input type="file" id="secondaryUpload" accept="image/*" />
+          </div>
+          <div class="input-box">
+            <label for="standards">Standards (Downloadable)</label>
+            <select id="standards">
+              <option>WSTDA T-1</option>
+              <option>WSTDA T-2</option>
+            </select>
+          </div>
         </div>
-      </div>
 
-      <!-- Button -->
-      <button id="inspectButton">Run Inspection</button>
+        <!-- Button -->
+        <button id="inspectButton">Run Inspection</button>
 
-      <!-- Placeholder for Previews, AI Results, PDF Button -->
-      <div id="resultsSection"></div>
+        <!-- Placeholder for Previews, AI Results, PDF Button -->
+        <div id="resultsSection"></div>
 
-      <!-- Disclaimer -->
-      <div class="disclaimer-box">
-        <strong>Disclaimer:</strong>
-        <p>
-          StrapScan is an AI-assisted image analysis tool developed to support preliminary visual evaluations of synthetic webbing and tie-down straps.
-          It is intended to assist users in identifying visible signs of potential damage or wear based on submitted images.
-          However, the accuracy and reliability of the analysis are highly dependent on the quality of the images provided.
-        </p>
-        <p>
-          Users are solely responsible for capturing clear, high-resolution images in accordance with the provided guidelines.
-          StrapScan disclaims all liability for any decisions, actions, damages, or consequences resulting from the use or misuse of this tool.
-          Final determinations regarding the use, repair, or retirement of any equipment must be made by a qualified professional with appropriate industry credentials.
-        </p>
-        <p>
-          By using StrapScan, users acknowledge that this platform serves as a supplemental aid and not as an official inspection, certification, or clearance mechanism.
-          All tie-down equipment must still undergo regular inspections as mandated by applicable regulatory standards and governing safety authorities.
-        </p>
-      </div>
+        <!-- Disclaimer -->
+        <div class="disclaimer-box">
+          <strong>Disclaimer:</strong>
+          <p>
+            StrapScan is an AI-assisted image analysis tool developed to support preliminary visual evaluations of synthetic webbing and tie-down straps.
+            It is intended to assist users in identifying visible signs of potential damage or wear based on submitted images.
+            However, the accuracy and reliability of the analysis are highly dependent on the quality of the images provided.
+          </p>
+          <p>
+            Users are solely responsible for capturing clear, high-resolution images in accordance with the provided guidelines.
+            StrapScan disclaims all liability for any decisions, actions, damages, or consequences resulting from the use or misuse of this tool.
+            Final determinations regarding the use, repair, or retirement of any equipment must be made by a qualified professional with appropriate industry credentials.
+          </p>
+          <p>
+            By using StrapScan, users acknowledge that this platform serves as a supplemental aid and not as an official inspection, certification, or clearance mechanism.
+            All tie-down equipment must still undergo regular inspections as mandated by applicable regulatory standards and governing safety authorities.
+          </p>
+        </div>
 
-    </div>
-  </div>
+      </div> <!-- .ai-inspector -->
+    </div> <!-- .container -->
+  </div> <!-- .flex-wrapper -->
 </body>
 </html>
