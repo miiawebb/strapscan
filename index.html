@@ -13,7 +13,7 @@
   <div class="flex-wrapper">
     <div class="ai-inspector">
 
-      <!-- Header Banner -->
+      <!-- Banner -->
       <div class="strapscan-header">
         <img src="https://i.imgur.com/xCVtL06.jpeg" alt="StrapScan Banner" />
       </div>
@@ -21,36 +21,43 @@
       <!-- Intro Text -->
       <div class="subtext" style="margin-top: 1rem;">
         <p><strong>StrapScan – AI-Powered Tie-Down Inspection Tool</strong></p>
-        <ul style="margin: 0.5rem 0 0.5rem 1.25rem; padding: 0; list-style-type: disc;">
-          <li style="margin-bottom: 0.4rem;">Select the strap material and tie-down type to begin.</li>
-          <li style="margin-bottom: 0.4rem;">Upload a clear, close-up photo of the ID tag. Ensure the serial number and markings are legible.</li>
-          <li style="margin-bottom: 0.4rem;">Upload a close-up photo of the area to be analyzed. Focus on visible damage, wear, or label degradation.</li>
-        </ul>
-        <p style="margin-top: 0.6rem;">
-          StrapScan uses AI trained on U.S. safety standards for ratchet straps and tie-downs to deliver pass/fail results in seconds.
-        </p>
+        <ol style="margin-left: 1.25rem;">
+          <li>Select the strap material and tie-down type to begin.</li>
+          <li>Upload a clear, close-up photo of the ID tag. Ensure manufacturer and WLL are visible.</li>
+          <li>Upload a close-up photo of the suspected damage area. Focus clearly on any cuts, abrasion, fraying, or deformation.</li>
+        </ol>
+        <p>StrapScan utilizes advanced AI-driven computer vision technology to assess the condition and regulatory compliance of tie-downs and slings in seconds.</p>
       </div>
 
-      <!-- Webbing Material + Product Type -->
-      <div class="row">
-        <div class="half">
+      <!-- Dropdowns: Type / Material / Width -->
+      <div class="row three-col">
+        <div class="third">
+          <label for="use">Tie Down Type</label>
+          <select id="use">
+            <option>Ratchet Strap</option>
+            <option>Logistics Strap</option>
+            <option>Winch Strap</option>
+          </select>
+        </div>
+        <div class="third">
           <label for="material">Webbing Material</label>
           <select id="material">
             <option>Polyester</option>
             <option>Nylon</option>
           </select>
         </div>
-        <div class="half">
-          <label for="use">Product Type</label>
-          <select id="use">
-            <option>Winch Strap</option>
-            <option>Ratchet Strap</option>
-            <option>Logistic Strap</option>
+        <div class="third">
+          <label for="width">Webbing Width</label>
+          <select id="width">
+            <option>1 inch</option>
+            <option>2 inch</option>
+            <option>3 inch</option>
+            <option>4 inch</option>
           </select>
         </div>
       </div>
 
-      <!-- Image Uploads -->
+      <!-- Uploads -->
       <div class="row">
         <div class="half">
           <label for="damageUpload">ID Tag Upload (Required)</label>
@@ -62,73 +69,61 @@
         </div>
       </div>
 
-      <!-- Standards Full Width -->
+      <!-- Standards Dropdown (Placeholder) -->
       <div class="row">
         <div class="full-width">
-          <label>Inspection Standards</label>
-          <div class="standards-wrapper">
-            <div id="standardsBox" class="standards-note"></div>
-          </div>
+          <label for="standardsSelect">Standards (downloadable)</label>
+          <select id="standardsSelect">
+            <option>WSTDA T-1</option>
+            <option>WSTDA T-2</option>
+          </select>
         </div>
       </div>
 
-<!-- Image Previews -->
-<div class="row" id="previewRow" style="display: none;">
-  <div class="half">
-    <label for="damagePreview">Preview – ID Tag</label>
-    <div class="preview-box">
-      <img id="damagePreview" class="preview" alt="ID Tag Preview" style="display: none;" />
-    </div>
-  </div>
-
-  <div class="half">
-    <label for="secondaryPreview">Preview – Analysis Area</label>
-    <div class="preview-box">
-      <img id="secondaryPreview" class="preview" alt="Damage Area Preview" style="display: none;" />
-    </div>
-  </div>
-</div>
-
-      <!-- Run Inspection Button -->
+      <!-- Run Inspection -->
       <button onclick="showResult()">Run Inspection</button>
-      <div id="processingMessage" style="display:none;margin-top:10px;font-weight:bold;">
+      <div id="processingMessage" style="display: none; margin-top: 10px; font-weight: bold;">
         Processing image, please wait...
       </div>
 
-      <!-- AI Result Output -->
-      <div class="result-box" id="resultBox"></div>
-
-      <!-- Signature Section -->
-      <div class="row" style="margin-top: 15px; align-items: stretch;">
-        <div class="half" style="display: flex; flex-direction: column;">
-          <label for="signatureCanvas">Digital Signature</label>
-          <canvas id="signatureCanvas" width="400" height="100" style="width: 100%; height: 100px; border: 1px solid #bbb; border-radius: 6px; background-color: #fff;"></canvas>
-          <button type="button" id="clearSignatureBtn"
-            style="margin-top: 10px; background-color: #888; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer;">
-            Clear Signature
-          </button>
+      <!-- Previews + AI Results -->
+      <div class="row" id="previewRow" style="display: none;">
+        <!-- ID Tag Section -->
+        <div class="half">
+          <label>Preview – ID Tag</label>
+          <div class="preview-box">
+            <img id="damagePreview" class="preview" alt="ID Tag Preview" />
+          </div>
+          <div class="result-box" id="idTagResultBox"></div>
+          <button id="downloadPdfBtnTag" style="display: none;">Download PDF Report – Tag</button>
         </div>
-        <div class="half" style="display: flex; justify-content: center; align-items: center;">
-          <p style="font-size: 14px; color: #444; line-height: 1.6; text-align: justify; margin: 0;">
-            If you would like your PDF inspection report to include an electronic signature, please sign in the box provided before downloading. Signed reports can help support documentation in compliance and safety audits.
-          </p>
+
+        <!-- Damage Area Section -->
+        <div class="half">
+          <label>Preview – Damage Area</label>
+          <div class="preview-box">
+            <img id="secondaryPreview" class="preview" alt="Damage Area Preview" />
+          </div>
+          <div class="result-box" id="damageResultBox"></div>
+          <button id="downloadPdfBtnDamage" style="display: none;">Download PDF Report – Damage</button>
         </div>
       </div>
 
-      <!-- PDF Download Button -->
-      <button id="downloadPdfBtn" style="display: none;">Download FREE PDF Report</button>
-
       <!-- Disclaimer -->
-<div class="disclaimer-box">
-  <strong>Disclaimer:</strong><br>
-  StrapScan is an AI-powered inspection aid intended solely for preliminary visual assessment of synthetic tie-down straps. It is <strong>not a certified inspection tool</strong> and must <strong>not</strong> be used as the sole basis for determining product safety, compliance, or serviceability.
-  <br><br>
-  All final decisions regarding strap integrity, certification, and fitness for use must be made by a qualified person in accordance with applicable regulations and manufacturer specifications.
-  <br><br>
-  Use of this tool does not exempt users from their responsibilities under FMCSA, OSHA, WSTDA, CVSA, CSA, or other regulatory frameworks. StrapScan is not liable for any misuse, misinterpretation of results, or failure to perform formal inspections.
-</div>
+      <div class="disclaimer-box">
+        <strong>Disclaimer:</strong>
+        <p>
+          StrapScan is an AI-assisted image analysis tool developed to support preliminary visual evaluations of synthetic webbing and tie-down straps. It is intended to assist users in identifying visible signs of potential damage or wear based on submitted images. However, the accuracy and reliability of the analysis are highly dependent on the quality of the images provided. Factors such as poor lighting, motion blur, obstructions, improper angles, or incomplete visibility can significantly impair the tool’s effectiveness.
+        </p>
+        <p>
+          Users are solely responsible for capturing clear, high-resolution images in accordance with the provided guidelines. StrapScan disclaims all liability for any decisions, actions, damages, or consequences resulting from the use or misuse of this tool. Final determinations regarding the use, repair, or retirement of any equipment must be made by a qualified professional with appropriate industry credentials.
+        </p>
+        <p>
+          By using StrapScan, users acknowledge that this platform serves as a supplemental aid and not as an official inspection, certification, or clearance mechanism. All tie-down equipment must still undergo regular inspections as mandated by applicable regulatory standards and governing safety authorities.
+        </p>
+      </div>
 
-</div>
-</div>
+    </div>
+  </div>
 </body>
 </html>
