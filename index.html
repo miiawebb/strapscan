@@ -57,28 +57,24 @@
         </div>
       </div>
 
-      <!-- Uploads -->
-      <div class="row">
-        <div class="half">
-          <label for="damageUpload">ID Tag Upload (Required)</label>
-          <input type="file" id="damageUpload" accept="image/*" />
-        </div>
-        <div class="half">
-          <label for="secondaryUpload">Analysis Image (Required)</label>
-          <input type="file" id="secondaryUpload" accept="image/*" />
-        </div>
-      </div>
-
-      <!-- Standards Dropdown (Placeholder) -->
-      <div class="row">
-        <div class="full-width">
-          <label for="standardsSelect">Standards (downloadable)</label>
-          <select id="standardsSelect">
-            <option>WSTDA T-1</option>
-            <option>WSTDA T-2</option>
-          </select>
-        </div>
-      </div>
+     <!-- Uploads + Standards Dropdown -->
+<div class="row three-col">
+  <div class="third">
+    <label for="damageUpload">ID Tag Upload (Required)</label>
+    <input type="file" id="damageUpload" accept="image/*" />
+  </div>
+  <div class="third">
+    <label for="secondaryUpload">Analysis Image (Required)</label>
+    <input type="file" id="secondaryUpload" accept="image/*" />
+  </div>
+  <div class="third">
+    <label for="standardsSelect">Standards (Downloadable)</label>
+    <select id="standardsSelect">
+      <option>WSTDA T-1</option>
+      <option>WSTDA T-2</option>
+    </select>
+  </div>
+</div>
 
       <!-- Run Inspection -->
       <button onclick="showResult()">Run Inspection</button>
