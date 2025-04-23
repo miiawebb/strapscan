@@ -42,18 +42,18 @@ window.addEventListener("DOMContentLoaded", () => {
         label: "ID Tag",
         endpoint: "/api/inspect?idTag=true",
         resultBox: document.getElementById("idTagResultBox"),
-        regionSensitive: true
+        inspectionType: "tag"
       },
       {
         imageBase64: damageBase64,
         label: "Damage Area",
         endpoint: "/api/inspect?damage=true",
         resultBox: document.getElementById("damageResultBox"),
-        regionSensitive: false
+        inspectionType: "damage"
       }
     ];
 
-    for (const { imageBase64, label, endpoint, resultBox, regionSensitive } of payloads) {
+    for (const { imageBase64, label, endpoint, resultBox, inspectionType } of payloads) {
       try {
         const res = await fetch(endpoint, {
           method: "POST",
@@ -61,7 +61,9 @@ window.addEventListener("DOMContentLoaded", () => {
           body: JSON.stringify({
             imageBase64,
             material: document.getElementById("material")?.value,
-            productType: document.getElementById("use")?.value
+            productType: document.getElementById("use")?.value,
+            inspectionType, // 👈 This makes all the difference
+            region: "US" // or dynamically set later
           })
         });
 
@@ -73,8 +75,8 @@ window.addEventListener("DOMContentLoaded", () => {
         resultBox.style.display = "block";
         resultBox.innerHTML = `<strong>${label} Inspection:</strong><br>${cleanText}`;
 
-        if (label === "ID Tag") {
-          // Neutral styling for tag
+        if (inspectionType === "tag") {
+          // Neutral background for ID tags
           resultBox.style.backgroundColor = "#f2f2f2";
           resultBox.style.borderColor = "#ccc";
           resultBox.style.color = "#000";
@@ -94,7 +96,6 @@ window.addEventListener("DOMContentLoaded", () => {
           }
         }
 
-        // Optional: detect vague AI response
         if (result.toLowerCase().includes("image unclear") || result.length < 50) {
           resultBox.style.backgroundColor = "#fff3cd";
           resultBox.style.borderColor = "#ffeeba";
@@ -115,7 +116,7 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("processingMessage").style.display = "none";
   }
 
-  // Image Preview Logic
+  // Image preview
   document.getElementById("damageUpload")?.addEventListener("change", (e) => {
     const file = e.target.files[0];
     if (file && file.type.startsWith("image/")) {
@@ -136,7 +137,7 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Signature
+  // Signature pad
   const canvas = document.getElementById("signatureCanvas");
   if (canvas) {
     signaturePad = new SignaturePad(canvas, {
