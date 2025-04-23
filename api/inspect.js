@@ -1,88 +1,42 @@
-// inspect.js — AI prompt logic (GPT-4 Turbo, region-aware)
+// inspect.js — Basic OpenAI GPT-4 Turbo integration with placeholder logic
+import { OpenAI } from "openai";
 
-export async function generateInspectionPrompt({ imageType, material, productType, region, webbingWidth }) {
-  if (imageType === "tag") {
-    return `
-Agent 1: ID Tag Compliance Evaluation
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY
+});
 
-Instruction:
-You are a certified cargo control compliance specialist. Your task is to evaluate the ID tag on a synthetic web tie-down (such as a ratchet strap, winch strap, or logistic strap) based strictly on WSTDA and regional safety standards.
-
-Required tag data (per WSTDA Section 2.8.1):
-1. Manufacturer name or trademark
-2. Working Load Limit (WLL) in both pounds (lbs) and kilograms (kg)
-
-Region-based compliance:
-
-- United States:
-  If the ID tag is missing or unreadable, the strap may still be used by applying a default Working Load Limit (WLL) of 1,000 lb per inch of webbing width
-  (e.g., 2-inch strap = 2,000 lb WLL)
-
-- Canada:
-  The tag must be present and legible. If missing or unreadable, the strap must be removed from service.
-
-Do NOT use PASS or FAIL.
-Instead, clearly describe what is visible on the tag and report U.S. and Canadian compliance separately.
-
-Example Output:
-
-Tag is visible and legible. Manufacturer: SlingCo. WLL: 5,000 lbs / 2,268 kg.  
-US: Compliant  
-Canada: Compliant
-
-Tag is visible but missing WLL in kilograms.  
-US: Non-compliant – defaults to 1,000 lb per inch WLL  
-Canada: Non-compliant
-
-Tag is unreadable or missing.  
-US: Compliant with default WLL = 1,000 lb per inch of webbing  
-Canada: Non-compliant
-    `.trim();
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
-  // Webbing Damage Inspection
-  return `
-Agent 2: Webbing Damage Assessment Specialist
+  try {
+    const { imageBase64, material, productType } = req.body;
 
-Instruction:
-You are a certified visual inspection specialist for synthetic tie-downs, such as ratchet straps, winch straps, and logistic straps. Your job is to determine if the webbing should remain in service or be removed based on visible safety-critical defects.
+    if (!imageBase64 || !material || !productType) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
 
-Inspect the image for the following damage types:
-- Abrasion – fuzzy, worn, dulled, or flattened weave
-- Cuts or Tears – jagged or straight fiber breaks, frayed edges
-- Burns or Melting – glossy, blackened, fused, or hardened areas
-- UV Degradation – faded, chalky, brittle texture
-- Edge Fraying – unraveling, notched, or thinned strap edges
-- Snags – raised loops or pulled threads
-- Embedded Material – foreign debris causing bulges or irregularities
-- Chemical/Heat Discoloration – unnatural stains, sticky/brittle spots
-- Crushed Webbing – flattened or compressed appearance
-- Broken Stitching – loose, missing, or pulled stitches
-- Knots – any tied, bunched, or twisted webbing areas
+    const chatResponse = await openai.chat.completions.create({
+      model: "gpt-4-turbo",
+      messages: [
+        {
+          role: "system",
+          content: "You are an AI that returns a simple placeholder result for testing."
+        },
+        {
+          role: "user",
+          content: `The user uploaded an image of a ${material} ${productType}. Please give a placeholder inspection result.`
+        }
+      ],
+      max_tokens: 300
+    });
 
-Important:
-Do not flag cosmetic surface dirt, oil, or minor discoloration as damage unless structural fibers are compromised. Only confirm what is clearly visible.
+    const resultText = chatResponse.choices[0]?.message?.content || "No response generated.";
+    return res.status(200).json({ result: resultText });
 
-Defect Thresholds (per WSTDA guidance):
-If any individual or cumulative cut, tear, or hole exceeds the limit below, the strap must be removed from service:
-
-- 1.75–2 inch strap → ⅜ inch max defect
-- 3 inch strap → ⅝ inch max defect
-- 4 inch strap → ¾ inch max defect
-
-Edge Rule:
-- Damage on same edge = deepest defect only
-- Opposite edges or multiple defects across strap = additive
-
-Output Format:
-→ PASS – Suitable for continued use  
-→ FAIL – Should be removed from service
-
-Then give a short technical justification.
-
-If damage is clearly visible, include:
-Detected Damage: [abrasion, broken stitching]
-
-Only list damage types that are visibly confirmed. Do not guess.
-    `.trim();
+  } catch (error) {
+    console.error("API error:", error);
+    return res.status(500).json({ error: "AI inspection failed." });
+  }
 }
