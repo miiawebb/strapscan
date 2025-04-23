@@ -256,4 +256,16 @@ button:focus {
   flex: 1 1 30%;
   min-width: 200px;
 }
+
+  .row.three-cols {
+  display: flex;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.third {
+  flex: 1;
+  min-width: 200px;
+}
+
 }
