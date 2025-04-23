@@ -191,34 +191,37 @@ button:hover {
 /* Signature Section */
 .signature-section {
   margin-top: 25px;
+  display: flex;
+  gap: 20px;
 }
 
 .signature-section .half {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .signature-note {
+  flex: 1;
   display: flex;
-  align-items: center; /* ✅ vertical middle align */
-  justify-content: center;
+  align-items: center;
   text-align: justify;
   font-size: 14px;
   color: #444;
   line-height: 1.6;
-  height: 100%;
   padding-left: 10px;
   padding-right: 10px;
 }
 
 #signatureCanvas {
   width: 100%;
-  height: 150px;
-  margin-top: 8px; /* ✅ creates spacing under the label */
+  height: 120px;
+  margin-top: 8px;
   background-color: #fff;
   border: 1px solid #bbb;
   border-radius: 4px;
+  touch-action: none;
 }
 
 /* Align Clear Button */
