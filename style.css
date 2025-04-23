@@ -82,19 +82,20 @@ select {
 
 /* === Button === */
 #inspectButton {
-  display: block;
-  margin: 24px auto;
-  background-color: #ff6600; !important;
-  color: #fff;
-  border: none;
+  background-color: #ff6600 !important;
+  color: #fff !important;
+  border: none !important;
   border-radius: 6px;
   padding: 12px 28px;
   font-size: 16px;
   cursor: pointer;
+  margin: 24px auto;
+  display: block;
+  transition: background-color 0.2s ease-in-out;
 }
 
 #inspectButton:hover {
-  background-color: #002244;
+  background-color: #cc5200 !important;
 }
 
 /* === Previews === */
