@@ -103,25 +103,22 @@
       </div>
 
       <!-- Signature Capture -->
-      <div class="row" style="margin-top: 15px; align-items: stretch;">
-        <div class="half" style="display: flex; flex-direction: column;">
-          <label for="signatureCanvas">Digital Signature</label>
-          <canvas id="signatureCanvas" width="400" height="100" style="width: 100%; height: 100px; border: 1px solid #bbb; border-radius: 6px; background-color: #fff;"></canvas>
-          <button type="button" id="clearSignatureBtn"
-            style="margin-top: 10px; background-color: #888; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer;">
-            Clear Signature
-          </button>
-        </div>
-        <div class="half signature-note">
-          <p>
-            If you would like your PDF inspection report to include an electronic signature, please sign in the box provided before downloading. Signed reports can help support documentation in compliance and safety audits.
-          </p>
-          <br />
-          <p>
-            <strong>Note:</strong> If the ID tag is missing or unreadable, the inspection report cannot be definitively linked to a specific strap. Traceability may not be guaranteed.
-          </p>
-        </div>
-      </div>
+    <div class="row signature-row">
+  <div class="half">
+    <label for="signatureCanvas">Digital Signature</label>
+    <canvas id="signatureCanvas" width="400" height="100"></canvas>
+    <button type="button" id="clearSignatureBtn">Clear Signature</button>
+  </div>
+  <div class="half signature-note">
+    <p>
+      If you would like your PDF inspection report to include an electronic signature, please sign in the box provided before downloading.
+      Signed reports can help support documentation in compliance and safety audits.
+      <br><br>
+      <strong>Note:</strong> If the ID tag is missing or unreadable, the inspection report cannot be definitively linked to a specific strap.
+      Traceability may not be guaranteed.
+    </p>
+  </div>
+</div>
 
       <!-- PDF Button -->
       <button id="downloadPdfBtn" style="display: none;">Download FREE PDF Report</button>
