@@ -36,35 +36,33 @@ window.addEventListener("DOMContentLoaded", () => {
       readAsBase64(damageImage)
     ]);
 
+    const material = document.getElementById("material")?.value;
+    const productType = document.getElementById("use")?.value;
+    const width = document.getElementById("width")?.value;
+
     const payloads = [
       {
         imageBase64: idBase64,
         label: "ID Tag",
         endpoint: "/api/inspect?idTag=true",
         resultBox: document.getElementById("idTagResultBox"),
-        inspectionType: "tag"
+        regionSensitive: true
       },
       {
         imageBase64: damageBase64,
         label: "Damage Area",
         endpoint: "/api/inspect?damage=true",
         resultBox: document.getElementById("damageResultBox"),
-        inspectionType: "damage"
+        regionSensitive: false
       }
     ];
 
-    for (const { imageBase64, label, endpoint, resultBox, inspectionType } of payloads) {
+    for (const { imageBase64, label, endpoint, resultBox, regionSensitive } of payloads) {
       try {
         const res = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            imageBase64,
-            material: document.getElementById("material")?.value,
-            productType: document.getElementById("use")?.value,
-            inspectionType, // 👈 This makes all the difference
-            region: "US" // or dynamically set later
-          })
+          body: JSON.stringify({ imageBase64, material, productType, width })
         });
 
         const { result } = await res.json();
@@ -75,8 +73,8 @@ window.addEventListener("DOMContentLoaded", () => {
         resultBox.style.display = "block";
         resultBox.innerHTML = `<strong>${label} Inspection:</strong><br>${cleanText}`;
 
-        if (inspectionType === "tag") {
-          // Neutral background for ID tags
+        if (label === "ID Tag") {
+          // ID tag uses neutral styling
           resultBox.style.backgroundColor = "#f2f2f2";
           resultBox.style.borderColor = "#ccc";
           resultBox.style.color = "#000";
@@ -96,6 +94,7 @@ window.addEventListener("DOMContentLoaded", () => {
           }
         }
 
+        // Quality warning (short or vague answer)
         if (result.toLowerCase().includes("image unclear") || result.length < 50) {
           resultBox.style.backgroundColor = "#fff3cd";
           resultBox.style.borderColor = "#ffeeba";
@@ -116,11 +115,11 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("processingMessage").style.display = "none";
   }
 
-  // Image preview
+  // Image Preview
   document.getElementById("damageUpload")?.addEventListener("change", (e) => {
     const file = e.target.files[0];
+    const preview = document.getElementById("damagePreview");
     if (file && file.type.startsWith("image/")) {
-      const preview = document.getElementById("damagePreview");
       preview.src = URL.createObjectURL(file);
       preview.style.display = "block";
       document.getElementById("previewRow").style.display = "flex";
@@ -129,15 +128,15 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("secondaryUpload")?.addEventListener("change", (e) => {
     const file = e.target.files[0];
+    const preview = document.getElementById("secondaryPreview");
     if (file && file.type.startsWith("image/")) {
-      const preview = document.getElementById("secondaryPreview");
       preview.src = URL.createObjectURL(file);
       preview.style.display = "block";
       document.getElementById("previewRow").style.display = "flex";
     }
   });
 
-  // Signature pad
+  // Signature Setup
   const canvas = document.getElementById("signatureCanvas");
   if (canvas) {
     signaturePad = new SignaturePad(canvas, {
