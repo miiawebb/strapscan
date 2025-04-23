@@ -92,6 +92,20 @@ textarea {
   flex: 1 1 100%;
 }
 
+/* Three-Column Layout */
+.row.three-col {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 15px;
+}
+
+.row.three-col .third {
+  flex: 1 1 calc(33.333% - 13.5px);
+  min-width: 180px;
+}
+
 /* Preview Container */
 .preview-box {
   height: 250px;
@@ -232,7 +246,8 @@ button:focus {
   }
 
   .half,
-  .full-width {
+  .full-width,
+  .row.three-col .third {
     flex: 1 1 100%;
   }
 
@@ -243,29 +258,4 @@ button:focus {
   .preview-box {
     height: 200px;
   }
-
- /* Clean 3-column dropdown row */
-.row.three-cols {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.form-col {
-  flex: 1 1 30%;
-  min-width: 200px;
-}
-
-  .row.three-cols {
-  display: flex;
-  gap: 20px;
-  margin-top: 15px;
-}
-
-.third {
-  flex: 1;
-  min-width: 200px;
-}
-
 }
