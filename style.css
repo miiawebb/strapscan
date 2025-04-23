@@ -84,7 +84,7 @@ select {
 #inspectButton {
   display: block;
   margin: 24px auto;
-  background-color: #ff6600;
+  background-color: #ff6600; !important;
   color: #fff;
   border: none;
   border-radius: 6px;
