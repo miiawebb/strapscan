@@ -92,18 +92,16 @@ textarea {
   flex: 1 1 100%;
 }
 
-/* Three-Column Layout */
-.row.three-col {
+/* 3-column row (webbing width/material/type) */
+.row.three-cols {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
   gap: 20px;
   margin-top: 15px;
 }
 
-.row.three-col .third {
-  flex: 1 1 calc(33.333% - 13.5px);
-  min-width: 180px;
+.third {
+  flex: 1 1 calc(33.333% - 13.333px);
+  min-width: 200px;
 }
 
 /* Preview Container */
@@ -195,10 +193,6 @@ button:hover {
   margin-top: 25px;
 }
 
-.signature-description {
-  margin-top: 20px; /* Adjust as needed */
-}
-
 .signature-note {
   display: flex;
   justify-content: center;
@@ -208,6 +202,7 @@ button:hover {
   color: #444;
   line-height: 1.6;
   height: 100%;
+  padding-left: 15px;
 }
 
 #signatureCanvas {
@@ -218,6 +213,7 @@ button:hover {
   border-radius: 4px;
 }
 
+/* Align Clear Button */
 #clearSignatureBtn {
   margin-top: 12px;
   background-color: #888;
@@ -250,8 +246,8 @@ button:focus {
   }
 
   .half,
-  .full-width,
-  .row.three-col .third {
+  .third,
+  .full-width {
     flex: 1 1 100%;
   }
 
