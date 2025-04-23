@@ -186,7 +186,7 @@ button:hover {
   font-size: 11px;
   text-align: justify;
   color: #222;
-  line-height: 1.6;
+  line-height: 1.1;
 }
 
 /* Signature Section */
@@ -215,15 +215,14 @@ button:hover {
 
 .signature-note {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
+  align-items: center;       /* vertically centers the text */
+  justify-content: center;   /* optional: centers horizontally if needed */
+  text-align: justify;
   font-size: 14px;
   color: #444;
-  text-align: justify;
   line-height: 1.6;
-  height: 100%;
+  min-height: 160px;         /* ensures there's space to center vertically */
+  padding: 10px;
 }
 
 /* Signature Button */
