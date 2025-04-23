@@ -22,40 +22,42 @@
       <div class="subtext" style="margin-top: 1rem;">
         <p><strong>StrapScan – AI-Powered Tie-Down Inspection Tool</strong></p>
         <ol style="margin: 0.5rem 0 0.5rem 1.25rem; padding: 0;">
-  <li style="margin-bottom: 0.4rem;">Select the webbing material, width, and product type.</li>
-  <li style="margin-bottom: 0.4rem;">Upload a clear photo of the ID tag.</li>
-  <li style="margin-bottom: 0.4rem;">Upload a clear photo of the area to inspect.</li>
-</ol>
-  <p> StrapScan will then use advanced AI-driven vision technology to assess the condition and regulatory compliance of tie-downs.</p>
+          <li style="margin-bottom: 0.4rem;">Select the webbing material, width, and product type.</li>
+          <li style="margin-bottom: 0.4rem;">Upload a clear photo of the ID tag.</li>
+          <li style="margin-bottom: 0.4rem;">Upload a clear photo of the area to inspect.</li>
+        </ol>
+        <p>
+          StrapScan will then use advanced AI-driven vision technology to assess the condition and regulatory compliance of tie-downs.
+        </p>
       </div>
 
-<!-- Material + Width + Product Type Row -->
-<div class="row three-col">
-  <div class="third">
-    <label for="material">Webbing Material</label>
-    <select id="material">
-      <option>Polyester</option>
-      <option>Nylon</option>
-    </select>
-  </div>
-  <div class="third">
-    <label for="width">Webbing Width</label>
-    <select id="width">
-      <option>1 inch</option>
-      <option>2 inch</option>
-      <option>3 inch</option>
-      <option>4 inch</option>
-    </select>
-  </div>
-  <div class="third">
-    <label for="use">Product Type</label>
-    <select id="use">
-      <option>Winch Strap</option>
-      <option>Ratchet Strap</option>
-      <option>Logistic Strap</option>
-    </select>
-  </div>
-</div>
+      <!-- Material + Width + Product Type Row -->
+      <div class="row three-col">
+        <div class="third">
+          <label for="material">Webbing Material</label>
+          <select id="material">
+            <option>Polyester</option>
+            <option>Nylon</option>
+          </select>
+        </div>
+        <div class="third">
+          <label for="width">Webbing Width</label>
+          <select id="width">
+            <option>1 inch</option>
+            <option>2 inch</option>
+            <option>3 inch</option>
+            <option>4 inch</option>
+          </select>
+        </div>
+        <div class="third">
+          <label for="use">Product Type</label>
+          <select id="use">
+            <option>Winch Strap</option>
+            <option>Ratchet Strap</option>
+            <option>Logistic Strap</option>
+          </select>
+        </div>
+      </div>
 
       <!-- Image Uploads -->
       <div class="row">
@@ -104,54 +106,57 @@
       </div>
 
       <!-- Signature Capture -->
-    <div class="row signature-row">
-  <div class="half">
-    <label for="signatureCanvas">Digital Signature</label>
-    <canvas id="signatureCanvas" width="400" height="50"></canvas>
-    <button type="button" id="clearSignatureBtn">Clear Signature</button>
-  </div>
-  <div class="half signature-note">
-    <p>
-      If you would like your PDF inspection report to include an electronic signature, please sign in the box provided before downloading.
-      Signed reports can help support documentation in compliance and safety audits.
-      <br><br>
-      <strong>Note:</strong> If the ID tag is missing or unreadable, the inspection report cannot be definitively linked to a specific strap.
-      Traceability may not be guaranteed.
-    </p>
-  </div>
-</div>
+      <div class="row" style="margin-top: 25px; align-items: stretch;">
+        <div class="half" style="display: flex; flex-direction: column;">
+          <label for="signatureCanvas">Digital Signature</label>
+          <canvas id="signatureCanvas" width="400" height="100" style="width: 100%; height: 100px; border: 1px solid #bbb; border-radius: 6px; background-color: #fff;"></canvas>
+          <button type="button" id="clearSignatureBtn"
+            style="margin-top: 10px; background-color: #888; color: #fff; border: none; padding: 8px 12px; border-radius: 6px; font-size: 13px; cursor: pointer;">
+            Clear Signature
+          </button>
+        </div>
+        <div class="half signature-note" style="display: flex; justify-content: center; align-items: center;">
+          <p style="font-size: 14px; color: #444; line-height: 1.6; text-align: justify; margin: 0;">
+            If you would like your PDF inspection report to include an electronic signature, please sign in the box provided before downloading.
+            Signed reports can help support documentation in compliance and safety audits.
+            <br><br>
+            <strong>Note:</strong> If the ID tag is missing or unreadable, the inspection report cannot be definitively linked to a specific strap.
+            Traceability may not be guaranteed.
+          </p>
+        </div>
+      </div>
 
       <!-- PDF Button -->
       <button id="downloadPdfBtn" style="display: none;">Download FREE PDF Report</button>
 
       <!-- Disclaimer -->
-     <div class="disclaimer-box">
-  <strong>Disclaimer – StrapScan™ AI Visual Assessment Tool</strong>
-  <p>
-    StrapScan is an AI-assisted image analysis tool developed to support preliminary visual evaluations of synthetic webbing, straps.
-    It is designed to aid users in identifying visible signs of potential damage or wear based on uploaded images.
-    However, it is critical to understand the following limitations and responsibilities:
-  </p>
+      <div class="disclaimer-box">
+        <strong>Disclaimer – StrapScan™ AI Visual Assessment Tool</strong>
+        <p>
+          StrapScan is an AI-assisted image analysis tool developed to support preliminary visual evaluations of synthetic webbing, straps.
+          It is designed to aid users in identifying visible signs of potential damage or wear based on uploaded images.
+          However, it is critical to understand the following limitations and responsibilities:
+        </p>
 
-  <strong>Image Quality Limitations</strong>
-  <p>
-    The accuracy of the analysis is contingent on the quality and clarity of the uploaded images.
-    Poor lighting, blur, obstruction, angle, or partial visibility of the strap may significantly affect the reliability of results.
-    Users are responsible for ensuring high-quality image capture according to the provided guidelines.
-  </p>
+        <strong>Image Quality Limitations</strong>
+        <p>
+          The accuracy of the analysis is contingent on the quality and clarity of the uploaded images.
+          Poor lighting, blur, obstruction, angle, or partial visibility of the strap may significantly affect the reliability of results.
+          Users are responsible for ensuring high-quality image capture according to the provided guidelines.
+        </p>
 
-  <strong>No Liability for Use or Reliance</strong>
-  <p>
-    StrapScan shall not be held liable for any decisions, actions, damages, or incidents arising from the use or misuse of this tool.
-    All decisions regarding the use, repair, or retirement of tie-down equipment must be made by a qualified inspector or safety officer with relevant industry certifications.
-  </p>
+        <strong>No Liability for Use or Reliance</strong>
+        <p>
+          StrapScan shall not be held liable for any decisions, actions, damages, or incidents arising from the use or misuse of this tool.
+          All decisions regarding the use, repair, or retirement of tie-down equipment must be made by a qualified inspector or safety officer with relevant industry certifications.
+        </p>
 
-  <strong>User Responsibility</strong>
-  <p>
-    By using StrapScan, users acknowledge that this tool is a supplementary aid and not a certification or clearance mechanism.
-    All equipment should be subject to thorough inspections at regular intervals as defined by the relevant safety authority in your jurisdiction.
-  </p>
-</div>
+        <strong>User Responsibility</strong>
+        <p>
+          By using StrapScan, users acknowledge that this tool is a supplementary aid and not a certification or clearance mechanism.
+          All equipment should be subject to thorough inspections at regular intervals as defined by the relevant safety authority in your jurisdiction.
+        </p>
+      </div>
 
     </div>
   </div>
