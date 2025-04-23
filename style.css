@@ -68,6 +68,14 @@ button#inspectButton {
   transition: background-color 0.3s ease;
 }
 
+.container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+
 button#inspectButton:hover {
   background-color: #002a5c;
 }
