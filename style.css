@@ -244,11 +244,11 @@ button:focus {
     height: 200px;
   }
 
- .third {
+  .third {
   flex: 1 1 calc(33.333% - 13.33px);
   min-width: 200px;
 }
-  
+
 .row {
   display: flex;
   flex-wrap: wrap;
