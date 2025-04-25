@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4-vision-preview",  // ✅ Using current working Vision model
+      model: "gpt-4o",  // ✅ Using current working Vision model
       temperature: 0.2,
       max_tokens: 500,
       messages: [
