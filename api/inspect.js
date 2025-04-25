@@ -86,7 +86,7 @@ Only respond in JSON using this format:
     }
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4-vision-preview", // ✅ this is the correct current model
+      model: "gpt-4-turbo", // ✅ this is the correct current model
       temperature: 0.3,
       max_tokens: 500,
       messages: [
