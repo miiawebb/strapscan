@@ -81,7 +81,7 @@ Only respond in JSON using this format:
     }
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4-1106-vision-preview",
+      model: "gpt-4-vision-preview",
       temperature: 0.3,
       max_tokens: 500,
       messages: [
@@ -96,12 +96,13 @@ Only respond in JSON using this format:
               type: "text",
               text: prompt
             },
-            {
-              type: "image_url",
-              image_url: {
-                url: imageBase64
-              }
-            }
+           {
+  type: "image_url",
+  image_url: {
+    url: imageBase64, // already a data URL like "data:image/jpeg;base64,..."
+    detail: "high"
+  }
+}
           ]
         }
       ]
