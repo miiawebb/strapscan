@@ -81,7 +81,7 @@ Only respond in JSON using this format:
     }
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4-turbo",
+      model: "gpt-4-1106-vision-preview",
       temperature: 0.3,
       max_tokens: 500,
       messages: [
