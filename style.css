@@ -210,3 +210,31 @@ p.sub {
   font-size: 16px;
   color: #ff6600;
 }
+
+/* RESULTS BOX STYLES */
+#inspectionResults {
+  display: none; /* Initially hidden */
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 10px;
+  border: 2px solid #444;
+  color: white;
+}
+
+#inspectionResults h3 {
+  color: #ff6600;
+  font-size: 24px;
+}
+
+#inspectionResults p {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#inspectionResults .status {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ff6600;
+}
+
