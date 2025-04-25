@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",  // ✅ Using current working Vision model
+      model: "gpt-4o",  // ✅ New working model
       temperature: 0.2,
       max_tokens: 500,
       messages: [
@@ -51,7 +51,7 @@ export default async function handler(req, res) {
       ]
     });
 
-    const aiRaw = response.choices[0]?.message?.content?.trim();
+    let aiRaw = response.choices[0]?.message?.content?.trim();
 
     if (!aiRaw) {
       console.error("❌ AI response was empty.");
@@ -60,18 +60,22 @@ export default async function handler(req, res) {
 
     console.log("📨 Raw AI Output:\n", aiRaw);
 
+    // ✅ CLEAN THE BACKTICKS!
+    const cleanedAiRaw = aiRaw.replace(/```json|```/g, "").trim();
+
     let detected = {};
     try {
-      detected = JSON.parse(aiRaw);
+      detected = JSON.parse(cleanedAiRaw);
     } catch (err) {
-      console.error("❌ Failed to parse JSON:", err.message);
-      return res.status(500).json({ error: "Invalid AI JSON response.", raw: aiRaw });
+      console.error("❌ Failed to parse cleaned JSON:", err.message);
+      return res.status(500).json({ error: "Invalid AI JSON response.", raw: cleanedAiRaw });
     }
 
     // Handle QuickScan or TagScan separately
     if (inspectionType === "quick") {
-      // QuickScan expects detected.damageType as array
-      const issues = Array.isArray(detected.damageType) ? detected.damageType : [];
+      const issues = Array.isArray(detected["Detected Issues"])
+        ? detected["Detected Issues"]
+        : [];
 
       const responseLines = issues.map((key) => {
         return config.standard_responses[key.toLowerCase()] || `Detected issue: ${key}`;
@@ -81,7 +85,7 @@ export default async function handler(req, res) {
         responseLines.push("No significant issues detected.");
       }
 
-      const condition = detected.condition || "PASS";
+      const condition = detected["Condition"] || "PASS";
 
       return res.status(200).json({
         result: `→ Condition: ${condition}\n\n${responseLines.join("\n\n")}`,
@@ -89,7 +93,6 @@ export default async function handler(req, res) {
       });
 
     } else if (inspectionType === "tag") {
-      // TagScan expects tagStatus, manufacturer, wll, compliance
       return res.status(200).json({
         result: `→ TagScan Result\nTag Status: ${detected.tagStatus || "Unknown"}\nManufacturer: ${detected.manufacturer || "Unknown"}\nWLL: ${detected.wll || "Unknown"}\nUS Compliance: ${detected.us_compliance ? "✅" : "❌"}\nCanada Compliance: ${detected.ca_compliance ? "✅" : "❌"}`,
         status: detected.status || detected.tagStatus || "PASS"
