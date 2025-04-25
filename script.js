@@ -1,94 +1,145 @@
-// Button selection
-document.querySelectorAll(".button-group").forEach(group => {
-  group.addEventListener("click", e => {
-    if (e.target.tagName === "BUTTON") {
-      [...group.children].forEach(btn => btn.classList.remove("selected"));
-      e.target.classList.add("selected");
-    }
+// Button selection logic for webbing material
+const materialButtons = document.querySelectorAll("#materialGroup button");
+materialButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    materialButtons.forEach(btn => btn.classList.remove("selected"));
+    button.classList.add("selected");
   });
 });
 
-// Toggle logic
-document.querySelectorAll(".toggle input").forEach(input => {
-  input.addEventListener("change", () => {
-    const selectedLabel = document.querySelector(`label[for="${input.id}"]`);
-    selectedLabel.classList.add("selected");
+// Button selection logic for webbing width
+const widthButtons = document.querySelectorAll("#widthGroup button");
+widthButtons.forEach(button => {
+  button.addEventListener("click", () => {
+    widthButtons.forEach(btn => btn.classList.remove("selected"));
+    button.classList.add("selected");
+  });
+});
 
-    document.querySelectorAll(".toggle label").forEach(label => {
-      if (label !== selectedLabel) label.classList.remove("selected");
+// Toggle logic for inspection type
+const toggleInputs = document.querySelectorAll(".toggle input");
+toggleInputs.forEach(input => {
+  input.addEventListener("change", () => {
+    const selectedLabel = document.querySelector(".toggle label[for='" + input.id + "']");
+    selectedLabel.classList.add("selected");
+    toggleInputs.forEach(toggleInput => {
+      if (toggleInput !== input) {
+        const label = document.querySelector(".toggle label[for='" + toggleInput.id + "']");
+        label.classList.remove("selected");
+      }
     });
   });
 });
 
-// Upload preview
+// Image upload preview functionality
 const imageInput = document.getElementById("imageInput");
-const preview = document.getElementById("imagePreview");
-const text = document.getElementById("uploadText");
+const imagePreview = document.getElementById("imagePreview");
+const uploadBox = document.getElementById("uploadBox");
+const uploadText = document.getElementById("uploadText");
 
-imageInput.addEventListener("change", function () {
-  const file = this.files[0];
-  if (file && file.type.startsWith("image/")) {
+imageInput.addEventListener("change", function (e) {
+  const file = e.target.files[0];
+  if (file) {
     const reader = new FileReader();
-    reader.onload = function (e) {
-      preview.innerHTML = `<img src="${e.target.result}" alt="Preview" />`;
-      text.style.display = "none";
+    reader.onload = function () {
+      imagePreview.innerHTML = `<img src="${reader.result}" alt="Strap Image Preview" />`;
+      uploadText.style.display = "none"; // Hide the upload text after image is added
     };
     reader.readAsDataURL(file);
   }
 });
 
-// Inspection logic
-document.querySelector(".run-btn").addEventListener("click", async function () {
-  const image = document.getElementById("imageInput").files[0];
-  const material = document.querySelector("#materialGroup .selected")?.dataset.value || "";
-  const width = document.querySelector("#widthGroup .selected")?.dataset.value || "";
-  const inspectionType = document.querySelector("#tagScan").checked ? "tag" : "quick";
+// Drag-and-drop support for image uploads
+uploadBox.addEventListener("dragover", function (e) {
+  e.preventDefault();
+  uploadBox.style.borderColor = "#ff6600";
+});
 
-  const resultBox = document.getElementById("resultBox");
-  if (!image) {
-    alert("Please upload an image before running inspection.");
+uploadBox.addEventListener("dragleave", function (e) {
+  e.preventDefault();
+  uploadBox.style.borderColor = "#aaa";
+});
+
+uploadBox.addEventListener("drop", function (e) {
+  e.preventDefault();
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function () {
+      imagePreview.innerHTML = `<img src="${reader.result}" alt="Strap Image Preview" />`;
+      uploadText.style.display = "none";
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+// Run Inspection button click logic
+const runButton = document.querySelector(".run-btn");
+runButton.addEventListener("click", function () {
+  const file = imageInput.files[0];
+  if (!file) {
+    alert("Please upload an image.");
     return;
   }
 
-  this.textContent = "Processing... Please wait";
-  this.disabled = true;
-  resultBox.innerHTML = "";
-  resultBox.style.display = "block";
-
   const reader = new FileReader();
   reader.onload = async function () {
+    const imageBase64 = reader.result;
+
+    const width = document.querySelector("#widthGroup .selected")?.dataset.value || "";
+    const material = document.querySelector("#materialGroup .selected")?.dataset.value || "";
+    const inspectionType = document.querySelector(".toggle input:checked")?.id || "quick";
+
+    runButton.innerText = "Processing...";
+    runButton.disabled = true;
+
     try {
       const res = await fetch("/api/inspect", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          imageBase64: reader.result,
-          inspectionType,
+          imageBase64,
           width,
-          material
+          material,
+          inspectionType
         })
       });
 
       const data = await res.json();
-      if (data.result) {
-        let bg = "#2a2a2a";
-        if (data.result.includes("→ PASS")) bg = "#134e4a";
-        if (data.result.includes("→ WARNING")) bg = "#92400e";
-        if (data.result.includes("→ FAIL")) bg = "#7f1d1d";
 
-        resultBox.style.backgroundColor = bg;
-        resultBox.innerHTML = `<pre style="white-space: pre-wrap;">${data.result}</pre>`;
-      } else {
-        resultBox.innerHTML = `<span style="color: orange;">Inspection completed, but no result returned.</span>`;
+      const inspectionResults = document.getElementById("inspectionResults");
+      const messageBox = document.getElementById("inspectionMessage");
+      const statusBox = document.getElementById("inspectionStatus");
+
+      if (!res.ok || !data || !data.result) {
+        throw new Error("Server responded with error: " + (data?.error || "Unknown error"));
       }
+
+      // Show result
+      inspectionResults.style.display = "block";
+
+      const resultText = data.result.trim();
+      const status = resultText.match(/→ (PASS|FAIL|WARNING)/i)?.[1] || "UNKNOWN";
+
+      // Set background color based on result
+      let bgColor = "#2a2a2a";
+      if (status === "PASS") bgColor = "#256029";
+      else if (status === "FAIL") bgColor = "#b02a37";
+      else if (status === "WARNING") bgColor = "#c57d00";
+
+      inspectionResults.style.backgroundColor = bgColor;
+
+      messageBox.innerHTML = resultText;
+      statusBox.innerText = `Status: ${status}`;
+
     } catch (err) {
       console.error("Error during inspection:", err);
-      resultBox.innerHTML = `<span style="color: red;">Error processing image.</span>`;
+      alert("There was an error processing the inspection. Please try again.");
     }
 
-    document.querySelector(".run-btn").textContent = "Run Inspection";
-    document.querySelector(".run-btn").disabled = false;
+    runButton.innerText = "Run Inspection";
+    runButton.disabled = false;
   };
 
-  reader.readAsDataURL(image);
+  reader.readAsDataURL(file);
 });
