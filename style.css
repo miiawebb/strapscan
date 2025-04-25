@@ -237,11 +237,3 @@ p.sub {
   font-weight: bold;
   color: #ff6600;
 }
-
-body {
-  background-color: #ffffff; /* Sets outside container to white */
-  margin: 10;
-  padding: 10;
-}
-
-
