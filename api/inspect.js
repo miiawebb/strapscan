@@ -110,7 +110,6 @@ Only respond in JSON using this format:
     const aiRaw = response.choices[0].message.content;
     const aiJson = JSON.parse(aiRaw);
 
-    // Response formatting for QuickScan
     if (inspectionType === "quick") {
       let damageSummary = "";
       let recommendation = "";
@@ -135,12 +134,13 @@ Only respond in JSON using this format:
         "Other": "Damage Identified: Other significant damage\nAction: Remove the tie down from service. Doubt about strength warrants removal."
       };
 
-      // Format damage types
-      aiJson.damageType.forEach(type => {
-        if (damageMap[type]) {
-          damageSummary += damageMap[type] + "\n\n";
-        }
-      });
+      if (Array.isArray(aiJson.damageType)) {
+        aiJson.damageType.forEach(type => {
+          if (damageMap[type]) {
+            damageSummary += damageMap[type] + "\n\n";
+          }
+        });
+      }
 
       if (aiJson.condition === "PASS") {
         if (aiJson.lineMarker === "One") {
@@ -164,7 +164,6 @@ Only respond in JSON using this format:
       });
     }
 
-    // Response formatting for TagScan
     if (inspectionType === "tag") {
       return res.status(200).json({
         result: `→ TagScan Result\nTag Status: ${aiJson.tagStatus}\nManufacturer: ${aiJson.manufacturer}\nWLL: ${aiJson.wll}\nUS Compliance: ${aiJson.us_compliance ? "✅" : "❌"}\nCanada Compliance: ${aiJson.ca_compliance ? "✅" : "❌"}`,
@@ -173,7 +172,7 @@ Only respond in JSON using this format:
     }
 
   } catch (error) {
-    console.error("Error processing inspection:", error);
+    console.error("Error processing inspection:", error.message);
     return res.status(500).json({ error: "Error processing inspection" });
   }
 }
