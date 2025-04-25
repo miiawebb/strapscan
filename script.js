@@ -1,33 +1,35 @@
-// BUTTON SELECTIONS FOR WIDTH / MATERIAL
-document.querySelectorAll("#materialGroup button").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll("#materialGroup button").forEach(btn => btn.classList.remove("selected"));
-    button.classList.add("selected");
+// ========================
+// SELECTION BUTTONS
+// ========================
+document.querySelectorAll('.button-group').forEach(group => {
+  group.addEventListener('click', function (e) {
+    if (e.target.tagName === 'BUTTON') {
+      [...group.children].forEach(btn => btn.classList.remove('selected'));
+      e.target.classList.add('selected');
+    }
   });
 });
 
-document.querySelectorAll("#widthGroup button").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll("#widthGroup button").forEach(btn => btn.classList.remove("selected"));
-    button.classList.add("selected");
-  });
-});
-
-// TOGGLE SELECTION
-document.querySelectorAll(".toggle input").forEach(input => {
+// ========================
+// TOGGLE SWITCH
+// ========================
+const toggleInputs = document.querySelectorAll(".toggle input");
+toggleInputs.forEach(input => {
   input.addEventListener("change", () => {
-    const selectedLabel = document.querySelector(`.toggle label[for='${input.id}']`);
+    const selectedLabel = document.querySelector(".toggle label[for='" + input.id + "']");
     selectedLabel.classList.add("selected");
-    document.querySelectorAll(".toggle input").forEach(otherInput => {
-      if (otherInput !== input) {
-        const label = document.querySelector(`.toggle label[for='${otherInput.id}']`);
+    toggleInputs.forEach(toggleInput => {
+      if (toggleInput !== input) {
+        const label = document.querySelector(".toggle label[for='" + toggleInput.id + "']");
         label.classList.remove("selected");
       }
     });
   });
 });
 
-// IMAGE UPLOAD + PREVIEW
+// ========================
+// IMAGE PREVIEW + DRAG SUPPORT
+// ========================
 const imageInput = document.getElementById("imageInput");
 const imagePreview = document.getElementById("imagePreview");
 const uploadBox = document.getElementById("uploadBox");
@@ -45,17 +47,17 @@ imageInput.addEventListener("change", function (e) {
   }
 });
 
-uploadBox.addEventListener("dragover", e => {
+uploadBox.addEventListener("dragover", function (e) {
   e.preventDefault();
   uploadBox.style.borderColor = "#ff6600";
 });
 
-uploadBox.addEventListener("dragleave", e => {
+uploadBox.addEventListener("dragleave", function (e) {
   e.preventDefault();
   uploadBox.style.borderColor = "#aaa";
 });
 
-uploadBox.addEventListener("drop", e => {
+uploadBox.addEventListener("drop", function (e) {
   e.preventDefault();
   const file = e.dataTransfer.files[0];
   if (file) {
@@ -68,50 +70,68 @@ uploadBox.addEventListener("drop", e => {
   }
 });
 
-// RUN INSPECTION
-document.querySelector(".run-btn").addEventListener("click", async () => {
-  const imageFile = imageInput.files[0];
-  if (!imageFile) {
-    alert("Please upload an image.");
+// ========================
+// INSPECTION LOGIC
+// ========================
+const runButton = document.querySelector(".run-btn");
+const resultBox = document.getElementById("resultBox");
+
+runButton.addEventListener("click", async function () {
+  const imageInput = document.getElementById("imageInput");
+  const file = imageInput.files[0];
+  if (!file) {
+    alert("Please upload an image before running inspection.");
     return;
   }
 
+  // Set button to loading
+  runButton.disabled = true;
+  runButton.innerText = "Processing...";
+
+  // Read image as base64
   const reader = new FileReader();
-  reader.onloadend = async () => {
+  reader.onload = async function () {
     const imageBase64 = reader.result;
-    const width = document.querySelector("#widthGroup .selected")?.dataset.value;
-    const material = document.querySelector("#materialGroup .selected")?.dataset.value;
-    const inspectionType = document.getElementById("tagScan").checked ? "tag" : "quick";
+
+    // Collect input values
+    const material = document.querySelector("#materialGroup .selected")?.dataset.value || "";
+    const width = document.querySelector("#widthGroup .selected")?.dataset.value || "";
+    const scanType = document.querySelector(".toggle input:checked")?.id || "quickScan";
 
     try {
       const res = await fetch("/api/inspect", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ imageBase64, material, width, inspectionType }),
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          imageBase64,
+          material,
+          width,
+          inspectionType: scanType === "tagScan" ? "tag" : "quick"
+        })
       });
 
       const data = await res.json();
-      const resultText = data.result;
 
-      const resultBox = document.getElementById("inspectionResults");
-      const message = document.getElementById("inspectionMessage");
-
-      message.textContent = resultText;
-      resultBox.style.display = "block";
-
-      // Optional: Background color feedback based on result
-      if (resultText.startsWith("→ PASS")) {
-        resultBox.style.backgroundColor = "#e0f7e9";
-      } else if (resultText.startsWith("→ FAIL")) {
-        resultBox.style.backgroundColor = "#ffe0e0";
-      } else if (resultText.startsWith("→ WARNING")) {
-        resultBox.style.backgroundColor = "#fff3cd";
+      if (data?.result) {
+        resultBox.style.display = "block";
+        resultBox.innerText = data.result;
+        // Optional: Color code block could be added here
+      } else {
+        resultBox.style.display = "block";
+        resultBox.innerText = "⚠️ No result returned from inspection.";
       }
-
     } catch (err) {
       console.error("Error during inspection:", err);
-      alert("Inspection failed. Try again later.");
+      resultBox.style.display = "block";
+      resultBox.innerText = "🚫 Error: Failed to complete inspection.";
     }
+
+    // Reset button
+    runButton.disabled = false;
+    runButton.innerText = "Run Inspection";
   };
-  reader.readAsDataURL(imageFile);
+
+  reader.readAsDataURL(file);
 });
