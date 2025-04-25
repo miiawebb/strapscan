@@ -240,8 +240,8 @@ p.sub {
 
 body {
   background-color: #ffffff; /* Sets outside container to white */
-  margin: 0;
-  padding: 0;
+  margin: 10;
+  padding: 10;
 }
 
 
