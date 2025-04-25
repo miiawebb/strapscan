@@ -76,6 +76,51 @@ uploadBox.addEventListener("drop", function (e) {
 // Run Inspection button click logic
 const runButton = document.querySelector(".run-btn");
 runButton.addEventListener("click", function () {
-  // You can add your logic for running the inspection here, such as sending data to the server or processing the inputs
-  alert("Running inspection... (logic to be added)");
+  // Collect selected data
+  const selectedMaterial = document.querySelector("#materialGroup .selected")?.textContent || '';
+  const selectedWidth = document.querySelector("#widthGroup .selected")?.textContent || '';
+  const selectedInspectionType = document.querySelector(".toggle input:checked")?.id || '';
+  
+  // Collect image data (base64 string or file)
+  const imageInput = document.getElementById("imageInput");
+  const imageFile = imageInput.files[0];
+  let imageData = '';
+  if (imageFile) {
+    const reader = new FileReader();
+    reader.onloadend = function () {
+      imageData = reader.result;
+      sendInspectionData(selectedMaterial, selectedWidth, selectedInspectionType, imageData);
+    };
+    reader.readAsDataURL(imageFile);
+  } else {
+    // If no image is selected, trigger the inspection with empty data
+    sendInspectionData(selectedMaterial, selectedWidth, selectedInspectionType, imageData);
+  }
 });
+
+// Function to send data to the server
+function sendInspectionData(material, width, inspectionType, imageData) {
+  fetch('/api/inspect', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      material: material,
+      width: width,
+      inspectionType: inspectionType,
+      image: imageData,
+    }),
+  })
+    .then(response => response.json())
+    .then(result => {
+      // Handle the result of the inspection here (e.g., show results)
+      console.log(result);
+      // Example: Display the result or update UI accordingly
+      alert("Inspection complete!");
+    })
+    .catch(error => {
+      console.error("Error during inspection:", error);
+    });
+}
+
