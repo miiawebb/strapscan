@@ -6,6 +6,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
+// Load inspection configuration
 const configPath = path.join(process.cwd(), "inspection-config.json");
 const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
 
@@ -32,19 +33,19 @@ export default async function handler(req, res) {
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4-turbo",
+      model: "gpt-4-vision-preview",  // ✅ Using current working Vision model
       temperature: 0.2,
       max_tokens: 500,
       messages: [
         {
           role: "system",
-          content: "You are a specialized cargo strap inspection AI. Only detect and classify based on provided prompt."
+          content: "You are a specialized cargo strap inspection AI. Only detect and classify based on the prompt. Return strict JSON only. No freeform descriptions."
         },
         {
           role: "user",
           content: [
             { type: "text", text: filledPrompt },
-            { type: "image_url", image_url: { url: imageBase64 } }
+            { type: "image_url", image_url: { url: imageBase64, detail: "high" } }
           ]
         }
       ]
@@ -63,39 +64,37 @@ export default async function handler(req, res) {
     try {
       detected = JSON.parse(aiRaw);
     } catch (err) {
-      // Fallback: try to extract keywords manually from freeform text
-      const lower = aiRaw.toLowerCase();
-      detected.detected = Object.keys(config.standard_responses).filter((key) =>
-        lower.includes(key)
-      );
-      detected.condition = lower.includes("fail")
-        ? "FAIL"
-        : lower.includes("warning")
-        ? "WARNING"
-        : "PASS";
+      console.error("❌ Failed to parse JSON:", err.message);
+      return res.status(500).json({ error: "Invalid AI JSON response.", raw: aiRaw });
     }
 
-    // Pull response strings from config
-    const detectedIssues = Array.isArray(detected.detected)
-      ? detected.detected
-      : [];
+    // Handle QuickScan or TagScan separately
+    if (inspectionType === "quick") {
+      // QuickScan expects detected.damageType as array
+      const issues = Array.isArray(detected.damageType) ? detected.damageType : [];
 
-    const responseLines = detectedIssues.map((key) => {
-      return config.standard_responses[key] || `Detected issue: ${key}`;
-    });
+      const responseLines = issues.map((key) => {
+        return config.standard_responses[key.toLowerCase()] || `Detected issue: ${key}`;
+      });
 
-    if (responseLines.length === 0) {
-      responseLines.push("No significant issues detected.");
+      if (responseLines.length === 0) {
+        responseLines.push("No significant issues detected.");
+      }
+
+      const condition = detected.condition || "PASS";
+
+      return res.status(200).json({
+        result: `→ Condition: ${condition}\n\n${responseLines.join("\n\n")}`,
+        status: condition
+      });
+
+    } else if (inspectionType === "tag") {
+      // TagScan expects tagStatus, manufacturer, wll, compliance
+      return res.status(200).json({
+        result: `→ TagScan Result\nTag Status: ${detected.tagStatus || "Unknown"}\nManufacturer: ${detected.manufacturer || "Unknown"}\nWLL: ${detected.wll || "Unknown"}\nUS Compliance: ${detected.us_compliance ? "✅" : "❌"}\nCanada Compliance: ${detected.ca_compliance ? "✅" : "❌"}`,
+        status: detected.status || detected.tagStatus || "PASS"
+      });
     }
-
-    const summary = `→ Condition: ${detected.condition || "PASS"}\n\n${responseLines.join(
-      "\n\n"
-    )}`;
-
-    return res.status(200).json({
-      result: summary,
-      status: detected.condition || "PASS"
-    });
 
   } catch (error) {
     console.error("💥 Inspection error:", error.message, error.stack);
