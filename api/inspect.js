@@ -20,10 +20,11 @@ export default async function handler(req) {
       return new Response("Missing required fields", { status: 400 });
     }
 
+    const base64Cleaned = imageBase64.replace(/^data:image\/\w+;base64,/, "");
+
     let prompt = "";
 
     if (inspectionType === "tag") {
-      // ===== ID TAG COMPLIANCE PROMPT =====
       prompt = `
 You are a certified cargo control compliance specialist. 
 Inspect the uploaded ID tag of a synthetic web tie-down strap.
@@ -38,21 +39,20 @@ Regulations:
 - USA: If tag is missing/unreadable, assign default WLL = 1,000 lbs per inch of webbing width.
 - Canada: Missing or unreadable tag = REMOVE FROM SERVICE.
 
-Output Format (strictly):
+Image (base64 encoded):
+${base64Cleaned}
+
+Respond ONLY in this format:
 Tag Status: Legible / Unreadable
 Manufacturer: [Name or "Not found"]
 WLL: [Value in lbs / kg or "Not listed"]
 US Compliance: ✅ / ❌
 Canada Compliance: ✅ / ❌
-
-Respond precisely in this format.
       `;
     } else if (inspectionType === "quick") {
-      // ===== QUICK VISUAL DAMAGE SCAN PROMPT =====
       prompt = `
 You are a certified tie-down strap inspector. 
-Analyze the uploaded image of a ${width} wide ${material} strap. 
-Your evaluation must comply with WSTDA safety standards.
+Analyze this strap image (${width}, ${material}) using WSTDA safety standards.
 
 Damage Categories:
 1. Webbing Integrity
@@ -69,66 +69,46 @@ Damage Categories:
    - Chemical stains or burns altering color = WARNING
    - UV fading obscuring 25%+ = WARNING
 
-Line Marker Detection (for MBS rating):
-- Single center line = 5,000 lb/inch MBS (WSTDA compliant ✅)
-- Double center lines = 6,000 lb/inch MBS (WSTDA compliant ✅)
-- No visible lines = Flag as POTENTIAL non-compliance with WSTDA T-4 unless inside enclosed vehicle.
+Line Marker Detection:
+- One line = 5,000 lb/in MBS ✅
+- Two lines = 6,000 lb/in MBS ✅
+- No line = ⚠️ unless in enclosed cargo
 
-Final Decision Rules:
-- PASS – No major defects.
-- WARNING – Minor wear, suggest monitoring.
-- FAIL – Significant damage, remove from service immediately.
+Base64 Image:
+${base64Cleaned}
 
-Multiple Images:
-- Base decision on worst damage observed.
-
-Respond in EXACTLY this format:
-
+Respond strictly:
 Condition: PASS / WARNING / FAIL
-Detected Damage: [List of issues found, or "None"]
-Line Marker Result: [One line, Two lines, None]
+Detected Damage: [list or "None"]
+Line Marker Result: One line / Two lines / None
 Recommendation: Continue use / Monitor closely / Remove from service
       `;
-    } else {
-      return new Response("Invalid inspection type", { status: 400 });
     }
 
-    // ===== CALL GPT-4 Turbo =====
     const response = await openai.chat.completions.create({
       model: "gpt-4-turbo",
       temperature: 0.2,
       messages: [
         {
           role: "system",
-          content: "You are an expert strap inspector and compliance checker. Follow the user's instructions precisely.",
+          content: "You are an expert strap inspector. Follow compliance rules exactly.",
         },
         {
           role: "user",
-          content: [
-            {
-              type: "text",
-              text: prompt,
-            },
-            {
-              type: "image",
-              image: {
-                base64: imageBase64.split(",")[1], // Remove data prefix if it exists
-              },
-            },
-          ],
+          content: prompt,
         },
       ],
-      max_tokens: 1500,
     });
 
-    const rawText = response.choices[0]?.message?.content || "No result";
+    const resultText = response.choices[0]?.message?.content || "No result";
 
-    return new Response(JSON.stringify({ result: rawText }), {
+    return new Response(JSON.stringify({ result: resultText }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
-  } catch (error) {
-    console.error("Inspection API error:", error);
+
+  } catch (err) {
+    console.error("Inspection API error:", err);
     return new Response("Internal Server Error", { status: 500 });
   }
 }
