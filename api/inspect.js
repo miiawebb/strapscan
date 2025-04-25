@@ -81,7 +81,7 @@ Only respond in JSON using this format:
     }
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4-vision-preview",
+      model: "gpt-4-1106-vision-preview",
       temperature: 0.3,
       max_tokens: 500,
       messages: [
@@ -96,19 +96,21 @@ Only respond in JSON using this format:
               type: "text",
               text: prompt
             },
-           {
-  type: "image_url",
-  image_url: {
-    url: imageBase64, // already a data URL like "data:image/jpeg;base64,..."
-    detail: "high"
-  }
-}
+            {
+              type: "image_url",
+              image_url: {
+                url: imageBase64,
+                detail: "high"
+              }
+            }
           ]
         }
       ]
     });
 
-    const aiRaw = response.choices[0].message.content;
+    const aiRaw = response.choices[0]?.message?.content;
+    if (!aiRaw) throw new Error("Empty response from AI.");
+
     const aiJson = JSON.parse(aiRaw);
 
     if (inspectionType === "quick") {
@@ -173,7 +175,7 @@ Only respond in JSON using this format:
     }
 
   } catch (error) {
-    console.error("Error processing inspection:", error.message);
+    console.error("Error processing inspection:", error.message, error.stack);
     return res.status(500).json({ error: "Error processing inspection" });
   }
 }
