@@ -4,90 +4,90 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 });
 
-export async function POST(req) {
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  const { imageBase64, inspectionType, material, width } = req.body;
+
+  if (!imageBase64 || !inspectionType) {
+    return res.status(400).json({ error: "Missing required fields." });
+  }
+
   try {
-    const body = await req.json();
-    const {
-      imageBase64,
-      inspectionType,
-      width,
-      material
-    } = body;
-
-    if (!imageBase64 || !inspectionType) {
-      return new Response(
-        JSON.stringify({ error: "Missing required fields." }),
-        { status: 400 }
-      );
-    }
-
     let prompt = "";
-    if (inspectionType === "tag") {
+
+    if (inspectionType === "quick") {
       prompt = `
-You are a certified cargo control compliance specialist. Your task is to inspect the ID tag on a synthetic web tie-down strap and assess its compliance with WSTDA, U.S., and Canadian regulations.
+You are a certified tie-down strap inspector. You will be shown a high-resolution image of a synthetic web tie-down strap.
 
-Required Fields:
-- Manufacturer Name: Must be clear and complete.
-- Working Load Limit (WLL): Must appear in both pounds (lbs) and kilograms (kg).
+Your task:
+1. Visually inspect the strap and detect any visible damage.
+2. Classify the damage into one or more of the following WSTDA removal criteria:
 
-Inspection Guidelines:
-1. Manufacturer Name:
-   - Tag must show a full, legible manufacturer name.
-2. WLL:
-   - Both lb and kg units required. Must be clearly readable and match the physical rating of the strap.
-3. Tag Condition:
-   - Tag must be free from fading, tears, or smudging that obscures key data.
+- Holes, Tears, Cuts, Snags, or Embedded Particles
+- Broken or Worn Stitching
+- Excessive Abrasive Wear
+- Knots
+- Melting, Charring, or Weld Spatter
+- Chemical Burns
+- UV Degradation (bleaching, stiffness)
+- Distorted, Pitted, or Corroded Hardware
+- Illegible or Missing ID Tags
+- Other visible damage
 
-Regulations:
-- USA (WSTDA): If tag is missing/unreadable, use default WLL = 1,000 lbs per inch of width.
-- Canada: Missing or unreadable tag = Immediate removal from service.
+Return only the damage **type**, and classify the condition as:
 
-Output Format:
-→ PASS / WARNING / FAIL
-Tag Status: Legible / Unreadable
-Manufacturer: [Name or "Not found"]
-WLL: [lbs / kg or "Not listed"]
-US Compliance: ✅ / ❌
-Canada Compliance: ✅ / ❌
-      `.trim();
-    } else {
+- PASS: No visible damage
+- WARNING: Minor, non-critical signs of damage
+- FAIL: Significant damage that requires removal
+
+Line Marker Logic:
+- If visible: One line = 5,000 lb/in MBS; Two lines = 6,000 lb/in MBS
+- If not visible: Flag as non-compliant with WSTDA T-4 Section 2.3.7 unless used in enclosed transport
+
+Only respond in JSON using this format:
+
+{
+  "condition": "PASS" | "WARNING" | "FAIL",
+  "damageType": ["Cuts", "Fraying", "UV Degradation"],
+  "lineMarker": "One" | "Two" | "None",
+  "status": "PASS" | "WARNING" | "FAIL"
+}
+`;
+    } else if (inspectionType === "tag") {
       prompt = `
-You are a certified tie-down strap inspector. Review the uploaded image of a ${width}-wide ${material} strap. Your assessment must align with WSTDA inspection standards.
+You are a certified cargo control compliance specialist. Inspect the ID tag shown in the image and extract the following:
 
-Webbing Damage:
-- Cuts or Tears > 1/4 inch = FAIL
-- Fraying > 2 inches = FAIL
-- Burn marks altering weave = FAIL
+1. Manufacturer Name
+2. Working Load Limit (WLL) in lbs and kg
+3. Tag legibility
+4. Compliance:
+   - US: ✅ if readable, ❌ if unreadable
+   - Canada: ✅ only if tag is fully legible and shows both manufacturer and WLL
 
-Structural Issues:
-- Crushed fibers > 1 inch = WARNING
-- Knots in webbing = FAIL
-- Broken or loose stitching >10% = FAIL
+Only respond in JSON using this format:
 
-Contaminants & UV Wear:
-- Chemical stains altering color = WARNING
-- Fading obscuring >25% = WARNING or FAIL
-
-Marker Detection:
-- One line = 5,000 lb/in MBS
-- Two lines = 6,000 lb/in MBS
-- None = Warning (unless enclosed vehicle use)
-
-Result format:
-→ PASS / WARNING / FAIL
-Condition: [PASS, WARNING, or FAIL]
-Damage: [summary]
-Line Marker: One / Two / None
-Recommendation: [What action the user should take]
-      `.trim();
+{
+  "tagStatus": "Legible" | "Unreadable",
+  "manufacturer": "Vevor",
+  "wll": "5400 lbs / 2449 kg",
+  "us_compliance": true | false,
+  "ca_compliance": true | false,
+  "status": "PASS" | "FAIL"
+}
+`;
     }
 
     const response = await openai.chat.completions.create({
       model: "gpt-4-turbo",
+      temperature: 0.3,
+      max_tokens: 500,
       messages: [
         {
           role: "system",
-          content: "You are an expert in cargo control inspection and WSTDA compliance."
+          content: "You will receive an image in base64 format. Analyze it strictly according to the prompt."
         },
         {
           role: "user",
@@ -104,20 +104,76 @@ Recommendation: [What action the user should take]
             }
           ]
         }
-      ],
-      max_tokens: 1000
+      ]
     });
 
-    const output = response.choices[0].message.content;
-    return new Response(JSON.stringify({ result: output }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" }
-    });
-  } catch (err) {
-    console.error("Inspection Error:", err);
-    return new Response(
-      JSON.stringify({ error: "Error processing inspection" }),
-      { status: 500 }
-    );
+    const aiRaw = response.choices[0].message.content;
+    const aiJson = JSON.parse(aiRaw);
+
+    // Response formatting for QuickScan
+    if (inspectionType === "quick") {
+      let damageSummary = "";
+      let recommendation = "";
+      let lineInfo = "";
+
+      const damageMap = {
+        "Cuts": "Damage Identified: Cut in the webbing\nAction: Remove the tie down from service. Cuts cause localized weakness in the webbing and can result in failure under load.",
+        "Tears": "Damage Identified: Tear in the webbing\nAction: Remove the tie down from service. A tear in the webbing is a critical failure point, weakening the tie down's integrity.",
+        "Snags": "Damage Identified: Snag in the webbing\nAction: Remove the tie down from service. Snags disrupt the structural integrity of the webbing and can cause further damage under tension.",
+        "Fraying": "Damage Identified: Excessive fraying\nAction: Remove the tie down from service. Frayed edges reduce load capacity and indicate long-term wear.",
+        "Embedded Particles": "Damage Identified: Embedded particles\nAction: Remove the tie down from service. These can cause abrasion and compromise strength.",
+        "Broken Stitching": "Damage Identified: Broken stitching\nAction: Remove the tie down from service. This undermines load-carrying integrity.",
+        "Worn Stitching": "Damage Identified: Worn stitching\nAction: Remove the tie down from service. It indicates potential seam failure.",
+        "Abrasive Wear": "Damage Identified: Excessive abrasive wear\nAction: Remove the tie down from service. This compromises tensile strength.",
+        "Knots": "Damage Identified: Knot in load-bearing webbing\nAction: Remove the tie down from service. Knots introduce weak points.",
+        "Melting": "Damage Identified: Melting of webbing\nAction: Remove the tie down from service. Heat damage reduces strength.",
+        "Charring": "Damage Identified: Charring on webbing\nAction: Remove the tie down from service. Heat has compromised the material.",
+        "Weld Spatter": "Damage Identified: Weld spatter on webbing\nAction: Remove the tie down from service. This creates local failure points.",
+        "Chemical Burns": "Damage Identified: Chemical burn\nAction: Remove the tie down from service. Chemicals degrade material safety.",
+        "UV Degradation": "Damage Identified: UV degradation\nAction: Remove the tie down from service. This weakens material through sun exposure.",
+        "Corroded Hardware": "Damage Identified: Corroded hardware\nAction: Remove the tie down from service. Weakens load integrity.",
+        "Other": "Damage Identified: Other significant damage\nAction: Remove the tie down from service. Doubt about strength warrants removal."
+      };
+
+      // Format damage types
+      aiJson.damageType.forEach(type => {
+        if (damageMap[type]) {
+          damageSummary += damageMap[type] + "\n\n";
+        }
+      });
+
+      if (aiJson.condition === "PASS") {
+        if (aiJson.lineMarker === "One") {
+          lineInfo = `Line Marker: One line visible — indicates 5,000 lb/in MBS per WSTDA T-4 Section 2.3.7.`;
+        } else if (aiJson.lineMarker === "Two") {
+          lineInfo = `Line Marker: Two lines visible — indicates 6,000 lb/in MBS per WSTDA T-4 Section 2.3.7.`;
+        } else {
+          lineInfo = `Line Marker: None visible — not compliant under WSTDA T-4 Section 2.3.7 unless used in enclosed transport.`;
+        }
+      }
+
+      recommendation = (aiJson.condition === "FAIL")
+        ? "→ Recommendation: Remove this tie-down from service immediately to maintain safety and compliance."
+        : (aiJson.condition === "WARNING")
+          ? "→ Recommendation: Inspect this tie-down fully before use. Monitor damage and consider retiring it if wear progresses."
+          : "→ Recommendation: This strap appears safe for use. Continue with standard inspection protocol.";
+
+      return res.status(200).json({
+        result: `→ Condition: ${aiJson.condition}\n${damageSummary}${lineInfo}\n${recommendation}`,
+        status: aiJson.status
+      });
+    }
+
+    // Response formatting for TagScan
+    if (inspectionType === "tag") {
+      return res.status(200).json({
+        result: `→ TagScan Result\nTag Status: ${aiJson.tagStatus}\nManufacturer: ${aiJson.manufacturer}\nWLL: ${aiJson.wll}\nUS Compliance: ${aiJson.us_compliance ? "✅" : "❌"}\nCanada Compliance: ${aiJson.ca_compliance ? "✅" : "❌"}`,
+        status: aiJson.status
+      });
+    }
+
+  } catch (error) {
+    console.error("Error processing inspection:", error);
+    return res.status(500).json({ error: "Error processing inspection" });
   }
 }
