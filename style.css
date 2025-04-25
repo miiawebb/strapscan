@@ -238,3 +238,10 @@ p.sub {
   color: #ff6600;
 }
 
+body {
+  background-color: #ffffff; /* Sets outside container to white */
+  margin: 0;
+  padding: 0;
+}
+
+
