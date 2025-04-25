@@ -15,6 +15,11 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Missing required fields." });
   }
 
+  if (!imageBase64.startsWith("data:image/")) {
+    console.error("❌ Invalid imageBase64 format:", imageBase64.slice(0, 50));
+    return res.status(400).json({ error: "Invalid image format." });
+  }
+
   try {
     let prompt = "";
 
@@ -92,26 +97,28 @@ Only respond in JSON using this format:
         {
           role: "user",
           content: [
-            {
-              type: "text",
-              text: prompt
-            },
-            {
-              type: "image_url",
-              image_url: {
-                url: imageBase64,
-                detail: "high"
-              }
-            }
+            { type: "text", text: prompt },
+            { type: "image_url", image_url: { url: imageBase64, detail: "high" } }
           ]
         }
       ]
     });
 
-    const aiRaw = response.choices[0]?.message?.content;
-    if (!aiRaw) throw new Error("Empty response from AI.");
+    const aiRaw = response.choices[0]?.message?.content?.trim();
+    if (!aiRaw) {
+      console.error("❌ AI response was empty.");
+      return res.status(500).json({ error: "Empty response from AI." });
+    }
 
-    const aiJson = JSON.parse(aiRaw);
+    console.log("📨 AI response:\n", aiRaw);
+
+    let aiJson;
+    try {
+      aiJson = JSON.parse(aiRaw);
+    } catch (err) {
+      console.error("❌ Failed to parse AI response as JSON:\n", aiRaw);
+      return res.status(500).json({ error: "AI response was not valid JSON." });
+    }
 
     if (inspectionType === "quick") {
       let damageSummary = "";
@@ -175,7 +182,7 @@ Only respond in JSON using this format:
     }
 
   } catch (error) {
-    console.error("Error processing inspection:", error.message, error.stack);
-    return res.status(500).json({ error: "Error processing inspection" });
+    console.error("💥 Unexpected server error:", error.message, error.stack);
+    return res.status(500).json({ error: "Unexpected error during inspection." });
   }
 }
