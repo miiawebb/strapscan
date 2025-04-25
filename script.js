@@ -116,11 +116,20 @@ function sendInspectionData(material, width, inspectionType, imageData) {
     .then(result => {
       // Handle the result of the inspection here (e.g., show results)
       console.log(result);
-      // Example: Display the result or update UI accordingly
-      alert("Inspection complete!");
+
+      // Ensure the results box is visible
+      const resultsBox = document.getElementById("inspectionResults");
+      const inspectionMessage = document.getElementById("inspectionMessage");
+      const inspectionStatus = document.getElementById("inspectionStatus");
+
+      // Assuming 'result' contains inspection result data
+      inspectionMessage.textContent = result.message || "No specific message returned.";
+      inspectionStatus.textContent = result.status || "No status returned.";
+
+      // Show the results box
+      resultsBox.style.display = "block";
     })
     .catch(error => {
       console.error("Error during inspection:", error);
     });
 }
-
