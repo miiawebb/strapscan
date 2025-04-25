@@ -1,103 +1,134 @@
-
 import OpenAI from "openai";
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-const standardResponses = {
-  "abrasion": "Excessive abrasive wear has reduced the effective strength of the strap. Remove from service.",
-  "cut": "Cuts or slices significantly diminish the strap’s load capacity. Remove from service.",
-  "fraying": "Frayed edges or loose fibers detected. If exceeding 2 inches, remove from service.",
-  "burn": "Heat damage such as charring or melting is visible. Remove from service.",
-  "stitching": "Broken or worn stitching found in load-bearing areas. Strap must be retired.",
-  "knot": "Knots concentrate stress and reduce effective strength. Remove from service.",
-  "chemical": "Chemical exposure observed. May degrade material strength. Remove from service.",
-  "uv": "UV fading or discoloration suggests degradation. Remove from service if severe.",
-  "snag": "Snags found. Minor issues may warrant monitoring; severe snags require removal.",
-  "marker-none": "No marker lines detected. May violate WSTDA-T-4 2.3.7 unless used in enclosed vehicles.",
-  "marker-single": "Single line marker found. Interpreted as 5,000 lb/inch MBS. Complies with WSTDA-T-4.",
-  "marker-double": "Double line marker found. Interpreted as 6,000 lb/inch MBS. Complies with WSTDA-T-4."
+export const config = {
+  runtime: "edge",
 };
 
-const quickScanPrompt = ({ width, material }) => `
-You are a certified tie-down strap inspector. Review the uploaded image of a ${width}-wide ${material} strap. Your assessment must align with WSTDA inspection standards.
+export default async function handler(req) {
+  if (req.method !== "POST") {
+    return new Response("Method Not Allowed", { status: 405 });
+  }
 
-Evaluate the strap for:
-1. Webbing Integrity:
-- Cuts, Tears, Fraying, Burns
-2. Structural Issues:
-- Crushed fibers, Knots, Stitching damage
-3. Contaminants:
-- Chemical burns, Oil, Grease
-4. Discoloration:
-- UV fading, General surface wear
-5. Marker Lines:
-- Identify if line markers are present (none / single / double)
-
-Output Format:
-→ [PASS | WARNING | FAIL] – Condition summary.
-Detected Damage: [List each damage type].
-Marker Lines: [none | 1 line | 2 lines]
-Recommendation: [Action to be taken]
-`;
-
-const tagScanPrompt = `
-You are a certified cargo control compliance specialist. Your task is to inspect the ID tag on a synthetic web tie-down strap.
-
-Check:
-- Manufacturer Name: Must be legible and complete.
-- Working Load Limit (WLL): Must appear in lbs and kg.
-
-Rules:
-- If tag is unreadable → US: defaults to 1,000 lbs/inch; CA: non-compliant.
-- If WLL is missing, strap must be removed from service.
-- If manufacturer name is missing, strap must be removed.
-
-Output Format:
-→ [PASS | WARNING | FAIL] – Label condition.
-Details:
-- Manufacturer: [name or not found]
-- WLL: [value or not visible]
-- Compliance: US [✓ or ✗], CA [✓ or ✗]
-`;
-
-export default async function handler(req, res) {
   try {
-    const { imageBase64, inspectionType, width, material } = req.body;
+    const { imageBase64, material, width, inspectionType } = await req.json();
 
     if (!imageBase64 || !inspectionType) {
-      return res.status(400).json({ error: "Missing required fields." });
+      return new Response("Missing required fields", { status: 400 });
     }
 
-    const prompt = inspectionType === "quick"
-      ? quickScanPrompt({ width, material })
-      : tagScanPrompt;
+    let prompt = "";
 
-    const completion = await openai.chat.completions.create({
+    if (inspectionType === "tag") {
+      // ===== ID TAG COMPLIANCE PROMPT =====
+      prompt = `
+You are a certified cargo control compliance specialist. 
+Inspect the uploaded ID tag of a synthetic web tie-down strap.
+Assess its compliance with WSTDA, U.S., and Canadian regulations.
+
+Required Checks:
+- Manufacturer Name: Must be clear and complete.
+- Working Load Limit (WLL): Must appear in both pounds (lbs) and kilograms (kg).
+- Tag Legibility: No missing, faded, or smudged critical information.
+
+Regulations:
+- USA: If tag is missing/unreadable, assign default WLL = 1,000 lbs per inch of webbing width.
+- Canada: Missing or unreadable tag = REMOVE FROM SERVICE.
+
+Output Format (strictly):
+Tag Status: Legible / Unreadable
+Manufacturer: [Name or "Not found"]
+WLL: [Value in lbs / kg or "Not listed"]
+US Compliance: ✅ / ❌
+Canada Compliance: ✅ / ❌
+
+Respond precisely in this format.
+      `;
+    } else if (inspectionType === "quick") {
+      // ===== QUICK VISUAL DAMAGE SCAN PROMPT =====
+      prompt = `
+You are a certified tie-down strap inspector. 
+Analyze the uploaded image of a ${width} wide ${material} strap. 
+Your evaluation must comply with WSTDA safety standards.
+
+Damage Categories:
+1. Webbing Integrity
+   - Cuts or Tears > 1/4 inch = FAIL
+   - Fraying > 2 inches = FAIL
+   - Burns altering weave = FAIL
+
+2. Structural Issues
+   - Crushed fibers > 1 inch = WARNING
+   - Permanent knots = FAIL
+   - Broken stitching > 10% = FAIL
+
+3. Contaminants & UV Wear
+   - Chemical stains or burns altering color = WARNING
+   - UV fading obscuring 25%+ = WARNING
+
+Line Marker Detection (for MBS rating):
+- Single center line = 5,000 lb/inch MBS (WSTDA compliant ✅)
+- Double center lines = 6,000 lb/inch MBS (WSTDA compliant ✅)
+- No visible lines = Flag as POTENTIAL non-compliance with WSTDA T-4 unless inside enclosed vehicle.
+
+Final Decision Rules:
+- PASS – No major defects.
+- WARNING – Minor wear, suggest monitoring.
+- FAIL – Significant damage, remove from service immediately.
+
+Multiple Images:
+- Base decision on worst damage observed.
+
+Respond in EXACTLY this format:
+
+Condition: PASS / WARNING / FAIL
+Detected Damage: [List of issues found, or "None"]
+Line Marker Result: [One line, Two lines, None]
+Recommendation: Continue use / Monitor closely / Remove from service
+      `;
+    } else {
+      return new Response("Invalid inspection type", { status: 400 });
+    }
+
+    // ===== CALL GPT-4 Turbo =====
+    const response = await openai.chat.completions.create({
       model: "gpt-4-turbo",
+      temperature: 0.2,
       messages: [
         {
           role: "system",
-          content: "You are a safety-critical inspection tool. Output must be factual and aligned with WSTDA compliance. Use standardized phrasing for consistent results."
+          content: "You are an expert strap inspector and compliance checker. Follow the user's instructions precisely.",
         },
         {
           role: "user",
-          content: `Image uploaded:
-
-${imageBase64}
-
-${prompt}`
-        }
+          content: [
+            {
+              type: "text",
+              text: prompt,
+            },
+            {
+              type: "image",
+              image: {
+                base64: imageBase64.split(",")[1], // Remove data prefix if it exists
+              },
+            },
+          ],
+        },
       ],
-      max_tokens: 1000
+      max_tokens: 1500,
     });
 
-    const resultText = completion.choices[0].message.content;
+    const rawText = response.choices[0]?.message?.content || "No result";
 
-    res.status(200).json({ result: resultText });
-  } catch (err) {
-    console.error("AI error:", err);
-    res.status(500).json({ error: "Inspection failed." });
+    return new Response(JSON.stringify({ result: rawText }), {
+      status: 200,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch (error) {
+    console.error("Inspection API error:", error);
+    return new Response("Internal Server Error", { status: 500 });
   }
 }
