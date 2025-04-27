@@ -5,24 +5,25 @@
   box-sizing: border-box;
 }
 
-/* Body settings */
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: #f9fafb; /* light gray */
-  padding: 16px;
+/* Important mobile scaling reset */
+html, body {
+  height: 100%;
+  width: 100%;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #f9fafb; /* light gray */
 }
 
 /* Main container */
 .container {
   width: 100%;
-  max-width: 400px;
+  max-width: 360px;
+  margin: 0 auto;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  padding: 16px;
   text-align: center;
   gap: 24px;
 }
@@ -35,6 +36,8 @@ body {
 .logo-image {
   width: 96px;
   height: 96px;
+  max-width: 100%;
+  height: auto;
   object-fit: contain;
 }
 
