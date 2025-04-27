@@ -1,4 +1,4 @@
-/* Force normal font-weight globally */
+/* Final Universal Reset for font weight */
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -14,30 +14,6 @@ menu, nav, output, ruby, section, summary,
 time, mark, audio, video, button, input, select, textarea {
   font-weight: normal !important;
 }
-
-/* Additional Override for Headings */
-h1, h2, h3, h4, h5, h6 {
-  font-weight: normal !important;
-}
-
-/* Ensure Paragraph and Text Elements are Normal Weight */
-p, span, div, blockquote, pre {
-  font-weight: normal !important;
-}
-
-/* Ensure Links Are Not Bold */
-a {
-  font-weight: normal !important;
-}
-
-/* Other Elements */
-strong, b {
-  font-weight: normal !important;
-}
-
-/* Your other CSS code goes below this... */
-
-
 
 body {
   font-family: 'Inter', sans-serif;
