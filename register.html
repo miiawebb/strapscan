@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | Assetra Inspection Portal</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container">
+
+  <header class="logo-header">
+    <img src="https://i.imgur.com/IgITkWf.jpeg" alt="Assetra Logo">
+  </header>
+
+  <section class="register-section">
+    <h1>Create Your Account</h1>
+
+    <form class="register-form" id="registrationForm">
+      <input type="text" id="businessName" placeholder="Business Name" required>
+      <input type="text" id="fullName" placeholder="Full Name (Point of Contact)" required>
+      <input type="email" id="emailAddress" placeholder="Email Address" required>
+      <input type="text" id="positionRole" placeholder="Position / Role" required>
+
+      <button type="submit" class="register-button">Next</button>
+    </form>
+
+    <div class="login-link">
+      <p>Already have an account? <a href="index.html">Login Here</a></p>
+    </div>
+  </section>
+
+</div>
+
+<!-- Popup Modal for User ID and Password -->
+<div id="idModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h2>Your Account Details</h2>
+    <p id="generatedUserId">User ID: AST-XXXX</p>
+
+    <input type="password" id="setPassword" placeholder="Set Your Password" required>
+
+    <button id="confirmRegistration" class="confirm-button">Confirm Registration</button>
+  </div>
+</div>
+
+<footer class="footer">
+  © 2024 Assetra | All Rights Reserved | v1.0
+</footer>
+
+<script src="register.js"></script>
+
+</body>
+</html>
