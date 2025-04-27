@@ -11,8 +11,10 @@
 html, body {
   font-family: 'Inter', sans-serif;
   background: #f7f9fc;
-  min-height: 100vh;
   color: #222;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* ===============================
