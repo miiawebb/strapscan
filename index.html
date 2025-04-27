@@ -126,5 +126,22 @@
 
 <script src="script.js"></script>
 
+  <!-- Modal Popup -->
+<div id="resultModal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <h2 id="modal-title">Inspection Result</h2>
+    <p id="modal-message"></p>
+
+    <!-- For Warning: Extra comment input -->
+    <div id="warning-comment-section" style="display: none; margin-top: 15px;">
+      <label for="warningComment">Additional Comments:</label>
+      <textarea id="warningComment" rows="3" style="width: 100%; padding: 8px; margin-top: 5px; box-sizing: border-box;"></textarea>
+    </div>
+
+    <button id="confirmResultButton" class="confirm-button">Confirm</button>
+  </div>
+</div>
+
+
 </body>
 </html>
