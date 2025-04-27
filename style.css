@@ -476,3 +476,58 @@ body {
   border-radius: 10px;
 }
 
+/* ===============================
+   Registration Page Styles
+================================ */
+
+.register-section h1 {
+  font-size: 24px;
+  color: #8077f4;
+  margin-bottom: 20px;
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.register-form input[type="text"],
+.register-form input[type="email"] {
+  padding: 12px;
+  border: 2px solid #cccccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.register-button {
+  background: #8077f4;
+  color: #ffffff;
+  border: none;
+  padding: 12px 0;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.register-button:hover {
+  background: #6f67d9;
+}
+
+.login-link p {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.login-link a {
+  color: #8077f4;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+
