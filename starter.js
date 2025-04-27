@@ -1,9 +1,19 @@
-// --- Starter Guide Basic JS ---
+// --- Starter Page Toggle Cards ---
 
-console.log("Starter Guide Page Loaded Successfully");
+document.addEventListener('DOMContentLoaded', function() {
+  const featureCards = document.querySelectorAll('.feature-card');
 
-// Later you can add:
-// - Hover popup text
-// - Modal open/close if needed
-// - AI chatbot logic
-// - Navigation button actions
+  featureCards.forEach(card => {
+    card.addEventListener('click', function() {
+      this.classList.toggle('expanded');
+
+      // Arrow flipping
+      const arrow = this.querySelector('.arrow');
+      if (this.classList.contains('expanded')) {
+        arrow.textContent = '▲';
+      } else {
+        arrow.textContent = '▼';
+      }
+    });
+  });
+});
