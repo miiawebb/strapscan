@@ -87,13 +87,13 @@ body {
 }
 
 .damage-buttons button.uploaded {
-  background: #a0d6b4; /* soft green tint */
+  background: #ada8f4; /* soft green tint */
   color: #222;
   position: relative;
 }
 
 .damage-buttons button.uploaded::after {
-  content: "✔️";
+  content: "(✔)";
   position: absolute;
   top: 8px;
   right: 8px;
