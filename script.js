@@ -17,7 +17,6 @@ fileInput.addEventListener('change', function() {
 });
 
 // --- Damage Type Image Upload Buttons ---
-// --- Damage Type Image Upload Buttons ---
 const damageButtons = document.querySelectorAll('.damage-btn');
 const damageUploads = document.querySelectorAll('.damage-upload');
 
@@ -61,8 +60,7 @@ function openModal(type, buttonElement) {
     modalMessage.textContent = 'a) Tag ID is compliant.\nb) No damage reported.\n\nPress Confirm to pass this inspection.';
   } else if (type === 'fail') {
     modalTitle.textContent = 'Fail Inspection';
-    const damages = uploadedDamages.length > 0 ? uploadedDamages.join(', ') : 'No damage types selected';
-    modalMessage.textContent = `a) Tag ID is compliant.\nb) Damage indicated: ${damages}.\n\nPress Confirm to fail this inspection.`;
+    modalMessage.textContent = 'a) Tag ID is compliant.\nb) Damage indicated: [Selected Damage Types].\n\nPress Confirm to fail this inspection.';
   } else if (type === 'warning') {
     modalTitle.textContent = 'Warning Issued';
     modalMessage.textContent = 'a) Tag ID is compliant.\nb) Warning detected but not sufficient to fail inspection.\n\nPlease add any additional comments below then press Confirm.';
@@ -84,6 +82,17 @@ confirmButton.addEventListener('click', () => {
         console.log('Warning Comment:', comment); // Save this later if needed
       }
     }
+
+    // Lock other Pass/Fail/Warning buttons
+    document.querySelectorAll('.passfail-buttons button').forEach(btn => {
+      if (btn !== currentButtonClicked) {
+        btn.classList.add('disabled');
+      }
+    });
+
+    // Show Reset Selection button
+    document.querySelector('.reset-selection-container').style.display = 'block';
+
     modal.style.display = 'none';
   }
 });
@@ -99,4 +108,15 @@ document.getElementById('failButton').addEventListener('click', (e) => {
 
 document.getElementById('warningButton').addEventListener('click', (e) => {
   openModal('warning', e.target);
+});
+
+// --- Reset Selection Button ---
+document.getElementById('resetSelectionButton').addEventListener('click', () => {
+  // Unlock all Pass/Fail/Warning buttons
+  document.querySelectorAll('.passfail-buttons button').forEach(btn => {
+    btn.classList.remove('disabled', 'pass-confirmed', 'fail-confirmed', 'warning-confirmed');
+  });
+
+  // Hide Reset button
+  document.querySelector('.reset-selection-container').style.display = 'none';
 });
