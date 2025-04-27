@@ -1,69 +1,99 @@
-/* ===============================
-   LANDING PAGE STYLES
-================================= */
+/* Reset basic defaults */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body settings */
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f9fafb; /* light gray */
+  padding: 16px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Main container */
 .container {
-  max-width: 500px;
-  width: 90%;
-  margin: 40px auto 20px auto; /* <- Notice: margin bottom smaller now */
-  padding: 30px 20px;
-  background: #e8e8e8;
-  border: 2px solid #8077f4;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  text-align: center;
+  gap: 24px;
 }
 
+/* Logo styling */
+.logo-header {
+  margin-bottom: 12px;
+}
 
-.login-section h1 {
+.logo-image {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+}
+
+/* Welcome Text */
+.welcome-text h1 {
   font-size: 24px;
-  color: #8077f4;
-  margin-bottom: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
 }
 
-.login-form {
+.welcome-text p {
+  font-size: 14px;
+  color: #6b7280; /* gray-600 */
+}
+
+/* CTA Buttons */
+.cta-buttons {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  margin-bottom: 15px;
+  gap: 16px;
+  margin-top: 24px;
 }
 
-.login-form input[type="text"],
-.login-form input[type="password"] {
-  padding: 12px;
-  border: 2px solid #cccccc;
-  border-radius: 6px;
-  font-size: 14px;
-}
-
-.login-button {
-  background: #8077f4;
-  color: #ffffff;
-  border: none;
-  padding: 12px 0;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.login-button:hover {
-  background: #6f67d9;
-}
-
-.register-link p {
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.register-link a {
-  color: #8077f4;
+.btn-primary {
+  display: block;
+  width: 100%;
+  background-color: #2563eb; /* blue-600 */
+  color: white;
   text-decoration: none;
-  font-weight: bold;
+  padding: 12px 0;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
 }
 
-.register-link a:hover {
-  text-decoration: underline;
+.btn-primary:hover {
+  background-color: #1d4ed8; /* blue-700 */
+}
+
+.btn-secondary {
+  display: block;
+  width: 100%;
+  border: 2px solid #2563eb;
+  color: #2563eb;
+  text-decoration: none;
+  padding: 12px 0;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #eff6ff; /* light blue-50 */
+}
+
+/* Footer text */
+.footer-text {
+  font-size: 12px;
+  color: #9ca3af; /* gray-400 */
+  margin-top: 32px;
 }
