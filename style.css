@@ -201,19 +201,19 @@ section h2 {
 /* Add icons BEFORE the button text */
 .passfail-buttons .pass::before {
   content: "(✔)";
-  color: #ffffff;
+  color: #000000; /* <-- Black color */
   margin-right: 6px;
 }
 
-passfail-buttons .fail::before {
+.passfail-buttons .fail::before {
   content: "(✖)";
-  color: #ffffff;
+  color: #000000; /* <-- Black color */
   margin-right: 6px;
 }
 
 .passfail-buttons .warning::before {
   content: "(!)";
-  color: #ffffff;
+  color: #000000; /* <-- Black color */
   margin-right: 6px;
 }
 
