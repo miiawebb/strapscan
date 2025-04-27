@@ -3,37 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Page Title</title>
-
-  <!-- Link to your external CSS file -->
-  <link rel="stylesheet" href="style.css"> <!-- Add this link to your CSS file here -->
+  <title>Inspection Form</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Your content starts here -->
-  <div class="container">
+<div class="container">
 
-    <!-- Line 1: Header Logo -->
-    <header class="logo-header">
-      <img src="https://i.imgur.com/IgITkWf.jpeg" alt="Assetra Logo">
-    </header>
-  
-<div class="instruction-upload">
-  <p>1. Start your inspection by uploading a clear, readable photo of the lifting sling’s ID tag. For best results, take the photo in landscape orientation and ensure all text is fully visible and in focus.</p>
-</div>
+  <header class="logo-header">
+    <img src="https://i.imgur.com/IgITkWf.jpeg" alt="Assetra Logo">
+  </header>
 
-  <!-- Line 2: Upload Tag Image Button -->
+  <div class="instruction-upload">
+    <p>1. Start your inspection by uploading a clear, readable photo of the lifting sling’s ID tag.</p>
+  </div>
+
   <section class="upload-section">
     <label for="upload" class="custom-upload-button">Upload Sling ID Tag</label>
-    <input type="file" id="upload" accept="image/*" style="display:none;">
+    <input type="file" id="upload" accept="image/*">
   </section>
 
-  <!-- Line 3: Hidden Image Preview -->
   <section class="image-preview" style="display:none;">
     <img id="preview-image" src="" alt="Uploaded Tag Image">
   </section>
 
-  <!-- Line 4: Hidden Tag Info (After Parsing) -->
   <section class="tag-info" style="display:none;">
     <p>Manufacturer: [Auto Filled]</p>
     <p>Serial Number: [Auto Filled]</p>
@@ -46,37 +39,61 @@
     </div>
   </section>
 
-  <!-- Line 5: Select Damage Heading -->
+  <!-- Damage Section -->
   <section class="damage-section">
     <h2>Select Identified Damage</h2>
-    
+
     <div class="instruction-damage">
-      <p>2. Select the appropriate damage type(s) from the options below. Upload clear supporting images if needed to verify the condition.</p>
+      <p>2. Select the appropriate damage type(s) below and upload supporting images if needed.</p>
     </div>
 
     <div class="damage-buttons">
-      <button>Cuts or Tears</button>
-      <button>Snags</button>
-      <button>Holes / Punctures</button>
-      <button>Melting / Charring</button>
-      <button>Weld Spatter</button>
-      <button>Acid / Alkali</button>
-      <button>Broken Stitches</button>
-      <button>Crushed Webbing</button>
-      <button>Knots</button>
-      <button>Abrasion</button>
-      <button>UV Degradation</button>
-      <button>Other Damage</button>
+      <!-- Damage Buttons with matching inputs -->
+      <button class="damage-btn" data-damage="Cuts or Tears">Cuts or Tears</button>
+      <input type="file" class="damage-upload" data-damage="Cuts or Tears" accept="image/*" multiple style="display:none;">
+
+      <button class="damage-btn" data-damage="Snags">Snags</button>
+      <input type="file" class="damage-upload" data-damage="Snags" accept="image/*" multiple style="display:none;">
+
+      <button class="damage-btn" data-damage="Holes / Punctures">Holes / Punctures</button>
+      <input type="file" class="damage-upload" data-damage="Holes / Punctures" accept="image/*" multiple style="display:none;">
+
+      <button class="damage-btn" data-damage="Melting / Charring">Melting / Charring</button>
+      <input type="file" class="damage-upload" data-damage="Melting / Charring" accept="image/*" multiple style="display:none;">
+
+      <button class="damage-btn" data-damage="Weld Spatter">Weld Spatter</button>
+      <input type="file" class="damage-upload" data-damage="Weld Spatter" accept="image/*" multiple style="display:none;">
+
+      <button class="damage-btn" data-damage="Acid / Alkali">Acid / Alkali</button>
+      <input type="file" class="damage-upload" data-damage="Acid / Alkali" accept="image/*" multiple style="display:none;">
+
+      <button class="damage-btn" data-damage="Broken Stitches">Broken Stitches</button>
+      <input type="file" class="damage-upload" data-damage="Broken Stitches" accept="image/*" multiple style="display:none;">
+
+      <button class="damage-btn" data-damage="Crushed Webbing">Crushed Webbing</button>
+      <input type="file" class="damage-upload" data-damage="Crushed Webbing" accept="image/*" multiple style="display:none;">
+
+      <button class="damage-btn" data-damage="Knots">Knots</button>
+      <input type="file" class="damage-upload" data-damage="Knots" accept="image/*" multiple style="display:none;">
+
+      <button class="damage-btn" data-damage="Abrasion">Abrasion</button>
+      <input type="file" class="damage-upload" data-damage="Abrasion" accept="image/*" multiple style="display:none;">
+
+      <button class="damage-btn" data-damage="UV Degradation">UV Degradation</button>
+      <input type="file" class="damage-upload" data-damage="UV Degradation" accept="image/*" multiple style="display:none;">
+
+      <button class="damage-btn" data-damage="Other Damage">Other Damage</button>
+      <input type="file" class="damage-upload" data-damage="Other Damage" accept="image/*" multiple style="display:none;">
     </div>
   </section>
-  
-    <!-- Inspection Result (Pass/Fail/Warning) -->
+
+  <!-- Pass/Fail/Warning Buttons -->
   <section class="passfail-section">
     <h2>Inspection Result</h2>
     <div class="passfail-buttons">
-      <button class="neutral-button"><span class="icon-pass">✔</span> Pass</button>
-      <button class="neutral-button"><span class="icon-fail"></span> Fail</button>
-      <button class="neutral-button"><span class="icon-warning"></span> Warning</button>
+      <button id="passButton" class="neutral-button">✔️ Pass</button>
+      <button id="failButton" class="neutral-button">❌ Fail</button>
+      <button id="warningButton" class="neutral-button">⚠️ Warning</button>
     </div>
   </section>
 
@@ -86,7 +103,7 @@
     <input type="text" placeholder="Enter Inspector Full Name">
   </section>
 
-  <!-- E-Signature Pad -->
+  <!-- Signature Pad -->
   <section class="signature-section">
     <h2>Inspector Signature</h2>
     <div class="signature-pad">
@@ -94,7 +111,7 @@
     </div>
   </section>
 
-  <!-- Save Draft / Submit Section -->
+  <!-- Submit Section -->
   <section class="submit-section">
     <button class="save-draft-button">Save Draft</button>
     <button class="submit-inspection-button">Submit Inspection</button>
@@ -102,7 +119,11 @@
 
 </div>
 
-<!-- Footer -->
 <footer class="footer">
   © 2024 Assetra | All Rights Reserved
 </footer>
+
+<script src="script.js"></script>
+
+</body>
+</html>
