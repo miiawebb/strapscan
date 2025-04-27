@@ -2,7 +2,7 @@
    LANDING PAGE STYLES
 ================================= */
 .container {
-  min-height: unset;
+  flex: 1;
 }
 
 .login-section h1 {
