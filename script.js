@@ -17,10 +17,9 @@ fileInput.addEventListener('change', function() {
 });
 
 // --- Damage Type Image Upload Buttons ---
+// --- Damage Type Image Upload Buttons ---
 const damageButtons = document.querySelectorAll('.damage-btn');
 const damageUploads = document.querySelectorAll('.damage-upload');
-
-let uploadedDamages = []; // Track selected damages
 
 damageButtons.forEach((button, index) => {
   button.addEventListener('click', () => {
@@ -30,14 +29,8 @@ damageButtons.forEach((button, index) => {
   damageUploads[index].addEventListener('change', () => {
     if (damageUploads[index].files.length > 0) {
       button.classList.add('uploaded');
-      const damageType = button.getAttribute('data-damage');
-      if (!uploadedDamages.includes(damageType)) {
-        uploadedDamages.push(damageType);
-      }
     } else {
       button.classList.remove('uploaded');
-      const damageType = button.getAttribute('data-damage');
-      uploadedDamages = uploadedDamages.filter(d => d !== damageType);
     }
   });
 });
