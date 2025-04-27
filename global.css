@@ -11,6 +11,8 @@ html, body {
   font-family: 'Inter', sans-serif;
   background: #f7f9fc;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   color: #222;
 }
 
