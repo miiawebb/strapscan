@@ -98,14 +98,6 @@ body {
   position: relative;
 }
 
-.damage-buttons button.uploaded::after {
-  content: "(✔)";
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 16px;
-}
-
 input[type="file"] {
   display: none;
 }
@@ -344,14 +336,3 @@ section h2 {
   color: #ffffff;
   position: relative;
 }
-
-.pass-confirmed::after,
-.fail-confirmed::after,
-.warning-confirmed::after {
-  content: "✔";
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 18px;
-}
-
