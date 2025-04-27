@@ -45,6 +45,6 @@ confirmButton.addEventListener('click', function() {
   console.log('Generated User ID:', generatedUserIdElement.textContent);
   console.log('Password Set:', password);
 
-  // After successful registration - redirect to login page
-  window.location.href = "index.html";
+  // After successful registration - redirect to Starter Page (NOT login)
+  window.location.href = "starter.html";
 });
