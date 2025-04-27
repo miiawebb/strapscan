@@ -1,110 +1,160 @@
-/* ===============================
-   STARTER GUIDE PAGE
-================================= */
+/* Reset basic defaults */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #f9fafb;
+}
+
+/* Main container */
 .container {
-  max-width: 540px;
-  width: 90%;
-  margin: 40px auto;
-  padding: 30px 20px;
-  background: #e8e8e8;
-  border: 2px solid #8077f4;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  min-height: unset;
+  text-align: center;
 }
 
+/* Logo */
+.logo-header {
+  margin-bottom: 20px;
+}
+
+.logo-image {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+}
+
+/* Starter guide section */
 .starter-guide-section {
-  text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 
 .starter-guide-section h1 {
-  font-size: 26px;
-  color: #8077f4;
+  font-size: 24px;
+  color: #2563eb;
   margin-bottom: 10px;
 }
 
 .intro-text {
-  font-size: 16px;
-  margin-bottom: 30px;
-  color: #333333;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 24px;
 }
 
 /* Feature Grid */
 .feature-grid {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  margin-bottom: 40px;
+  gap: 16px;
 }
 
 /* Feature Cards */
 .feature-card {
-  width: 90%;
-  max-width: 350px;
-  min-height: 70px;
-  background: #e8e8e8;
-  border: 2px solid #cccccc;
+  background-color: #e0e7ff; /* light blue */
+  border: 2px solid #2563eb;
   border-radius: 10px;
-  overflow: hidden;
+  padding: 16px;
   transition: all 0.3s ease;
   cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
 }
 
 .feature-card h2 {
   font-size: 18px;
-  color: #222;
-  margin: 0;
-  line-height: 1.2;
+  color: #2563eb;
+  margin-bottom: 8px;
 }
 
 .feature-card p {
-  font-size: 14px;
-  color: #555;
-  margin-top: 8px;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: opacity 0.3s ease, max-height 0.3s ease;
-  text-align: center;
-}
-
-/* Hover Effect */
-.feature-card:hover {
-  min-height: 140px;
-  background: #8077f4;
-}
-
-.feature-card:hover h2 {
-  color: #ffffff;
-}
-
-.feature-card:hover p {
+  font-size: 13px;
+  color: #2563eb;
   opacity: 1;
-  max-height: 200px;
-  color: #ffffff;
+  max-height: none;
+  overflow: hidden;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 
-/* Navigation Menu */
+/* Hover effect for desktop */
+@media (hover: hover) {
+  .feature-card p {
+    opacity: 0;
+    max-height: 0;
+  }
+
+  .feature-card:hover {
+    background-color: #2563eb;
+  }
+
+  .feature-card:hover h2 {
+    color: #ffffff;
+  }
+
+  .feature-card:hover p {
+    opacity: 1;
+    max-height: 100px;
+    color: #ffffff;
+  }
+}
+
+/* Ask AI section */
+.ask-ai-section {
+  margin-top: 32px;
+  margin-bottom: 24px;
+}
+
+.ask-ai-section h2 {
+  font-size: 18px;
+  color: #2563eb;
+  margin-bottom: 16px;
+}
+
+.ai-question-input {
+  width: 90%;
+  max-width: 300px;
+  padding: 10px;
+  font-size: 14px;
+  border: 2px solid #2563eb;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.ai-question-button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.ai-question-button:hover {
+  background-color: #1d4ed8;
+}
+
+/* Navigation menu */
 .navigation-menu {
-  text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 24px;
 }
 
 .navigation-menu h2 {
-  font-size: 20px;
-  color: #8077f4;
-  margin-bottom: 10px;
+  font-size: 18px;
+  color: #2563eb;
+  margin-bottom: 12px;
 }
 
 .navigation-menu ul {
@@ -113,44 +163,16 @@
 }
 
 .navigation-menu li {
-  font-size: 16px;
+  font-size: 14px;
   margin: 8px 0;
+  color: #333;
 }
 
-/* Ask AI Section */
-.ask-ai-section {
+/* Footer */
+.footer {
+  font-size: 12px;
+  color: #9ca3af;
   text-align: center;
-  margin-top: 20px;
-  margin-bottom: 40px;
-}
-
-.ask-ai-section h2 {
-  font-size: 20px;
-  color: #8077f4;
-  margin-bottom: 15px;
-}
-
-.ai-question-input {
-  width: 80%;
-  max-width: 300px;
-  padding: 10px;
-  border: 2px solid #cccccc;
-  border-radius: 6px;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.ai-question-button {
-  background: #8077f4;
-  color: #ffffff;
-  border: none;
-  padding: 10px 20px;
-  font-size: 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.ai-question-button:hover {
-  background: #6f67d9;
+  margin-top: auto;
+  padding: 16px 0;
 }
