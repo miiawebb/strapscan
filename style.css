@@ -119,6 +119,7 @@ section h2 {
 }
 
 /* Damage Buttons */
+/* Damage Buttons */
 .damage-buttons {
   display: flex;
   flex-wrap: wrap;
@@ -128,6 +129,9 @@ section h2 {
 
 .damage-buttons button {
   flex: 1 1 calc(33% - 10px);
+  display: flex; /* NEW: Center label and tick */
+  align-items: center; /* NEW: Vertical center */
+  justify-content: center; /* NEW: Horizontal center */
   background: #cccccc;
   color: #222;
   border: none;
@@ -139,10 +143,17 @@ section h2 {
   box-sizing: border-box;
   cursor: pointer;
   transition: background 0.3s ease;
+  position: relative; /* Needed for tick later */
 }
 
 .damage-buttons button:hover {
   background: #bbbbbb;
+}
+
+.damage-buttons .uploaded .btn-label::after {
+  content: " (✔)";
+  font-size: 14px;
+  margin-left: 6px;
 }
 
 /* Inspector Name Field */
