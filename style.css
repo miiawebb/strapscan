@@ -1,239 +1,282 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Force normal font-weight globally */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, button, input, select, textarea {
+  font-weight: normal !important;
 }
 
+/* Additional Override for Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: normal !important;
+}
+
+/* Ensure Paragraph and Text Elements are Normal Weight */
+p, span, div, blockquote, pre {
+  font-weight: normal !important;
+}
+
+/* Ensure Links Are Not Bold */
+a {
+  font-weight: normal !important;
+}
+
+/* Other Elements */
+strong, b {
+  font-weight: normal !important;
+}
+
+/* Your other CSS code goes below this... */
+
+
+
 body {
-  font-family: Arial, sans-serif;
-  background-color: #191919;
-  color: #fff;
-  padding: 40px 20px;
+  font-family: 'Inter', sans-serif;
+  background: #f7f9fc;
+  margin: 0;
+  padding: 20px;
+  color: #222;
 }
 
 .container {
-  max-width: 950px;
-  margin: 0 auto;
-  padding: 30px;
-  background: #191919;
-  border: 4px solid #3a3a3a;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.4);
-}
-
-.banner {
-  width: 100%;
-  margin-bottom: 10px;
-}
-
-.banner img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  background: #e8e8e8;
   border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-hr.divider {
-  border: 0;
-  height: 2px;
-  background-color: #ccc;
+.logo-header img {
   width: 100%;
-  margin: 20px 0 30px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px auto;
 }
 
-h2 {
-  text-align: center;
-  color: #ff6600;
-  font-size: 30px;
+.instruction-upload p {
+  font-size: 14px;
+  text-align: justify;
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 
-p.sub {
-  text-align: center;
-  color: #fff;
-  margin-bottom: 50px;
-}
-
-.label {
-  font-weight: bold;
-  color: #ff6600;
-  font-size: 14px;
+/* Upload Section */
+.upload-section {
+  width: 100%;
   margin-bottom: 20px;
-}
-
-.button-group {
   display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.button-group button {
-  flex: 1 1 auto;
-  padding: 10px 18px;
-  background: #333;
-  border: 1px solid #444;
-  color: white;
-  border-radius: 6px;
-  cursor: pointer;
+.instruction-damage p {
   font-size: 14px;
+  text-align: justify;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
-.button-group button:hover,
-.button-group button.selected {
-  background: #333;
-  border-color: #ff6600;
-  color: white;
+.custom-upload-button {
+  width: 100%;
+  max-width: 100%;
+  background: #cccccc;
+  color: #222;
+  padding: 10px 0;
+  font-size: 14px;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  border: none;
+  box-sizing: border-box;
+  height: 40px;
+  line-height: 20px;
+  transition: background 0.3s ease;
 }
 
-.toggle {
-  display: flex;
-  background: #444;
-  border-radius: 25px;
-  overflow: hidden;
-  width: fit-content;
-  margin-top: 12px;
-  margin-left: auto;
-  margin-right: auto;
+.custom-upload-button:hover {
+  background: #bbbbbb;
 }
 
-.toggle input {
+input[type="file"] {
   display: none;
 }
 
-.toggle label {
-  padding: 10px 20px;
-  cursor: pointer;
-  font-weight: bold;
+/* Section Headings */
+section h2 {
   font-size: 14px;
-  color: white;
+  font-style: normal;
+  color: #8077f4;
+  margin-bottom: 10px;
 }
 
-.toggle input#tagScan:checked ~ label[for="tagScan"],
-.toggle input#quickScan:checked ~ label[for="quickScan"] {
-  background-color: #ff6600;
-  color: #fff;
+/* Damage Buttons */
+.damage-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.upload-container {
-  border: 2px dashed #aaa;
-  background: #2a2a2a;
-  padding: 20px;
+.damage-buttons button {
+  flex: 1 1 calc(33% - 10px);
+  background: #cccccc;
+  color: #222;
+  border: none;
+  padding: 10px 0;
+  font-size: 14px;
+  border-radius: 6px;
+  height: 40px;
+  line-height: 20px;
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.damage-buttons button:hover {
+  background: #bbbbbb;
+}
+
+/* Inspector Name Field */
+.inspector-name-section input[type="text"] {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #cccccc;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+/* Signature Pad */
+.signature-pad {
+  width: 100%;
+  height: 100px;
+  border: 2px dashed #cccccc;
   border-radius: 8px;
+  background: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #999;
+}
+
+/* Pass/Fail/Warning Buttons */
+.passfail-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.passfail-buttons .neutral-button {
+  flex: 1 1 calc(33% - 10px);
+  background: #cccccc;
+  color: #222;
+  padding: 10px 0;
+  font-size: 14px;
+  border-radius: 6px;
+  height: 40px;
+  line-height: 20px;
+  border: none;
+  cursor: pointer;
   text-align: center;
   position: relative;
-  min-height: 180px;
-  transition: border-color 0.3s;
+  box-sizing: border-box;
+  transition: background 0.3s ease;
 }
 
-.upload-container:hover {
-  border-color: #ff6600;
+.passfail-buttons .neutral-button:hover {
+  background: #bbbbbb;
 }
 
-.upload-container input[type="file"] {
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0; left: 0;
-  cursor: pointer;
+/* Add icons BEFORE the button text */
+.passfail-buttons .pass::before {
+  content: "✔️";
+  color: #4CAF50;
+  margin-right: 6px;
 }
 
-.upload-preview {
-  margin-top: 12px;
+.passfail-buttons .fail::before {
+  content: "❌";
+  color: #f44336;
+  margin-right: 6px;
 }
 
-.upload-preview img {
-  width: 100%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 6px;
+.passfail-buttons .warning::before {
+  content: "⚠️";
+  color: #FF6600;
+  margin-right: 6px;
 }
 
-.row {
+/* Save Draft / Submit Buttons */
+.submit-section {
   display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  margin-bottom: 30px;
-}
-
-.col-half {
-  flex: 1 1 48%;
-}
-
-.col-full {
-  flex: 1 1 100%;
-}
-
-.run-btn {
-  width: 100%;
-  padding: 15px;
-  font-size: 16px;
-  font-weight: bold;
-  background-color: #ff6600;
-  border: none;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-}
-
-.run-btn:hover {
-  background-color: #e65c00;
-}
-
-.scan-description {
+  gap: 10px;
   margin-top: 20px;
+}
+
+.save-draft-button {
+  flex: 1 1 50%;
+  background: #aaaaaa;
+  color: #222;
+  padding: 10px 0;
   font-size: 14px;
-  line-height: 1.6;
-  text-align: justify;
-  color: #fff;
+  border-radius: 6px;
+  height: 40px;
+  line-height: 20px;
+  border: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background 0.3s ease;
 }
 
-.scan-description strong {
-  color: #fff;
-  display: block;
-  margin-top: 10px;
+.save-draft-button:hover {
+  background: #bbbbbb;
 }
 
-.disclaimer-box {
-  margin-top: 30px;
-  font-size: 13px;
-  text-align: justify;
-  color: #fff;
-  background-color: #333;
-  padding: 25px;
-  border-radius: 10px;
-  line-height: 1.6;
+.submit-inspection-button {
+  flex: 1 1 50%;
+  background: #8077f4;
+  color: #ffffff;
+  padding: 10px 0;
+  font-size: 14px;
+  border-radius: 6px;
+  height: 40px;
+  line-height: 20px;
+  border: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  transition: background 0.3s ease;
 }
 
-.disclaimer-box strong {
-  font-size: 16px;
-  color: #ff6600;
+.submit-inspection-button:hover {
+  background: #777777;
 }
 
-/* RESULTS BOX STYLES */
-#inspectionResults {
-  display: none; /* Initially hidden */
-  margin-top: 30px;
-  padding: 20px;
-  background-color: #333;
-  border-radius: 10px;
-  border: 2px solid #444;
-  color: white;
-}
-
-#inspectionResults h3 {
-  color: #ff6600;
-  font-size: 24px;
-}
-
-#inspectionResults p {
-  font-size: 16px;
-  margin-top: 10px;
-}
-
-#inspectionResults .status {
-  font-size: 18px;
-  font-weight: bold;
-  color: #ff6600;
+/* Footer - inside container */
+.footer {
+  width: 100%;
+  max-width: 540px;
+  margin: 30px auto 0 auto;
+  text-align: center;
+  padding: 15px;
+  font-size: 12px;
+  color: #ffffff;
+  background: #8077f4;
+  border-top: 2px solid #cccccc;
+  border-radius: 8px;
+  box-sizing: border-box;
 }
