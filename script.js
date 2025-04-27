@@ -2,7 +2,6 @@
 const fileInput = document.getElementById('upload');
 const previewImage = document.getElementById('preview-image');
 const imagePreviewSection = document.querySelector('.image-preview');
-const warningReasonSection = document.querySelector('.warning-reason-section');
 
 fileInput.addEventListener('change', function() {
   const file = this.files[0];
@@ -89,7 +88,7 @@ confirmButton.addEventListener('click', () => {
       currentButtonClicked.classList.add('warning-confirmed');
       const comment = warningCommentInput.value.trim();
       if (comment) {
-        console.log('Warning Comment:', comment); // You can save this later
+        console.log('Warning Comment:', comment); // Save this later if needed
       }
     }
     modal.style.display = 'none';
