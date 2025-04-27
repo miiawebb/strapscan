@@ -2,7 +2,16 @@
    LANDING PAGE STYLES
 ================================= */
 .container {
-  flex: 1;
+  max-width: 400px;
+  width: 90%;
+  margin: 40px auto;
+  padding: 30px 20px;
+  background: #e8e8e8;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .login-section h1 {
