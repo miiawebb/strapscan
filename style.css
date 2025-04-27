@@ -336,3 +336,24 @@ section h2 {
   color: #ffffff;
   position: relative;
 }
+/* Reset Selection Button */
+.reset-selection-button {
+  background: #dddddd;
+  color: #333333;
+  border: none;
+  padding: 8px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.reset-selection-button:hover {
+  background: #cccccc;
+}
+
+.passfail-buttons .disabled {
+  background: #eeeeee !important;
+  color: #999999 !important;
+  pointer-events: none;
+}
