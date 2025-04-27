@@ -86,6 +86,20 @@ body {
   background: #bbbbbb;
 }
 
+.damage-buttons button.uploaded {
+  background: #a0d6b4; /* soft green tint */
+  color: #222;
+  position: relative;
+}
+
+.damage-buttons button.uploaded::after {
+  content: "✔️";
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 16px;
+}
+
 input[type="file"] {
   display: none;
 }
