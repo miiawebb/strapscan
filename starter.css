@@ -1,4 +1,8 @@
-/* Reset basic defaults */
+/* ===============================
+   STARTER PAGE STYLES
+================================= */
+
+/* Reset defaults */
 * {
   margin: 0;
   padding: 0;
@@ -36,7 +40,7 @@ html, body {
   object-fit: contain;
 }
 
-/* Starter guide section */
+/* Starter Guide Section */
 .starter-guide-section {
   margin-bottom: 24px;
 }
@@ -63,56 +67,47 @@ html, body {
 
 /* Feature Cards */
 .feature-card {
-  background-color: #e0e7ff; /* light blue */
-  border: 2px solid #2563eb;
+  background-color: #2563eb;
+  color: white;
   border-radius: 10px;
   padding: 16px;
   transition: all 0.3s ease;
   cursor: pointer;
+  position: relative;
+  overflow: hidden;
 }
 
 .feature-card h2 {
   font-size: 18px;
-  color: #2563eb;
-  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .feature-card p {
-  font-size: 13px;
-  color: #2563eb;
-  opacity: 1;
-  max-height: none;
+  font-size: 14px;
+  margin-top: 12px;
+  max-height: 0;
   overflow: hidden;
-  text-align: center;
+  opacity: 0;
   transition: all 0.3s ease;
 }
 
-/* Hover effect for desktop */
-@media (hover: hover) {
-  .feature-card p {
-    opacity: 0;
-    max-height: 0;
-  }
-
-  .feature-card:hover {
-    background-color: #2563eb;
-  }
-
-  .feature-card:hover h2 {
-    color: #ffffff;
-  }
-
-  .feature-card:hover p {
-    opacity: 1;
-    max-height: 100px;
-    color: #ffffff;
-  }
+/* Expanded card */
+.feature-card.expanded {
+  background-color: #1d4ed8;
 }
 
-/* Ask AI section */
+.feature-card.expanded p {
+  max-height: 200px;
+  opacity: 1;
+}
+
+/* Ask AI Section */
 .ask-ai-section {
   margin-top: 32px;
   margin-bottom: 24px;
+  width: 100%;
 }
 
 .ask-ai-section h2 {
@@ -122,21 +117,22 @@ html, body {
 }
 
 .ai-question-input {
-  width: 90%;
-  max-width: 300px;
-  padding: 10px;
-  font-size: 14px;
+  width: 100%;
+  padding: 12px;
   border: 2px solid #2563eb;
   border-radius: 8px;
+  font-size: 14px;
   margin-bottom: 12px;
 }
 
 .ai-question-button {
+  display: block;
+  width: 100%;
   background-color: #2563eb;
   color: white;
   border: none;
-  padding: 10px 20px;
-  font-size: 14px;
+  padding: 14px;
+  font-size: 16px;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -146,7 +142,7 @@ html, body {
   background-color: #1d4ed8;
 }
 
-/* Navigation menu */
+/* Navigation Menu */
 .navigation-menu {
   margin-bottom: 24px;
 }
