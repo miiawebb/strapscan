@@ -1,32 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Assetra - Landing</title>
-  <link rel="stylesheet" href="global.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dawnerz Recovery Force Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <div class="calculator">
+        <div class="header">
+            DAWNERZ RECOVERY FORCE CALCULATOR
+            <div class="unit-toggle">
+                <label>LBS</label>
+                <label class="toggle-switch">
+                    <input type="checkbox" id="unitToggle">
+                    <span class="toggle-slider"></span>
+                </label>
+                <label>TONS</label>
+            </div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <div class="step-number">1</div>
+                <div>VEHICLE WEIGHT</div>
+            </div>
+            <p>Enter the total weight of the stuck vehicle including all cargo and accessories.</p>
+            <input type="number" id="gvw" placeholder="Enter weight in pounds (lbs)" min="0">
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <div class="step-number">2</div>
+                <div>TERRAIN CONDITION</div>
+            </div>
+            <p>Select the ground condition where the vehicle is stuck:</p>
+            <select id="surface">
+                <option value="">-- Select Terrain Condition --</option>
+                <option value="0.04">Paved Surface (Asphalt, Concrete)</option>
+                <option value="0.14">Firm Ground (Grass, Packed Dirt)</option>
+                <option value="0.17">Hard Wet Sand</option>
+                <option value="0.20">Soft Wet Sand</option>
+                <option value="0.25">Loose Terrain (Dry Sand or Gravel)</option>
+                <option value="0.33">Light Mud</option>
+                <option value="0.75">Deep Mud (Up To Tire Bottom)</option>
+                <option value="1.00">Deep Mud (Up To Middle of Wheels)</option>
+                <option value="1.33">Extreme Mud (Above Wheels)</option>
+            </select>
+            <div id="surfaceResistance" class="result">Terrain Force: <span class="result-value">0 lbs</span></div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <div class="step-number">3</div>
+                <div>INCLINE ANGLE</div>
+            </div>
+            <p>Select the slope angle of the recovery:</p>
+            <select id="slope">
+                <option value="">-- Select Angle --</option>
+                <option value="0.08">5°</option>
+                <option value="0.17">10°</option>
+                <option value="0.25">15°</option>
+                <option value="0.34">20°</option>
+                <option value="0.42">25°</option>
+                <option value="0.50">30°</option>
+                <option value="0.58">35°</option>
+                <option value="0.67">40°</option>
+                <option value="1.00">45° or steeper</option>
+            </select>
+            <div id="slopeResistance" class="result">Incline Force: <span class="result-value">0 lbs</span></div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <div class="step-number">4</div>
+                <div>VEHICLE CONDITION</div>
+            </div>
+            <p>Select the mechanical condition of the vehicle:</p>
+            <select id="damage">
+                <option value="">-- Select Vehicle Condition --</option>
+                <option value="0.33">Partially Locked (Some axles seized)</option>
+                <option value="0.67">Severely Locked (Most axles seized)</option>
+                <option value="0">No axle damage</option>
+            </select>
+            <p>Number of flat tires:</p>
+            <div id="flatTireSection">
+                <input type="number" id="flatTires" placeholder="Enter number of flat tires" min="0" max="10">
+            </div>
+            <div id="damageResistance" class="result">Condition Force: <span class="result-value">0 lbs</span></div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <div class="step-number">5</div>
+                <div>WEATHER CONDITIONS</div>
+            </div>
+            <p>Select the current weather conditions (affects recovery difficulty):</p>
+            <div class="weather-options">
+                <div class="weather-option" data-value="1.0">
+                    <i class="fas fa-sun"></i>
+                    <div>Dry Conditions</div>
+                </div>
+                <div class="weather-option" data-value="1.1">
+                    <i class="fas fa-cloud-rain"></i>
+                    <div>Light Rain/Snow</div>
+                </div>
+                <div class="weather-option" data-value="1.25">
+                    <i class="fas fa-cloud-showers-heavy"></i>
+                    <div>Heavy Rain/Snow</div>
+                </div>
+                <div class="weather-option" data-value="1.75">
+                    <i class="fas fa-icicles"></i>
+                    <div>Freezing & Precipitation</div>
+                </div>
+            </div>
+            <div id="weatherFactor" class="result">Weather Factor: <span class="result-value">1.0×</span></div>
+        </div>
+        
+        <!-- New section for image upload -->
+        <div class="step">
+            <div class="step-title">
+                <div class="step-number">6</div>
+                <div>VEHICLE DOCUMENTATION</div>
+            </div>
+            <p>Upload an image of the stuck vehicle for documentation purposes (optional):</p>
+            <div class="image-upload">
+                <label for="vehicleImage" class="image-upload-label">
+                    <i class="fas fa-camera"></i>
+                    <div>Click to upload or drag and drop image</div>
+                </label>
+                <input type="file" id="vehicleImage" accept="image/*" style="display: none">
+                <img id="imagePreview" class="image-preview">
+            </div>
+        </div>
+        
+        <div class="step yellow-highlight">
+            <div class="step-title">
+                <div>FORCE SUBTOTAL</div>
+            </div>
+            <div id="subtotal" class="result">Combined Forces: <span class="result-value">0 lbs</span></div>
+        </div>
+        
+        <div class="step">
+            <div class="step-title">
+                <div class="step-number">7</div>
+                <div>SAFETY MARGIN</div>
+            </div>
+            <p>A safety factor of 25% is applied to ensure reliable recovery:</p>
+            <div id="errorFactor" class="result">With Safety Margin: <span class="result-value">0 lbs</span></div>
+        </div>
+        
+        <div class="step">
+            <div class="buttons">
+                <button id="calculate">Calculate Recovery Force</button>
+                <button id="reset">Reset</button>
+            </div>
+            <div class="disclaimer">
+                This calculator provides an estimate only. Always use properly rated recovery equipment and follow safe recovery practices.
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Structure -->
+    <div class="modal-overlay" id="resultsModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title">RECOVERY FORCE RESULTS</div>
+                <button class="modal-close" id="closeModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-tabs">
+                <div class="modal-tab active" data-tab="summary">Summary</div>
+                <div class="modal-tab" data-tab="safety">Safety Warnings</div>
+                <div class="modal-tab" data-tab="details">Equipment Details</div>
+            </div>
+            <div class="modal-content">
+                <!-- Summary Tab -->
+                <div class="modal-tab-content active" id="summaryTab">
+                    <div class="final-result">
+                        MINIMUM REQUIRED RECOVERY EQUIPMENT STRENGTH:
+                        <span id="finalResult">0 lbs</span>
+                    </div>
+                    
+                    <div id="recommendations" class="recommendations">
+                        <h3>EQUIPMENT RECOMMENDATIONS</h3>
+                        <p>Based on industry standards, your recovery equipment should meet the following minimum breaking strengths:</p>
+                        <table class="recommendations-table">
+                            <thead>
+                                <tr>
+                                    <th>Safety Factor</th>
+                                    <th>Minimum Breaking Strength (MBS)</th>
+                                    <th>Equipment Types</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>3:1 (Standard)</td>
+                                    <td id="mbs3">0 lbs</td>
+                                    <td rowspan="2">
+                                        Polyester recovery tow straps, Dyneema/UHWMPE ropes, soft shackles
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>5:1 (Heavy Duty)</td>
+                                    <td id="mbs5">0 lbs</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="vehicleImageContainer" style="margin-top: 20px; display: none;">
+                        <h3>VEHICLE DOCUMENTATION</h3>
+                        <img id="modalVehicleImage" style="max-width: 100%; border-radius: 8px;">
+                    </div>
+                </div>
+                
+                <!-- Safety Warnings Tab -->
+                <div class="modal-tab-content" id="safetyTab">
+                    <div class="safety-warning">
+                        <h3><i class="fas fa-exclamation-triangle"></i> POSITION & SAFETY ZONE</h3>
+                        <ul>
+                            <li>Create a clear safety zone around the recovery operation</li>
+                            <li>Never position yourself under, on top of, or in line with tensioned straps</li>
+                            <li>Keep all bystanders well away from the recovery area</li>
+                            <li>Remember that failed equipment can become dangerous projectiles</li>
+                            <li>Position recovery dampers on straps to minimize recoil hazards</li>
+                            <li>Stay visibly clear of both vehicles during the entire operation</li>
+                            <li>Consider wind direction and terrain when positioning yourself</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="safety-warning">
+                        <h3><i class="fas fa-search"></i> EQUIPMENT ESSENTIALS</h3>
+                        <ul>
+                            <li>Thoroughly inspect all equipment before every use</li>
+                            <li>Immediately retire any equipment showing signs of damage</li>
+                            <li>Only use connection points specifically designed for recovery</li>
+                            <li>Protect equipment from abrasive surfaces and sharp edges</li>
+                            <li>Never exceed the working load limit of your weakest component</li>
+                            <li>Rotate straps regularly to distribute wear evenly</li>
+                            <li>Store equipment properly in a cool, dry place away from sunlight</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="safety-warning">
+                        <h3><i class="fas fa-tachometer-alt"></i> OPERATIONAL PRACTICES</h3>
+                        <ul>
+                            <li>Apply tension gradually - never jerk or shock load the system</li>
+                            <li>Ensure all parking brakes are disengaged during recovery</li>
+                            <li>Establish clear communication signals before starting</li>
+                            <li>Have a backup plan if primary recovery method fails</li>
+                            <li>Never tie knots in recovery straps or webbing</li>
+                            <li>Avoid contact between straps and hot vehicle components</li>
+                            <li>If something doesn't feel right, stop and reassess immediately</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Details Tab -->
+                <div class="modal-tab-content" id="detailsTab">
+                    <h3>CALCULATION BREAKDOWN</h3>
+                    <table class="recommendations-table">
+                        <thead>
+                            <tr>
+                                <th>Factor</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Vehicle Weight</td>
+                                <td id="detailWeight">0 lbs</td>
+                            </tr>
+                            <tr>
+                                <td>Terrain Force</td>
+                                <td id="detailTerrain">0 lbs</td>
+                            </tr>
+                            <tr>
+                                <td>Incline Force</td>
+                                <td id="detailIncline">0 lbs</td>
+                            </tr>
+                            <tr>
+                                <td>Vehicle Condition Force</td>
+                                <td id="detailCondition">0 lbs</td>
+                            </tr>
+                            <tr>
+                                <td>Weather Multiplier</td>
+                                <td id="detailWeather">1.0×</td>
+                            </tr>
+                            <tr>
+                                <td>Subtotal Force</td>
+                                <td id="detailSubtotal">0 lbs</td>
+                            </tr>
+                            <tr>
+                                <td>Safety Margin (25%)</td>
+                                <td id="detailMargin">0 lbs</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Final Required Force</strong></td>
+                                <td id="detailFinal"><strong>0 lbs</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <h3>EQUIPMENT SELECTION GUIDANCE</h3>
+                    <p>When selecting recovery equipment, always choose items that have a Minimum Breaking Strength (MBS) that meets or exceeds the calculated values. Remember that MBS is the point at which the equipment will fail under ideal conditions.</p>
+                    <p>Working Load Limit (WLL) is typically a fraction of the MBS (often 1/3 to 1/5) and represents the maximum safe working load for the equipment.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <button id="printResults" class="print-button"><i class="fas fa-print"></i> Print/Save Report</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<div class="container">
-
-  <header class="logo-header">
-    <a href="index.html"><img src="https://i.imgur.com/IgITkWf.jpeg" alt="Assetra Logo" class="logo-image"></a>
-  </header>
-
-  <h1>Welcome to Assetra</h1>
-  <p>AI-powered inspections made simple and professional.</p>
-
-  <div class="action-grid">
-    <a href="register.html" class="action-card">Get Started</a>
-    <a href="account.html" class="action-card">Login</a>
-  </div>
-
-</div>
-
-<footer class="footer">
-  © 2025 Assetra | All rights reserved
-</footer>
-
+    <script src="script.js"></script>
 </body>
 </html>
