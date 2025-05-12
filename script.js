@@ -228,3 +228,10 @@
             // Show success message
             alert('Inspection report downloaded successfully!');
         }
+// Expose functions globally for onclick handlers to work
+window.startInspection = startInspection;
+window.goBack = goBack;
+window.showResources = showResources;
+window.uploadImage = uploadImage;
+window.generatePDF = generatePDF;
+window.removeImage = removeImage;
