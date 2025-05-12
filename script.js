@@ -1,5 +1,6 @@
 // Image upload functionality
         const imageArrays = {};
+        const signaturePads = {};
         
         // Set current date on form load
         function setCurrentDate() {
@@ -12,13 +13,65 @@
         // Initialize
         window.onload = function() {
             setCurrentDate();
+            initializeSignaturePads();
         };
+        
+        // Signature pad initialization
+        function initializeSignaturePads() {
+            const types = ['initial', 'frequent', 'periodic'];
+            
+            types.forEach(type => {
+                const canvas = document.getElementById(`${type}-signature-pad`);
+                
+                if (canvas) {
+                    const signaturePad = new SignaturePad(canvas, {
+                        backgroundColor: 'rgb(255, 255, 255)',
+                        penColor: 'rgb(0, 0, 0)'
+                    });
+                    
+                    // Adjust canvas size to fit container
+                    resizeCanvas(canvas, signaturePad);
+                    
+                    // Store signature pad instances
+                    signaturePads[type] = signaturePad;
+                    
+                    // Add resize event to adjust canvas when window size changes
+                    window.addEventListener('resize', function() {
+                        resizeCanvas(canvas, signaturePad);
+                    });
+                }
+            });
+        }
+        
+        // Resize the canvas to match its container
+        function resizeCanvas(canvas, signaturePad) {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            const container = canvas.parentElement;
+            canvas.width = container.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear(); // Clear the canvas after resize
+        }
+        
+        // Clear signature
+        function clearSignature(type) {
+            if (signaturePads[type]) {
+                signaturePads[type].clear();
+            }
+        }
         
         // Navigation functions
         function startInspection(type) {
             document.getElementById('homePage').style.display = 'none';
             document.getElementById(type + 'Form').style.display = 'block';
             setCurrentDate();
+            
+            // Initialize signature pad after the form is displayed
+            setTimeout(() => {
+                if (signaturePads[type]) {
+                    resizeCanvas(document.getElementById(`${type}-signature-pad`), signaturePads[type]);
+                }
+            }, 100);
         }
         
         function showResources() {
@@ -96,6 +149,12 @@
                 return;
             }
             
+            // Check if signature is provided
+            if (!formData.signature) {
+                alert('Please provide a signature before generating the report.');
+                return;
+            }
+            
             // Create PDF content
             const pdfContent = generatePDFContent(type, formData);
             
@@ -111,7 +170,8 @@
                 status: document.querySelector(`input[name="${type}-status"]:checked`)?.value,
                 comments: document.getElementById(type + '-comments').value,
                 selections: {},
-                images: imageArrays[type] || []
+                images: imageArrays[type] || [],
+                signature: signaturePads[type] && !signaturePads[type].isEmpty() ? signaturePads[type].toDataURL() : null
             };
             
             // Collect all select values for the specific form
@@ -198,6 +258,10 @@
                 content += `\nPHOTO DOCUMENTATION\n------------------\n${data.images.length} photo(s) attached\n`;
             }
             
+            if (data.signature) {
+                content += `\nDIGITAL SIGNATURE\n-----------------\nDigitally signed by ${data.inspector}\n`;
+            }
+            
             content += `
                 
                 CONTACT INFORMATION
@@ -235,3 +299,4 @@ window.showResources = showResources;
 window.uploadImage = uploadImage;
 window.generatePDF = generatePDF;
 window.removeImage = removeImage;
+window.clearSignature = clearSignature;
