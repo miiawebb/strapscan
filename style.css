@@ -273,22 +273,12 @@ body {
         }
         
         .signature-pad {
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-            touch-action: none;
-            cursor: crosshair;
-            min-height: 200px;
-        }
-        
-        /* jSignature specific styling */
-        .jSignature {
-            margin: 0 auto;
-            border: 1px solid #ddd !important;
-            border-radius: 8px !important;
-            background-color: #fff !important;
-        }
+    width: 100%;
+    min-height: 200px;
+    background-color: #fff;
+    cursor: crosshair;
+    touch-action: none;
+}
         
         .signature-actions {
             margin-top: 15px;
