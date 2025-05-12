@@ -150,6 +150,20 @@
                 <input type="file" class="hidden-file-input" id="initial-camera" accept="image/*" capture="environment" multiple>
             </div>
             
+            <!-- Signature Box Section -->
+            <div class="form-section signature-section">
+                <h3>Digital Signature</h3>
+                <p>Sign to authorize this inspection report</p>
+                <div class="signature-container">
+                    <div id="initial-signature-pad" class="signature-pad"></div>
+                    <div class="signature-actions">
+                        <button type="button" class="btn-clear" onclick="clearSignature('initial')">
+                            <i class="fas fa-eraser"></i> Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
             <div class="button-group">
                 <button class="btn" onclick="generatePDF('initial')">Generate PDF Report</button>
                 <button class="btn btn-back" onclick="goBack()">Back</button>
@@ -283,6 +297,20 @@
                 <div class="image-preview-container" id="frequent-preview"></div>
                 <input type="file" class="hidden-file-input" id="frequent-file" accept="image/*" multiple>
                 <input type="file" class="hidden-file-input" id="frequent-camera" accept="image/*" capture="environment" multiple>
+            </div>
+            
+            <!-- Signature Box Section -->
+            <div class="form-section signature-section">
+                <h3>Digital Signature</h3>
+                <p>Sign to authorize this inspection report</p>
+                <div class="signature-container">
+                    <div id="frequent-signature-pad" class="signature-pad"></div>
+                    <div class="signature-actions">
+                        <button type="button" class="btn-clear" onclick="clearSignature('frequent')">
+                            <i class="fas fa-eraser"></i> Clear
+                        </button>
+                    </div>
+                </div>
             </div>
             
             <div class="button-group">
@@ -483,6 +511,20 @@
                 <input type="file" class="hidden-file-input" id="periodic-camera" accept="image/*" capture="environment" multiple>
             </div>
             
+            <!-- Signature Box Section -->
+            <div class="form-section signature-section">
+                <h3>Digital Signature</h3>
+                <p>Sign to authorize this inspection report</p>
+                <div class="signature-container">
+                    <div id="periodic-signature-pad" class="signature-pad"></div>
+                    <div class="signature-actions">
+                        <button type="button" class="btn-clear" onclick="clearSignature('periodic')">
+                            <i class="fas fa-eraser"></i> Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
             <div class="button-group">
                 <button class="btn" onclick="generatePDF('periodic')">Generate PDF Report</button>
                 <button class="btn btn-back" onclick="goBack()">Back</button>
@@ -566,6 +608,7 @@
         </div>
     </div>
     
-    
+    <!-- Add Signature Pad library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
 </body>
 </html>
