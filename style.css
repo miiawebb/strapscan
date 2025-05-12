@@ -279,7 +279,10 @@ body {
     cursor: crosshair;
     touch-action: none;
 }
-        
+        canvas {
+    touch-action: auto !important;
+}
+
         .signature-actions {
             margin-top: 15px;
             display: flex;
