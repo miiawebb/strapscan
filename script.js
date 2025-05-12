@@ -1,6 +1,5 @@
 // Image upload functionality
 const imageArrays = {};
-const signaturePads = {};
 
 // Set current date on form load
 function setCurrentDate() {
@@ -10,119 +9,49 @@ function setCurrentDate() {
     });
 }
 
-// Initialize
-window.onload = function() {
+// Initialize on document ready
+$(document).ready(function() {
+    // Set initial date
     setCurrentDate();
     
-    // Delay initialization to ensure DOM is fully loaded
-    setTimeout(initializeSignaturePads, 500);
-    
-    // Add event listeners for form visibility to reinitialize signature pads
-    document.querySelectorAll('.inspection-card').forEach(card => {
-        card.addEventListener('click', function() {
-            // Delay to allow DOM updates
-            setTimeout(initializeSignaturePads, 500);
-        });
-    });
-};
+    // Initialize signature pads using jSignature
+    initializeSignatures();
+});
 
-// Signature pad initialization
-function initializeSignaturePads() {
-    const types = ['initial', 'frequent', 'periodic'];
-    
-    types.forEach(type => {
-        const canvasElement = document.getElementById(`${type}-signature-pad`);
-        
-        if (canvasElement && canvasElement.getContext) {
-            // Clear any existing signature pad instance
-            if (signaturePads[type]) {
-                signaturePads[type].off();
-                delete signaturePads[type];
-            }
-            
-            // Check if the form is visible before initializing
-            const form = document.getElementById(`${type}Form`);
-            if (form && form.style.display === 'block') {
-                // Make sure canvas has correct dimensions
-                canvasElement.width = canvasElement.offsetWidth;
-                canvasElement.height = canvasElement.offsetHeight;
-                
-                // Create new signature pad
-                signaturePads[type] = new SignaturePad(canvasElement, {
-                    backgroundColor: 'rgb(255, 255, 255)',
-                    penColor: 'rgb(0, 0, 0)',
-                    velocityFilterWeight: 0.7
-                });
-                
-                // Add touch event listeners for mobile
-                canvasElement.addEventListener('touchstart', function(event) {
-                    if (event.cancelable) {
-                        event.preventDefault();
-                    }
-                }, { passive: false });
-                
-                canvasElement.addEventListener('touchmove', function(event) {
-                    if (event.cancelable) {
-                        event.preventDefault();
-                    }
-                }, { passive: false });
-                
-                // Resize canvas to parent container
-                resizeCanvas(canvasElement, signaturePads[type]);
-                
-                console.log(`Signature pad initialized for ${type}`);
-            }
-        } else {
-            console.error(`Canvas element not found or context not available for ${type}`);
-        }
+// Initialize signature pads
+function initializeSignatures() {
+    // Set up signature pads for all inspection types
+    $("#initial-signature").jSignature({
+        width: '100%',
+        height: 200,
+        lineWidth: 2,
+        color: "#000000",
+        "background-color": "#fff",
+        "decor-color": "#ddd"
     });
     
-    // Add resize listener
-    window.addEventListener('resize', function() {
-        types.forEach(type => {
-            const canvasElement = document.getElementById(`${type}-signature-pad`);
-            if (canvasElement && signaturePads[type]) {
-                resizeCanvas(canvasElement, signaturePads[type]);
-            }
-        });
+    $("#frequent-signature").jSignature({
+        width: '100%',
+        height: 200,
+        lineWidth: 2,
+        color: "#000000",
+        "background-color": "#fff",
+        "decor-color": "#ddd"
+    });
+    
+    $("#periodic-signature").jSignature({
+        width: '100%',
+        height: 200,
+        lineWidth: 2,
+        color: "#000000",
+        "background-color": "#fff",
+        "decor-color": "#ddd"
     });
 }
 
-// Resize the canvas to match its container
-function resizeCanvas(canvas, signaturePad) {
-    if (!canvas || !signaturePad) return;
-    
-    const ratio = Math.max(window.devicePixelRatio || 1, 1);
-    const container = canvas.parentElement;
-    
-    // Save signature data
-    const data = signaturePad.toData();
-    
-    // Resize canvas
-    canvas.width = container.offsetWidth * ratio;
-    canvas.height = 200 * ratio; // Fixed height for consistency
-    canvas.style.width = container.offsetWidth + 'px';
-    canvas.style.height = '200px';
-    
-    // Scale context
-    const context = canvas.getContext('2d');
-    context.scale(ratio, ratio);
-    
-    // Clear and restore signature if data exists
-    signaturePad.clear();
-    if (data && data.length > 0) {
-        signaturePad.fromData(data);
-    }
-}
-
-// Clear signature
+// Clear signature function
 function clearSignature(type) {
-    if (signaturePads[type]) {
-        signaturePads[type].clear();
-        console.log(`Cleared signature for ${type}`);
-    } else {
-        console.error(`Signature pad not found for ${type}`);
-    }
+    $(`#${type}-signature`).jSignature("reset");
 }
 
 // Navigation functions
@@ -131,11 +60,10 @@ function startInspection(type) {
     document.getElementById(type + 'Form').style.display = 'block';
     setCurrentDate();
     
-    // Initialize signature pad after the form is displayed
-    setTimeout(() => {
-        initializeSignaturePads();
-        console.log(`Reinitialized signature pad after showing ${type}Form`);
-    }, 300);
+    // Reset the signature pad when showing a form
+    setTimeout(function() {
+        $(`#${type}-signature`).jSignature("reset");
+    }, 100);
 }
 
 function showResources() {
@@ -214,7 +142,8 @@ function generatePDF(type) {
     }
     
     // Check if signature is provided
-    if (!formData.signature) {
+    const signatureData = $(`#${type}-signature`).jSignature("getData");
+    if (signatureData && $(`#${type}-signature`).jSignature("getData", "native").length === 0) {
         alert('Please provide a signature before generating the report.');
         return;
     }
@@ -235,7 +164,7 @@ function collectFormData(type) {
         comments: document.getElementById(type + '-comments').value,
         selections: {},
         images: imageArrays[type] || [],
-        signature: signaturePads[type] && !signaturePads[type].isEmpty() ? signaturePads[type].toDataURL() : null
+        signature: $(`#${type}-signature`).jSignature("getData", "image")
     };
     
     // Collect all select values for the specific form
@@ -248,8 +177,14 @@ function collectFormData(type) {
     
     // Add specific fields for periodic inspection
     if (type === 'periodic') {
-        data.serviceType = document.getElementById('periodic-service-type').value;
-        data.frequency = document.getElementById('periodic-frequency').value;
+        const serviceType = document.getElementById('periodic-service-type');
+        const frequency = document.getElementById('periodic-frequency');
+        if (serviceType && serviceType.value) {
+            data.serviceType = serviceType.selectedOptions[0].text;
+        }
+        if (frequency && frequency.value) {
+            data.frequency = frequency.selectedOptions[0].text;
+        }
     }
     
     return data;
@@ -292,8 +227,8 @@ function generatePDFContent(type, data) {
         Strap ID/Serial Number: ${data.strapId}
     `;
     
-    if (type === 'periodic') {
-        content += `Service Type: ${data.selections['Service Type'] || ''}\n`;
+    if (type === 'periodic' && data.serviceType) {
+        content += `Service Type: ${data.serviceType}\n`;
     }
     
     content += `
