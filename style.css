@@ -268,27 +268,28 @@ body {
         }
         
         .signature-container {
-            position: relative;
-            margin-top: 20px;
-        }
+  padding: 0;
+  margin: 0;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  overflow: hidden;
+}
         
         .signature-pad {
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #fff;
-            touch-action: none;
-            cursor: crosshair;
-            min-height: 200px;
-        }
+  margin: 0 !important;
+  padding: 0 !important;
+  height: 200px;
+  border: none;
+}
         
         /* jSignature specific styling */
         .jSignature {
-            margin: 0 auto;
-            border: 1px solid #ddd !important;
-            border-radius: 8px !important;
-            background-color: #fff !important;
-        }
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: #fff !important;
+}
         
         .signature-actions {
             margin-top: 15px;
@@ -520,30 +521,3 @@ body {
         .visible {
             display: block !important;
         }
-
-.header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.header-logo {
-  height: 50px;
-  width: 50px;
-  object-fit: contain;
-  border-radius: 4px;
-}
-
-.header-title {
-  flex-grow: 1;
-  text-align: center;
-}
-
-.header-title h1,
-.header-title .subtitle {
-  margin: 0;
-  color: white;
-}
