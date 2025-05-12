@@ -17,25 +17,17 @@ body {
             overflow: hidden;
             width: 100%;
         }
-        .page-container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
+        
         /* ===== Header ===== */
-.header {
-  width: 100%;
-  background-color: #fff;
-  padding: 20px 0;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.header > div {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+            font-weight: bold;
+            font-size: 24px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
         
         .header h1 {
             margin: 0;
@@ -281,16 +273,23 @@ body {
         }
         
         .signature-pad {
-    width: 100%;
-    min-height: 200px;
-    background-color: #fff;
-    cursor: crosshair;
-    touch-action: none;
-}
-        canvas {
-    touch-action: auto !important;
-}
-
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            touch-action: none;
+            cursor: crosshair;
+            min-height: 200px;
+        }
+        
+        /* jSignature specific styling */
+        .jSignature {
+            margin: 0 auto;
+            border: 1px solid #ddd !important;
+            border-radius: 8px !important;
+            background-color: #fff !important;
+        }
+        
         .signature-actions {
             margin-top: 15px;
             display: flex;
@@ -521,3 +520,30 @@ body {
         .visible {
             display: block !important;
         }
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.header-logo {
+  height: 50px;
+  width: 50px;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.header-title {
+  flex-grow: 1;
+  text-align: center;
+}
+
+.header-title h1,
+.header-title .subtitle {
+  margin: 0;
+  color: white;
+}
