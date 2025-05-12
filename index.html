@@ -1,621 +1,575 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tow Strap Inspection Tool</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- Add jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    
-    <!-- Add jSignature library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jSignature/2.1.3/jSignature.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tow Strap Inspection Tool</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+<!-- Add jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Add jSignature library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jSignature/2.1.3/jSignature.min.js"></script>
+<link href="style.css" rel="stylesheet"/>
 </head>
 <body>
-    <div class="header">
-  <div style="max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
-    <img src="Picture1.png" alt="Logo" style="height: 50px; width: 50px; object-fit: contain; border-radius: 4px;">
-    <div style="text-align: center; flex-grow: 1;">
-      <h1>TOW STRAP INSPECTION TOOL</h1>
-      <div class="subtitle">Professional Inspection Management System</div>
-    </div>
-    <div style="width: 50px;"></div>
-  </div>
-</div>
-        
-        <!-- Home Page -->
-        <div class="home-page" id="homePage">
-            <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Select Inspection Type</h2>
-            <div class="inspection-options">
-                <div class="inspection-card" onclick="startInspection('initial')">
-                    <h3>
-                        <i class="fas fa-box-open icon"></i>
+<div class="container">
+<div class="header"><div class="header-inner"><img alt="Logo" class="header-logo" src="logo-placeholder.png"/><div class="header-title"><h1>TOW STRAP INSPECTION TOOL</h1><div class="subtitle">Professional Inspection Management System</div></div></div></div>
+<!-- Home Page -->
+<div class="home-page" id="homePage">
+<h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Select Inspection Type</h2>
+<div class="inspection-options">
+<div class="inspection-card" onclick="startInspection('initial')">
+<h3>
+<i class="fas fa-box-open icon"></i>
                         Initial Inspection
                     </h3>
-                    <p>Upon receipt/first use - verify product specifications and shipping condition</p>
-                    <i class="fas fa-chevron-right arrow"></i>
-                </div>
-                
-                <div class="inspection-card" onclick="startInspection('frequent')">
-                    <h3>
-                        <i class="fas fa-calendar-day icon"></i>
+<p>Upon receipt/first use - verify product specifications and shipping condition</p>
+<i class="fas fa-chevron-right arrow"></i>
+</div>
+<div class="inspection-card" onclick="startInspection('frequent')">
+<h3>
+<i class="fas fa-calendar-day icon"></i>
                         Frequent Inspection
                     </h3>
-                    <p>Daily or before each shift/use - quick safety examination</p>
-                    <i class="fas fa-chevron-right arrow"></i>
-                </div>
-                
-                <div class="inspection-card" onclick="startInspection('periodic')">
-                    <h3>
-                        <i class="fas fa-calendar-check icon"></i>
+<p>Daily or before each shift/use - quick safety examination</p>
+<i class="fas fa-chevron-right arrow"></i>
+</div>
+<div class="inspection-card" onclick="startInspection('periodic')">
+<h3>
+<i class="fas fa-calendar-check icon"></i>
                         Periodic Inspection
                     </h3>
-                    <p>Yearly or more frequent - comprehensive detailed examination</p>
-                    <i class="fas fa-chevron-right arrow"></i>
-                </div>
-                
-                <div class="inspection-card" onclick="showResources()">
-                    <h3>
-                        <i class="fas fa-book icon"></i>
+<p>Yearly or more frequent - comprehensive detailed examination</p>
+<i class="fas fa-chevron-right arrow"></i>
+</div>
+<div class="inspection-card" onclick="showResources()">
+<h3>
+<i class="fas fa-book icon"></i>
                         Resources
                     </h3>
-                    <p>Inspection procedures manual and damage reference guide</p>
-                    <i class="fas fa-chevron-right arrow"></i>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Initial Inspection Form -->
-        <div class="inspection-form" id="initialForm">
-            <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Initial Inspection</h2>
-            
-            <div class="form-section">
-                <h3>General Information</h3>
-                <div class="form-group">
-                    <label>Inspector Name</label>
-                    <input type="text" id="initial-inspector" required>
-                </div>
-                <div class="form-group">
-                    <label>Inspection Date</label>
-                    <input type="date" id="initial-date" required>
-                </div>
-                <div class="form-group">
-                    <label>Strap ID/Serial Number</label>
-                    <input type="text" id="initial-strap-id" required>
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <h3>Initial Inspection Requirements</h3>
-                <div class="form-group">
-                    <label>Product Verification</label>
-                    <select id="initial-product" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="verified">Verified - Correct product as ordered</option>
-                        <option value="incorrect">Incorrect product received</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Manufacturer Specifications</label>
-                    <select id="initial-specifications" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="compliant">Compliant with manufacturer specifications</option>
-                        <option value="non-compliant">Non-compliant with specifications</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Shipping Damage</label>
-                    <select id="initial-shipping" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="no-damage">No shipping damage detected</option>
-                        <option value="minor-damage">Minor damage detected</option>
-                        <option value="major-damage">Major damage detected</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Identification and Markings</label>
-                    <select id="initial-markings" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="present">Proper identification and markings present</option>
-                        <option value="missing">Missing or unclear markings</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <h3>Inspection Result</h3>
-                <div class="status-group">
-                    <label>
-                        <input type="radio" name="initial-status" value="pass" required>
+<p>Inspection procedures manual and damage reference guide</p>
+<i class="fas fa-chevron-right arrow"></i>
+</div>
+</div>
+</div>
+<!-- Initial Inspection Form -->
+<div class="inspection-form" id="initialForm">
+<h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Initial Inspection</h2>
+<div class="form-section">
+<h3>General Information</h3>
+<div class="form-group">
+<label>Inspector Name</label>
+<input id="initial-inspector" required="" type="text"/>
+</div>
+<div class="form-group">
+<label>Inspection Date</label>
+<input id="initial-date" required="" type="date"/>
+</div>
+<div class="form-group">
+<label>Strap ID/Serial Number</label>
+<input id="initial-strap-id" required="" type="text"/>
+</div>
+</div>
+<div class="form-section">
+<h3>Initial Inspection Requirements</h3>
+<div class="form-group">
+<label>Product Verification</label>
+<select id="initial-product" required="">
+<option value="">-- Select Status --</option>
+<option value="verified">Verified - Correct product as ordered</option>
+<option value="incorrect">Incorrect product received</option>
+</select>
+</div>
+<div class="form-group">
+<label>Manufacturer Specifications</label>
+<select id="initial-specifications" required="">
+<option value="">-- Select Status --</option>
+<option value="compliant">Compliant with manufacturer specifications</option>
+<option value="non-compliant">Non-compliant with specifications</option>
+</select>
+</div>
+<div class="form-group">
+<label>Shipping Damage</label>
+<select id="initial-shipping" required="">
+<option value="">-- Select Status --</option>
+<option value="no-damage">No shipping damage detected</option>
+<option value="minor-damage">Minor damage detected</option>
+<option value="major-damage">Major damage detected</option>
+</select>
+</div>
+<div class="form-group">
+<label>Identification and Markings</label>
+<select id="initial-markings" required="">
+<option value="">-- Select Status --</option>
+<option value="present">Proper identification and markings present</option>
+<option value="missing">Missing or unclear markings</option>
+</select>
+</div>
+</div>
+<div class="form-section">
+<h3>Inspection Result</h3>
+<div class="status-group">
+<label>
+<input name="initial-status" required="" type="radio" value="pass"/>
                         PASS - Approved for Service
                     </label>
-                    <label>
-                        <input type="radio" name="initial-status" value="fail" required>
+<label>
+<input name="initial-status" required="" type="radio" value="fail"/>
                         FAIL - Remove from Service
                     </label>
-                </div>
-                <div class="form-group">
-                    <label>Comments/Notes</label>
-                    <textarea id="initial-comments" rows="4"></textarea>
-                </div>
-            </div>
-            
-            <div class="form-section image-upload-section">
-                <h3>Photo Documentation</h3>
-                <p>Add inspection photos to your report</p>
-                <div class="upload-container">
-                    <button type="button" class="upload-btn" onclick="uploadImage('initial', true)">
-                        <i class="fas fa-camera"></i> Take Photo
+</div>
+<div class="form-group">
+<label>Comments/Notes</label>
+<textarea id="initial-comments" rows="4"></textarea>
+</div>
+</div>
+<div class="form-section image-upload-section">
+<h3>Photo Documentation</h3>
+<p>Add inspection photos to your report</p>
+<div class="upload-container">
+<button class="upload-btn" onclick="uploadImage('initial', true)" type="button">
+<i class="fas fa-camera"></i> Take Photo
                     </button>
-                    <button type="button" class="upload-btn" onclick="uploadImage('initial', false)">
-                        <i class="fas fa-upload"></i> Upload Photo
+<button class="upload-btn" onclick="uploadImage('initial', false)" type="button">
+<i class="fas fa-upload"></i> Upload Photo
                     </button>
-                </div>
-                <div class="image-preview-container" id="initial-preview"></div>
-                <input type="file" class="hidden-file-input" id="initial-file" accept="image/*" multiple>
-                <input type="file" class="hidden-file-input" id="initial-camera" accept="image/*" capture="environment" multiple>
-            </div>
-            
-            <!-- Signature Box Section -->
-            <div class="form-section signature-section">
-                <h3>Digital Signature</h3>
-                <p>Sign to authorize this inspection report</p>
-                <div class="signature-container">
-                    <div id="initial-signature" class="signature-pad"></div>
-                    <div class="signature-actions">
-                        <button type="button" class="btn-clear" onclick="clearSignature('initial')">
-                            <i class="fas fa-eraser"></i> Clear
+</div>
+<div class="image-preview-container" id="initial-preview"></div>
+<input accept="image/*" class="hidden-file-input" id="initial-file" multiple="" type="file"/>
+<input accept="image/*" capture="environment" class="hidden-file-input" id="initial-camera" multiple="" type="file"/>
+</div>
+<!-- Signature Box Section -->
+<div class="form-section signature-section">
+<h3>Digital Signature</h3>
+<p>Sign to authorize this inspection report</p>
+<div class="signature-container">
+<div class="signature-pad" id="initial-signature"></div>
+<div class="signature-actions">
+<button class="btn-clear" onclick="clearSignature('initial')" type="button">
+<i class="fas fa-eraser"></i> Clear
                         </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="button-group">
-                <button class="btn" onclick="generatePDF('initial')">Generate PDF Report</button>
-                <button class="btn btn-back" onclick="goBack()">Back</button>
-            </div>
-        </div>
-        
-        <!-- Frequent Inspection Form -->
-        <div class="inspection-form" id="frequentForm">
-            <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Frequent Inspection</h2>
-            
-            <div class="form-section">
-                <h3>General Information</h3>
-                <div class="form-group">
-                    <label>Inspector Name</label>
-                    <input type="text" id="frequent-inspector" required>
-                </div>
-                <div class="form-group">
-                    <label>Inspection Date</label>
-                    <input type="date" id="frequent-date" required>
-                </div>
-                <div class="form-group">
-                    <label>Strap ID/Serial Number</label>
-                    <input type="text" id="frequent-strap-id" required>
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <h3>Frequent Inspection Checklist</h3>
-                <div class="form-group">
-                    <label>Webbing Condition</label>
-                    <select id="frequent-webbing" required>
-                        <option value="">-- Select Condition --</option>
-                        <option value="good">No cuts, tears, or damaged yarns</option>
-                        <option value="minor-damage">Minor surface wear</option>
-                        <option value="major-damage">Cuts, tears, or damaged yarns present</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Holes, Snags, or Punctures</label>
-                    <select id="frequent-holes" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="none">None detected</option>
-                        <option value="minor">Minor surface snags</option>
-                        <option value="major">Holes or punctures present</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Abrasive Wear</label>
-                    <select id="frequent-wear" required>
-                        <option value="">-- Select Level --</option>
-                        <option value="minimal">Minimal wear</option>
-                        <option value="moderate">Moderate wear</option>
-                        <option value="excessive">Excessive wear</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Knots</label>
-                    <select id="frequent-knots" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="none">No knots</option>
-                        <option value="present">Knots present</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Webbing Structure</label>
-                    <select id="frequent-crushed" required>
-                        <option value="">-- Select Condition --</option>
-                        <option value="normal">Normal webbing structure</option>
-                        <option value="minor">Minor compression</option>
-                        <option value="crushed">Crushed webbing</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Heat or Chemical Damage</label>
-                    <select id="frequent-heat" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="none">No damage detected</option>
-                        <option value="minor">Minor discoloration</option>
-                        <option value="major">Heat or chemical damage present</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>UV Degradation</label>
-                    <select id="frequent-uv" required>
-                        <option value="">-- Select Level --</option>
-                        <option value="none">No degradation</option>
-                        <option value="minor">Minor fading</option>
-                        <option value="major">Significant fading or stiffness</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>End Fitting Condition</label>
-                    <select id="frequent-fittings" required>
-                        <option value="">-- Select Condition --</option>
-                        <option value="good">Good condition</option>
-                        <option value="minor-damage">Minor wear</option>
-                        <option value="damaged">Damaged or deformed</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <h3>Inspection Result</h3>
-                <div class="status-group">
-                    <label>
-                        <input type="radio" name="frequent-status" value="pass" required>
+</div>
+</div>
+</div>
+<div class="button-group">
+<button class="btn" onclick="generatePDF('initial')">Generate PDF Report</button>
+<button class="btn btn-back" onclick="goBack()">Back</button>
+</div>
+</div>
+<!-- Frequent Inspection Form -->
+<div class="inspection-form" id="frequentForm">
+<h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Frequent Inspection</h2>
+<div class="form-section">
+<h3>General Information</h3>
+<div class="form-group">
+<label>Inspector Name</label>
+<input id="frequent-inspector" required="" type="text"/>
+</div>
+<div class="form-group">
+<label>Inspection Date</label>
+<input id="frequent-date" required="" type="date"/>
+</div>
+<div class="form-group">
+<label>Strap ID/Serial Number</label>
+<input id="frequent-strap-id" required="" type="text"/>
+</div>
+</div>
+<div class="form-section">
+<h3>Frequent Inspection Checklist</h3>
+<div class="form-group">
+<label>Webbing Condition</label>
+<select id="frequent-webbing" required="">
+<option value="">-- Select Condition --</option>
+<option value="good">No cuts, tears, or damaged yarns</option>
+<option value="minor-damage">Minor surface wear</option>
+<option value="major-damage">Cuts, tears, or damaged yarns present</option>
+</select>
+</div>
+<div class="form-group">
+<label>Holes, Snags, or Punctures</label>
+<select id="frequent-holes" required="">
+<option value="">-- Select Status --</option>
+<option value="none">None detected</option>
+<option value="minor">Minor surface snags</option>
+<option value="major">Holes or punctures present</option>
+</select>
+</div>
+<div class="form-group">
+<label>Abrasive Wear</label>
+<select id="frequent-wear" required="">
+<option value="">-- Select Level --</option>
+<option value="minimal">Minimal wear</option>
+<option value="moderate">Moderate wear</option>
+<option value="excessive">Excessive wear</option>
+</select>
+</div>
+<div class="form-group">
+<label>Knots</label>
+<select id="frequent-knots" required="">
+<option value="">-- Select Status --</option>
+<option value="none">No knots</option>
+<option value="present">Knots present</option>
+</select>
+</div>
+<div class="form-group">
+<label>Webbing Structure</label>
+<select id="frequent-crushed" required="">
+<option value="">-- Select Condition --</option>
+<option value="normal">Normal webbing structure</option>
+<option value="minor">Minor compression</option>
+<option value="crushed">Crushed webbing</option>
+</select>
+</div>
+<div class="form-group">
+<label>Heat or Chemical Damage</label>
+<select id="frequent-heat" required="">
+<option value="">-- Select Status --</option>
+<option value="none">No damage detected</option>
+<option value="minor">Minor discoloration</option>
+<option value="major">Heat or chemical damage present</option>
+</select>
+</div>
+<div class="form-group">
+<label>UV Degradation</label>
+<select id="frequent-uv" required="">
+<option value="">-- Select Level --</option>
+<option value="none">No degradation</option>
+<option value="minor">Minor fading</option>
+<option value="major">Significant fading or stiffness</option>
+</select>
+</div>
+<div class="form-group">
+<label>End Fitting Condition</label>
+<select id="frequent-fittings" required="">
+<option value="">-- Select Condition --</option>
+<option value="good">Good condition</option>
+<option value="minor-damage">Minor wear</option>
+<option value="damaged">Damaged or deformed</option>
+</select>
+</div>
+</div>
+<div class="form-section">
+<h3>Inspection Result</h3>
+<div class="status-group">
+<label>
+<input name="frequent-status" required="" type="radio" value="pass"/>
                         PASS - Approved for Service
                     </label>
-                    <label>
-                        <input type="radio" name="frequent-status" value="fail" required>
+<label>
+<input name="frequent-status" required="" type="radio" value="fail"/>
                         FAIL - Remove from Service
                     </label>
-                </div>
-                <div class="form-group">
-                    <label>Comments/Notes</label>
-                    <textarea id="frequent-comments" rows="4"></textarea>
-                </div>
-            </div>
-            
-            <div class="form-section image-upload-section">
-                <h3>Photo Documentation</h3>
-                <p>Add inspection photos to your report</p>
-                <div class="upload-container">
-                    <button type="button" class="upload-btn" onclick="uploadImage('frequent', true)">
-                        <i class="fas fa-camera"></i> Take Photo
+</div>
+<div class="form-group">
+<label>Comments/Notes</label>
+<textarea id="frequent-comments" rows="4"></textarea>
+</div>
+</div>
+<div class="form-section image-upload-section">
+<h3>Photo Documentation</h3>
+<p>Add inspection photos to your report</p>
+<div class="upload-container">
+<button class="upload-btn" onclick="uploadImage('frequent', true)" type="button">
+<i class="fas fa-camera"></i> Take Photo
                     </button>
-                    <button type="button" class="upload-btn" onclick="uploadImage('frequent', false)">
-                        <i class="fas fa-upload"></i> Upload Photo
+<button class="upload-btn" onclick="uploadImage('frequent', false)" type="button">
+<i class="fas fa-upload"></i> Upload Photo
                     </button>
-                </div>
-                <div class="image-preview-container" id="frequent-preview"></div>
-                <input type="file" class="hidden-file-input" id="frequent-file" accept="image/*" multiple>
-                <input type="file" class="hidden-file-input" id="frequent-camera" accept="image/*" capture="environment" multiple>
-            </div>
-            
-            <!-- Signature Box Section -->
-            <div class="form-section signature-section">
-                <h3>Digital Signature</h3>
-                <p>Sign to authorize this inspection report</p>
-                <div class="signature-container">
-                    <div id="frequent-signature" class="signature-pad"></div>
-                    <div class="signature-actions">
-                        <button type="button" class="btn-clear" onclick="clearSignature('frequent')">
-                            <i class="fas fa-eraser"></i> Clear
+</div>
+<div class="image-preview-container" id="frequent-preview"></div>
+<input accept="image/*" class="hidden-file-input" id="frequent-file" multiple="" type="file"/>
+<input accept="image/*" capture="environment" class="hidden-file-input" id="frequent-camera" multiple="" type="file"/>
+</div>
+<!-- Signature Box Section -->
+<div class="form-section signature-section">
+<h3>Digital Signature</h3>
+<p>Sign to authorize this inspection report</p>
+<div class="signature-container">
+<div class="signature-pad" id="frequent-signature"></div>
+<div class="signature-actions">
+<button class="btn-clear" onclick="clearSignature('frequent')" type="button">
+<i class="fas fa-eraser"></i> Clear
                         </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="button-group">
-                <button class="btn" onclick="generatePDF('frequent')">Generate PDF Report</button>
-                <button class="btn btn-back" onclick="goBack()">Back</button>
-            </div>
-        </div>
-        
-        <!-- Periodic Inspection Form -->
-        <div class="inspection-form" id="periodicForm">
-            <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Periodic Inspection</h2>
-            
-            <div class="form-section">
-                <h3>General Information</h3>
-                <div class="form-group">
-                    <label>Inspector Name</label>
-                    <input type="text" id="periodic-inspector" required>
-                </div>
-                <div class="form-group">
-                    <label>Inspection Date</label>
-                    <input type="date" id="periodic-date" required>
-                </div>
-                <div class="form-group">
-                    <label>Strap ID/Serial Number</label>
-                    <input type="text" id="periodic-strap-id" required>
-                </div>
-                <div class="form-group">
-                    <label>Service Type</label>
-                    <select id="periodic-service-type" required>
-                        <option value="">-- Select Service Type --</option>
-                        <option value="normal">Normal Service (Yearly Inspection)</option>
-                        <option value="severe">Severe Service (Monthly/Quarterly)</option>
-                        <option value="special">Special Service (Per Qualified Personnel)</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <h3>Eye Loop Examination</h3>
-                <div class="form-group">
-                    <label>Interior Edge Condition</label>
-                    <select id="periodic-eye-interior" required>
-                        <option value="">-- Select Condition --</option>
-                        <option value="good">Free of cuts, rough spots, or wear</option>
-                        <option value="minor-wear">Minor wear present</option>
-                        <option value="damaged">Cuts, rough spots, or excessive wear</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Stitching Condition</label>
-                    <select id="periodic-eye-stitching" required>
-                        <option value="">-- Select Condition --</option>
-                        <option value="intact">All stitching intact</option>
-                        <option value="minor-issues">Minor loose threads</option>
-                        <option value="damaged">Missing or broken stitches</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Eye Opening Shape</label>
-                    <select id="periodic-eye-distortion" required>
-                        <option value="">-- Select Condition --</option>
-                        <option value="normal">Normal shape maintained</option>
-                        <option value="minor-stretch">Minor stretching</option>
-                        <option value="distorted">Stretched or distorted</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <h3>Main Webbing Examination</h3>
-                <div class="form-group">
-                    <label>Embedded Foreign Objects</label>
-                    <select id="periodic-embedded" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="none">None detected</option>
-                        <option value="minor">Minor debris that can be removed</option>
-                        <option value="major">Embedded objects that cannot be removed</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Internal Webbing Condition</label>
-                    <select id="periodic-soft-spots" required>
-                        <option value="">-- Select Condition --</option>
-                        <option value="normal">Normal consistency throughout</option>
-                        <option value="minor">Minor soft areas</option>
-                        <option value="major">Soft or compressed areas indicating damage</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Edge Condition</label>
-                    <select id="periodic-edges" required>
-                        <option value="">-- Select Condition --</option>
-                        <option value="clean">Clean edges, no damage</option>
-                        <option value="minor-fray">Minor fraying</option>
-                        <option value="damaged">Cuts, tears, or significant fraying</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Material Flexibility</label>
-                    <select id="periodic-flexibility" required>
-                        <option value="">-- Select Condition --</option>
-                        <option value="proper">Maintains proper flexibility</option>
-                        <option value="minor-stiff">Minor stiffness in some areas</option>
-                        <option value="stiff">Stiff, brittle, or crackling sounds</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Color Consistency</label>
-                    <select id="periodic-color" required>
-                        <option value="">-- Select Condition --</option>
-                        <option value="consistent">Consistent color throughout</option>
-                        <option value="minor-changes">Minor discoloration</option>
-                        <option value="major-changes">Significant color changes or patterns</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <h3>General Condition Assessment</h3>
-                <div class="form-group">
-                    <label>Chemical Exposure</label>
-                    <select id="periodic-chemical" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="none">No evidence of exposure</option>
-                        <option value="suspected">Suspected chemical contact</option>
-                        <option value="confirmed">Clear evidence of chemical damage</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Heat Damage</label>
-                    <select id="periodic-heat-damage" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="none">No heat damage</option>
-                        <option value="minor">Minor discoloration or odor</option>
-                        <option value="major">Melting, glazing, or brittleness</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Unauthorized Repairs</label>
-                    <select id="periodic-unauthorized" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="none">No unauthorized repairs</option>
-                        <option value="minor">Minor repairs (review needed)</option>
-                        <option value="major">Unauthorized repairs present (tape, wire, etc.)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Frequent Inspection Verification</label>
-                    <select id="periodic-frequent-verified" required>
-                        <option value="">-- Select Status --</option>
-                        <option value="verified">Frequent inspections being performed correctly</option>
-                        <option value="incomplete">Infrequent or incomplete inspections</option>
-                        <option value="none">No frequent inspection records</option>
-                    </select>
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <h3>Inspection Result</h3>
-                <div class="status-group">
-                    <label>
-                        <input type="radio" name="periodic-status" value="pass" required>
+</div>
+</div>
+</div>
+<div class="button-group">
+<button class="btn" onclick="generatePDF('frequent')">Generate PDF Report</button>
+<button class="btn btn-back" onclick="goBack()">Back</button>
+</div>
+</div>
+<!-- Periodic Inspection Form -->
+<div class="inspection-form" id="periodicForm">
+<h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Periodic Inspection</h2>
+<div class="form-section">
+<h3>General Information</h3>
+<div class="form-group">
+<label>Inspector Name</label>
+<input id="periodic-inspector" required="" type="text"/>
+</div>
+<div class="form-group">
+<label>Inspection Date</label>
+<input id="periodic-date" required="" type="date"/>
+</div>
+<div class="form-group">
+<label>Strap ID/Serial Number</label>
+<input id="periodic-strap-id" required="" type="text"/>
+</div>
+<div class="form-group">
+<label>Service Type</label>
+<select id="periodic-service-type" required="">
+<option value="">-- Select Service Type --</option>
+<option value="normal">Normal Service (Yearly Inspection)</option>
+<option value="severe">Severe Service (Monthly/Quarterly)</option>
+<option value="special">Special Service (Per Qualified Personnel)</option>
+</select>
+</div>
+</div>
+<div class="form-section">
+<h3>Eye Loop Examination</h3>
+<div class="form-group">
+<label>Interior Edge Condition</label>
+<select id="periodic-eye-interior" required="">
+<option value="">-- Select Condition --</option>
+<option value="good">Free of cuts, rough spots, or wear</option>
+<option value="minor-wear">Minor wear present</option>
+<option value="damaged">Cuts, rough spots, or excessive wear</option>
+</select>
+</div>
+<div class="form-group">
+<label>Stitching Condition</label>
+<select id="periodic-eye-stitching" required="">
+<option value="">-- Select Condition --</option>
+<option value="intact">All stitching intact</option>
+<option value="minor-issues">Minor loose threads</option>
+<option value="damaged">Missing or broken stitches</option>
+</select>
+</div>
+<div class="form-group">
+<label>Eye Opening Shape</label>
+<select id="periodic-eye-distortion" required="">
+<option value="">-- Select Condition --</option>
+<option value="normal">Normal shape maintained</option>
+<option value="minor-stretch">Minor stretching</option>
+<option value="distorted">Stretched or distorted</option>
+</select>
+</div>
+</div>
+<div class="form-section">
+<h3>Main Webbing Examination</h3>
+<div class="form-group">
+<label>Embedded Foreign Objects</label>
+<select id="periodic-embedded" required="">
+<option value="">-- Select Status --</option>
+<option value="none">None detected</option>
+<option value="minor">Minor debris that can be removed</option>
+<option value="major">Embedded objects that cannot be removed</option>
+</select>
+</div>
+<div class="form-group">
+<label>Internal Webbing Condition</label>
+<select id="periodic-soft-spots" required="">
+<option value="">-- Select Condition --</option>
+<option value="normal">Normal consistency throughout</option>
+<option value="minor">Minor soft areas</option>
+<option value="major">Soft or compressed areas indicating damage</option>
+</select>
+</div>
+<div class="form-group">
+<label>Edge Condition</label>
+<select id="periodic-edges" required="">
+<option value="">-- Select Condition --</option>
+<option value="clean">Clean edges, no damage</option>
+<option value="minor-fray">Minor fraying</option>
+<option value="damaged">Cuts, tears, or significant fraying</option>
+</select>
+</div>
+<div class="form-group">
+<label>Material Flexibility</label>
+<select id="periodic-flexibility" required="">
+<option value="">-- Select Condition --</option>
+<option value="proper">Maintains proper flexibility</option>
+<option value="minor-stiff">Minor stiffness in some areas</option>
+<option value="stiff">Stiff, brittle, or crackling sounds</option>
+</select>
+</div>
+<div class="form-group">
+<label>Color Consistency</label>
+<select id="periodic-color" required="">
+<option value="">-- Select Condition --</option>
+<option value="consistent">Consistent color throughout</option>
+<option value="minor-changes">Minor discoloration</option>
+<option value="major-changes">Significant color changes or patterns</option>
+</select>
+</div>
+</div>
+<div class="form-section">
+<h3>General Condition Assessment</h3>
+<div class="form-group">
+<label>Chemical Exposure</label>
+<select id="periodic-chemical" required="">
+<option value="">-- Select Status --</option>
+<option value="none">No evidence of exposure</option>
+<option value="suspected">Suspected chemical contact</option>
+<option value="confirmed">Clear evidence of chemical damage</option>
+</select>
+</div>
+<div class="form-group">
+<label>Heat Damage</label>
+<select id="periodic-heat-damage" required="">
+<option value="">-- Select Status --</option>
+<option value="none">No heat damage</option>
+<option value="minor">Minor discoloration or odor</option>
+<option value="major">Melting, glazing, or brittleness</option>
+</select>
+</div>
+<div class="form-group">
+<label>Unauthorized Repairs</label>
+<select id="periodic-unauthorized" required="">
+<option value="">-- Select Status --</option>
+<option value="none">No unauthorized repairs</option>
+<option value="minor">Minor repairs (review needed)</option>
+<option value="major">Unauthorized repairs present (tape, wire, etc.)</option>
+</select>
+</div>
+<div class="form-group">
+<label>Frequent Inspection Verification</label>
+<select id="periodic-frequent-verified" required="">
+<option value="">-- Select Status --</option>
+<option value="verified">Frequent inspections being performed correctly</option>
+<option value="incomplete">Infrequent or incomplete inspections</option>
+<option value="none">No frequent inspection records</option>
+</select>
+</div>
+</div>
+<div class="form-section">
+<h3>Inspection Result</h3>
+<div class="status-group">
+<label>
+<input name="periodic-status" required="" type="radio" value="pass"/>
                         PASS - Approved for Service
                     </label>
-                    <label>
-                        <input type="radio" name="periodic-status" value="fail" required>
+<label>
+<input name="periodic-status" required="" type="radio" value="fail"/>
                         FAIL - Remove from Service
                     </label>
-                </div>
-                <div class="form-group">
-                    <label>Recommended Inspection Frequency</label>
-                    <select id="periodic-frequency">
-                        <option value="yearly">Yearly</option>
-                        <option value="quarterly">Quarterly</option>
-                        <option value="monthly">Monthly</option>
-                        <option value="custom">Custom (specify in comments)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Comments/Notes</label>
-                    <textarea id="periodic-comments" rows="4"></textarea>
-                </div>
-            </div>
-            
-            <div class="form-section image-upload-section">
-                <h3>Photo Documentation</h3>
-                <p>Add inspection photos to your report</p>
-                <div class="upload-container">
-                    <button type="button" class="upload-btn" onclick="uploadImage('periodic', true)">
-                        <i class="fas fa-camera"></i> Take Photo
+</div>
+<div class="form-group">
+<label>Recommended Inspection Frequency</label>
+<select id="periodic-frequency">
+<option value="yearly">Yearly</option>
+<option value="quarterly">Quarterly</option>
+<option value="monthly">Monthly</option>
+<option value="custom">Custom (specify in comments)</option>
+</select>
+</div>
+<div class="form-group">
+<label>Comments/Notes</label>
+<textarea id="periodic-comments" rows="4"></textarea>
+</div>
+</div>
+<div class="form-section image-upload-section">
+<h3>Photo Documentation</h3>
+<p>Add inspection photos to your report</p>
+<div class="upload-container">
+<button class="upload-btn" onclick="uploadImage('periodic', true)" type="button">
+<i class="fas fa-camera"></i> Take Photo
                     </button>
-                    <button type="button" class="upload-btn" onclick="uploadImage('periodic', false)">
-                        <i class="fas fa-upload"></i> Upload Photo
+<button class="upload-btn" onclick="uploadImage('periodic', false)" type="button">
+<i class="fas fa-upload"></i> Upload Photo
                     </button>
-                </div>
-                <div class="image-preview-container" id="periodic-preview"></div>
-                <input type="file" class="hidden-file-input" id="periodic-file" accept="image/*" multiple>
-                <input type="file" class="hidden-file-input" id="periodic-camera" accept="image/*" capture="environment" multiple>
-            </div>
-            
-            <!-- Signature Box Section -->
-            <div class="form-section signature-section">
-                <h3>Digital Signature</h3>
-                <p>Sign to authorize this inspection report</p>
-                <div class="signature-container">
-                    <div id="periodic-signature" class="signature-pad"></div>
-                    <div class="signature-actions">
-                        <button type="button" class="btn-clear" onclick="clearSignature('periodic')">
-                            <i class="fas fa-eraser"></i> Clear
+</div>
+<div class="image-preview-container" id="periodic-preview"></div>
+<input accept="image/*" class="hidden-file-input" id="periodic-file" multiple="" type="file"/>
+<input accept="image/*" capture="environment" class="hidden-file-input" id="periodic-camera" multiple="" type="file"/>
+</div>
+<!-- Signature Box Section -->
+<div class="form-section signature-section">
+<h3>Digital Signature</h3>
+<p>Sign to authorize this inspection report</p>
+<div class="signature-container">
+<div class="signature-pad" id="periodic-signature"></div>
+<div class="signature-actions">
+<button class="btn-clear" onclick="clearSignature('periodic')" type="button">
+<i class="fas fa-eraser"></i> Clear
                         </button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="button-group">
-                <button class="btn" onclick="generatePDF('periodic')">Generate PDF Report</button>
-                <button class="btn btn-back" onclick="goBack()">Back</button>
-            </div>
-        </div>
-        
-        <!-- Resources Page -->
-        <div class="inspection-form" id="resourcesPage">
-            <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Inspection Resources</h2>
-            
-            <div class="form-section">
-                <h3>Damage Reference Guide</h3>
-                <div class="damage-reference">
-                    <img src="https://i.imgur.com/KL00zMm.jpeg" alt="Damage reference guide">
-                </div>
-            </div>
-            
-            <div class="form-section">
-                <h3>Key Inspection Procedures</h3>
-                <div style="background-color: #f9fafc; padding: 25px; border-radius: 8px; border: 1px solid #eaeaea;">
-                    <h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 17px;">Equipment Requirements</h4>
-                    <ul style="margin-bottom: 25px; padding-left: 20px;">
-                        <li>Clean, flat surface to fully extend the strap</li>
-                        <li>Adequate lighting for visual examination</li>
-                        <li>No specialized tools necessary</li>
-                    </ul>
-                    
-                    <h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 17px;">Eye Loop Examination</h4>
-                    <ul style="margin-bottom: 25px; padding-left: 20px;">
-                        <li>Place both hands around the eye opening</li>
-                        <li>Run thumb around interior edge checking for cuts, rough spots</li>
-                        <li>Inspect stitching connection to main webbing</li>
-                        <li>Look for loose threads or gaps in stitching</li>
-                    </ul>
-                    
-                    <h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 17px;">Main Webbing Inspection</h4>
-                    <ul style="margin-bottom: 25px; padding-left: 20px;">
-                        <li>Use hand-over-hand method for systematic examination</li>
-                        <li>Apply moderate pressure while maintaining contact</li>
-                        <li>Feel for hard spots indicating embedded objects</li>
-                        <li>Check for soft/compressed areas suggesting internal damage</li>
-                        <li>Run fingers along both edges for cuts/tears/fraying</li>
-                    </ul>
-                    
-                    <h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 17px;">Material Condition Testing</h4>
-                    <ul style="margin-bottom: 25px; padding-left: 20px;">
-                        <li>Conduct flexibility assessment by folding at several points</li>
-                        <li>Normal webbing should bend easily without resistance</li>
-                        <li>Stiffness or crackling sounds indicate degradation</li>
-                        <li>Check for unusual odors (chemical, burnt, or musty)</li>
-                    </ul>
-                    
-                    <h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 17px;">Removal Criteria</h4>
-                    <div style="background-color: #ffebee; padding: 15px; border-radius: 6px; border-left: 4px solid #e74c3c;">
-                        <p style="color: #c0392b; font-weight: bold; margin-bottom: 10px;">Remove strap immediately if ANY of these conditions exist:</p>
-                        <ul style="padding-left: 20px; margin-bottom: 0;">
-                            <li>Cuts penetrating through webbing yarns</li>
-                            <li>Embedded foreign objects that cannot be safely extracted</li>
-                            <li>Stitching damage at eye loops</li>
-                            <li>Evidence of chemical or heat damage</li>
-                            <li>Knots tied anywhere in the strap</li>
-                            <li>Visible mold or mildew growth</li>
-                            <li>Previous unauthorized repairs</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="button-group">
-                <button class="btn btn-back" onclick="goBack()">Back to Home</button>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p>© 2025 Dawnerz. All rights reserved.</p>
-            <p>
-                <a href="tel:8143008032">814-300-8032</a> | 
+</div>
+</div>
+</div>
+<div class="button-group">
+<button class="btn" onclick="generatePDF('periodic')">Generate PDF Report</button>
+<button class="btn btn-back" onclick="goBack()">Back</button>
+</div>
+</div>
+<!-- Resources Page -->
+<div class="inspection-form" id="resourcesPage">
+<h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Inspection Resources</h2>
+<div class="form-section">
+<h3>Damage Reference Guide</h3>
+<div class="damage-reference">
+<img alt="Damage reference guide" src="https://i.imgur.com/KL00zMm.jpeg"/>
+</div>
+</div>
+<div class="form-section">
+<h3>Key Inspection Procedures</h3>
+<div style="background-color: #f9fafc; padding: 25px; border-radius: 8px; border: 1px solid #eaeaea;">
+<h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 17px;">Equipment Requirements</h4>
+<ul style="margin-bottom: 25px; padding-left: 20px;">
+<li>Clean, flat surface to fully extend the strap</li>
+<li>Adequate lighting for visual examination</li>
+<li>No specialized tools necessary</li>
+</ul>
+<h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 17px;">Eye Loop Examination</h4>
+<ul style="margin-bottom: 25px; padding-left: 20px;">
+<li>Place both hands around the eye opening</li>
+<li>Run thumb around interior edge checking for cuts, rough spots</li>
+<li>Inspect stitching connection to main webbing</li>
+<li>Look for loose threads or gaps in stitching</li>
+</ul>
+<h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 17px;">Main Webbing Inspection</h4>
+<ul style="margin-bottom: 25px; padding-left: 20px;">
+<li>Use hand-over-hand method for systematic examination</li>
+<li>Apply moderate pressure while maintaining contact</li>
+<li>Feel for hard spots indicating embedded objects</li>
+<li>Check for soft/compressed areas suggesting internal damage</li>
+<li>Run fingers along both edges for cuts/tears/fraying</li>
+</ul>
+<h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 17px;">Material Condition Testing</h4>
+<ul style="margin-bottom: 25px; padding-left: 20px;">
+<li>Conduct flexibility assessment by folding at several points</li>
+<li>Normal webbing should bend easily without resistance</li>
+<li>Stiffness or crackling sounds indicate degradation</li>
+<li>Check for unusual odors (chemical, burnt, or musty)</li>
+</ul>
+<h4 style="color: #2c3e50; margin-bottom: 15px; font-size: 17px;">Removal Criteria</h4>
+<div style="background-color: #ffebee; padding: 15px; border-radius: 6px; border-left: 4px solid #e74c3c;">
+<p style="color: #c0392b; font-weight: bold; margin-bottom: 10px;">Remove strap immediately if ANY of these conditions exist:</p>
+<ul style="padding-left: 20px; margin-bottom: 0;">
+<li>Cuts penetrating through webbing yarns</li>
+<li>Embedded foreign objects that cannot be safely extracted</li>
+<li>Stitching damage at eye loops</li>
+<li>Evidence of chemical or heat damage</li>
+<li>Knots tied anywhere in the strap</li>
+<li>Visible mold or mildew growth</li>
+<li>Previous unauthorized repairs</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="button-group">
+<button class="btn btn-back" onclick="goBack()">Back to Home</button>
+</div>
+</div>
+<div class="footer">
+<p>© 2025 Dawnerz. All rights reserved.</p>
+<p>
+<a href="tel:8143008032">814-300-8032</a> | 
                 <a href="mailto:info@dawnerz.com">info@dawnerz.com</a> | 
                 <a href="http://dawnerz.com">dawnerz.com</a>
-            </p>
-        </div>
-    </div>
-    
-    <script src="script.js"></script>
+</p>
+</div>
+</div>
+<script src="script.js"></script>
 </body>
 </html>
