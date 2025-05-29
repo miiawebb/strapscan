@@ -1,20 +1,338 @@
-<!DOCTYPE html>
-
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Tow Strap Inspection Tool</title>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
-<!-- Add jQuery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<!-- Add jSignature library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jSignature/2.1.3/jSignature.min.js"></script>
-<link href="style.css" rel="stylesheet"/>
-</head>
-<body>
+
+<!-- Landing Page Section -->
+<div class="app-section active" id="landingPage">
+<!-- Hero Section -->
+<section class="hero">
+<div class="hero-content">
+<h1>DAWNERZ RECOVERY TOOLKIT</h1>
+<p class="subtitle">Professional Recovery Solutions at Your Fingertips</p>
+<p class="tagline">Industry-leading tools for safe, efficient recovery operations</p>
+<div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+<a class="launch-btn" href="#tools">
+Explore Tools <i class="fas fa-arrow-down"></i>
+</a>
+</div>
+</div>
+</section>
+<!-- Tools Section -->
+<section class="tools-section" id="tools">
+<h2 class="section-title">Professional Recovery Tools</h2>
+<div class="tools-container">
+<div class="tool-card fade-in" onclick="toggleCard(this)">
+<div class="tool-icon">
+<i class="fas fa-calculator"></i>
+</div>
+<h3 class="tool-title">Recovery Load Calculator</h3>
+<div class="expandable-content">
+<p class="tool-description">Calculate precise working load limits for safe recovery operations based on vehicle weight, terrain, and environmental factors.</p>
+<ul class="tool-features">
+<li><i class="fas fa-check"></i> Real-time force calculations</li>
+<li><i class="fas fa-check"></i> 3:1 and 5:1 safety factor recommendations</li>
+<li><i class="fas fa-check"></i> Mobile-optimized interface</li>
+<li><i class="fas fa-check"></i> PDF report generation</li>
+</ul>
+<button class="launch-btn" onclick="event.stopPropagation(); showCalculator()">
+Launch Calculator <i class="fas fa-arrow-right"></i>
+</button>
+</div>
+</div>
+<div class="tool-card fade-in" onclick="toggleCard(this)">
+<div class="tool-icon">
+<i class="fas fa-clipboard-check"></i>
+</div>
+<h3 class="tool-title">Inspection Assistant</h3>
+<div class="expandable-content">
+<p class="tool-description">Comprehensive digital inspection tool for tow straps and recovery equipment with photo documentation and detailed reporting.</p>
+<ul class="tool-features">
+<li><i class="fas fa-check"></i> Three inspection types</li>
+<li><i class="fas fa-check"></i> Photo documentation</li>
+<li><i class="fas fa-check"></i> Digital record keeping</li>
+<li><i class="fas fa-check"></i> Damage reference guide</li>
+</ul>
+<button class="launch-btn" onclick="event.stopPropagation(); showInspection()">
+Launch Inspector <i class="fas fa-arrow-right"></i>
+</button>
+</div>
+</div>
+<div class="tool-card fade-in" onclick="toggleCard(this)">
+<div class="tool-icon">
+<i class="fas fa-question-circle"></i>
+</div>
+<h3 class="tool-title">Frequently Asked Questions</h3>
+<div class="expandable-content">
+<p class="tool-description">Get answers to the most common recovery and inspection questions in one place.</p>
+<ul class="tool-features">
+<li><i class="fas fa-check"></i> Recovery best practices explained</li>
+<li><i class="fas fa-check"></i> Inspection rules simplified</li>
+<li><i class="fas fa-check"></i> Equipment usage tips</li>
+<li><i class="fas fa-check"></i> Answers backed by industry standards</li>
+</ul>
+<button class="launch-btn" onclick="event.stopPropagation(); showFAQ()">
+      Go to FAQ <i class="fas fa-arrow-right"></i>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Stats Section -->
+<section class="stats-section">
+<div class="stats-container">
+<div class="stat-item">
+<div class="stat-title">Safety-Critical</div>
+<div class="stat-description">Calculates accurate WLL for controlled recovery.</div>
+</div>
+<div class="stat-item">
+<div class="stat-title">Regulatory Compliant</div>
+<div class="stat-description">Aligned with AMSE and OSHA standards.</div>
+</div>
+<div class="stat-item">
+<div class="stat-title">Operator-Friendly</div>
+<div class="stat-description">Built for fast, accurate inspections</div>
+</div>
+<div class="stat-item">
+<div class="stat-title">Time-Efficient</div>
+<div class="stat-description">Cuts downtime with instant compliance data.</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="footer">
+<div class="footer-content">
+<div class="footer-logo">DAWNERZ</div>
+<div class="footer-contact">
+<a href="tel:8143008032">
+<i class="fas fa-phone"></i> 814-300-8032
+</a>
+<a href="mailto:info@dawnerz.com">
+<i class="fas fa-envelope"></i> info@dawnerz.com
+</a>
+<a href="http://dawnerz.com" target="_blank">
+<i class="fas fa-globe"></i> dawnerz.com
+</a>
+</div>
+<div class="footer-copyright">
+© 2025 Dawnerz. All rights reserved. | Professional Recovery Equipment and Solutions
+</div>
+</div>
+</footer>
+</div>
+<!-- Calculator Section -->
+<div class="app-section" id="calculatorPage">
+<div class="calculator">
+<div class="header">
+RECOVERY WLL CALCULATOR
+<div class="unit-toggle-container">
+<div class="unit-toggle">
+<label>LBS</label>
+<label class="toggle-switch">
+<input id="unitToggle" type="checkbox"/>
+<span class="toggle-slider"></span>
+</label>
+<label>TONS</label>
+</div>
+</div>
+</div>
+<div class="step">
+<div class="step-title">
+<div class="step-number">1</div>
+<div>GROSS VEHICLE WEIGHT</div>
+</div>
+<p>Enter the total weight of the vehicle including all cargo and equipment.</p>
+<input id="gvw" min="0" placeholder="Enter weight in pounds (lbs)" type="number"/>
+</div>
+<div class="step">
+<div class="step-title">
+<div class="step-number">2</div>
+<div>SURFACE CONDITIONS</div>
+</div>
+<p>Select the ground surface where the vehicle is stuck.</p>
+<select id="surface">
+<option value="">-- Select Surface Type --</option>
+<option value="0.04">Hard (Asphalt/Concrete)</option>
+<option value="0.14">Firm Ground (Grass/Packed Dirt)</option>
+<option value="0.17">Hard Wet Sand</option>
+<option value="0.20">Soft Wet Sand</option>
+<option value="0.25">Loose Sand/Gravel</option>
+<option value="0.33">Light Mud</option>
+<option value="0.75">Deep Mud (Tire Depth)</option>
+<option value="1.00">Deep Mud (Wheel Depth)</option>
+<option value="1.33">Extreme Mud (Body Depth)</option>
+</select>
+<div class="result" id="surfaceResistance">Surface Force: <span class="result-value">0 lbs</span></div>
+</div>
+<div class="step">
+<div class="step-title">
+<div class="step-number">3</div>
+<div>SLOPE ANGLE</div>
+</div>
+<p>Select the incline angle of the recovery site.</p>
+<select id="slope">
+<option value="">-- Select Angle --</option>
+<option value="0.08">5°</option>
+<option value="0.17">10°</option>
+<option value="0.25">15°</option>
+<option value="0.34">20°</option>
+<option value="0.42">25°</option>
+<option value="0.50">30°</option>
+<option value="0.58">35°</option>
+<option value="0.67">40°</option>
+<option value="1.00">45°+ (Extreme)</option>
+</select>
+<div class="result" id="slopeResistance">Slope Force: <span class="result-value">0 lbs</span></div>
+<div class="warning-message" id="inclineWarning">
+<i class="fas fa-exclamation-triangle"></i>
+Extreme caution required! Operations on slopes 40° or greater should only be performed by professional recovery specialists with specialized equipment.
+</div>
+</div>
+<div class="step">
+<div class="step-title">
+<div class="step-number">4</div>
+<div>DAMAGE RESISTANCE</div>
+</div>
+<p>Additional resistance factors for vehicle damage conditions.</p>
+<select id="damage">
+<option value="">-- Select Damage Level --</option>
+<option value="0">No Axle Damage</option>
+<option value="0.33">Up to Half Axles Locked</option>
+<option value="0.67">Over Half Axles Locked</option>
+</select>
+<div class="result">Damage Force: <span class="result-value" id="damageResistance">0 lbs</span></div>
+<div style="margin-top: 15px;">
+<label for="flatTires" style="display: block; margin-bottom: 8px; font-weight: 500;">Flat Tires:</label>
+<input id="flatTires" max="8" min="0" placeholder="Number of flat tires" type="number" value="0"/>
+<div style="font-size: 12px; color: #666; margin-top: 5px;">
+• 1,000 lbs/tire for GVW ≤ 8,000 lbs<br/>• 2,000 lbs/tire for GVW &gt; 8,000 lbs
+</div>
+</div>
+<div class="result">Tire Force: <span class="result-value" id="tireResistance">0 lbs</span></div>
+</div>
+<div class="step yellow-highlight">
+<div class="step-title">
+<div>TOTAL RESISTANCE</div>
+</div>
+<div class="result" id="subtotal">Combined Forces: <span class="result-value">0 lbs</span></div>
+</div>
+<div class="step">
+<div class="step-title">
+<div class="step-number">5</div>
+<div>ERROR FACTOR</div>
+</div>
+<p>A 25% safety margin is applied to account for variables:</p>
+<div class="result" id="errorFactor">With Safety Margin: <span class="result-value">0 lbs</span></div>
+</div>
+<div class="step">
+<div class="buttons">
+<button id="calculate">Calculate WLL</button>
+<button id="reset">Reset</button>
+</div>
+<div class="disclaimer">
+This calculator provides estimates only. Always use properly rated equipment and follow safe recovery practices.
+</div>
+</div>
+<div class="return-home-container">
+<button class="return-home-btn" onclick="returnHome()">Return to Home</button>
+</div>
+</div>
+</div>
+<!-- Modal Structure -->
+<div class="modal-overlay" id="resultsModal">
+<div class="modal-container">
+<div class="modal-header">
+<div class="modal-title">WORKING LOAD LIMIT RESULTS</div>
+<button class="modal-close" id="closeModal">×</button>
+</div>
+<div class="modal-content">
+<div class="final-result">
+MINIMUM RECOVERY FORCE:
+<span id="finalResult">0 lbs</span>
+</div>
+<h3>CALCULATION DETAILS</h3>
+<table class="calculation-table">
+<thead>
+<tr>
+<th>Factor</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Vehicle Weight (GVW)</td>
+<td id="detailWeight">0 lbs</td>
+</tr>
+<tr>
+<td>Surface Force</td>
+<td id="detailSurface">0 lbs</td>
+</tr>
+<tr>
+<td>Slope Force</td>
+<td id="detailSlope">0 lbs</td>
+</tr>
+<tr>
+<td>Damage Force</td>
+<td id="detailDamage">0 lbs</td>
+</tr>
+<tr>
+<td>Flat Tire Force</td>
+<td id="detailTires">0 lbs</td>
+</tr>
+<tr>
+<td>Subtotal (Steps 2-4)</td>
+<td id="detailSubtotal">0 lbs</td>
+</tr>
+<tr>
+<td>Error Factor (25%)</td>
+<td id="detailError">0 lbs</td>
+</tr>
+<tr style="display: none;">
+<td>Final Working Load Limit</td>
+<td id="detailFinal">0 lbs</td>
+</tr>
+</tbody>
+</table>
+<h3 style="margin-top: 30px;">SAFETY FACTOR RECOMMENDATIONS</h3>
+<table class="calculation-table">
+<thead>
+<tr>
+<th>Safety Factor</th>
+<th>Required MBS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3:1 Safety Factor</td>
+<td id="detail3x">0 lbs</td>
+</tr>
+<tr>
+<td>5:1 Safety Factor</td>
+<td id="detail5x">0 lbs</td>
+</tr>
+</tbody>
+</table>
+<div id="safetyNote" style="margin-top: 20px; margin-bottom: 25px; padding: 15px; background-color: #e8f4fc; border-left: 4px solid #2c3e50; border-radius: 5px; display: none;">
+<strong>Note:</strong> <span id="safetyNoteText"></span>
+</div>
+<div class="safety-warning">
+<h3><i class="fas fa-exclamation-triangle"></i> SAFETY WARNING</h3>
+<div style="line-height: 1.6; font-size: 16px;">
+<p style="margin-bottom: 1em;"><strong>SAFETY NOTICE:</strong> The calculated Working Load Limit (WLL) must be thoroughly validated against all recovery factors specific to your operation. The Gross Vehicle Weight (GVW) including all cargo and accessories serves as the baseline measurement only.</p>
+<p style="margin-bottom: 1em;">Professional recovery operators or properly trained technicians must evaluate all contributing variables that may affect the required recovery force, including environmental factors, vehicle positioning, and equipment configuration prior to determining the final WLL and selecting appropriate Recovery Products.</p>
+<p style="margin-bottom: 1em;"><strong>This Recovery Force Calculator</strong> provides a systematic approach to estimate the MINIMUM WLL requirements. However, all calculations must be verified and adjusted by qualified personnel to ensure accuracy for the specific recovery conditions. Complete assessment of all FIVE FACTORS is mandatory, and all calculations must be independently validated.</p>
+<p style="margin-bottom: 1em;"><strong>CRITICAL PRINCIPLE:</strong> The strength of your recovery system is determined by its weakest component. Every element - from straps and shackles to anchor points - must meet or exceed the calculated WLL requirements for safe and effective recovery operations.</p>
+<p style="margin-bottom: 1em;"><strong>INDUSTRY STANDARDS:</strong> Always apply appropriate safety factors (3:1 minimum, 5:1 for critical applications) and never exceed 75% of any component's rated capacity during actual recovery operations. Failure to properly assess these factors may result in equipment failure, property damage, or personal injury.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Inspection Tool Section -->
+<div class="app-section" id="inspectionPage">
+<div class="inspection">
 <div class="container">
-<div class="header"><div class="header-inner"><img alt="Logo" class="header-logo" src="logo-placeholder.png"/><div class="header-title"><h1>TOW STRAP INSPECTION TOOL</h1><div class="subtitle">Professional Inspection Management System</div></div></div></div>
+<div class="header">
+<h1>TOW STRAP INSPECTION TOOL</h1>
+<div class="subtitle">Professional Inspection Management System</div>
+</div>
 <!-- Home Page -->
 <div class="home-page" id="homePage">
 <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Select Inspection Type</h2>
@@ -22,32 +340,32 @@
 <div class="inspection-card" onclick="startInspection('initial')">
 <h3>
 <i class="fas fa-box-open icon"></i>
-                        Initial Inspection
-                    </h3>
+Initial Inspection
+</h3>
 <p>Upon receipt/first use - verify product specifications and shipping condition</p>
 <i class="fas fa-chevron-right arrow"></i>
 </div>
 <div class="inspection-card" onclick="startInspection('frequent')">
 <h3>
 <i class="fas fa-calendar-day icon"></i>
-                        Frequent Inspection
-                    </h3>
+Frequent Inspection
+</h3>
 <p>Daily or before each shift/use - quick safety examination</p>
 <i class="fas fa-chevron-right arrow"></i>
 </div>
 <div class="inspection-card" onclick="startInspection('periodic')">
 <h3>
 <i class="fas fa-calendar-check icon"></i>
-                        Periodic Inspection
-                    </h3>
+Periodic Inspection
+</h3>
 <p>Yearly or more frequent - comprehensive detailed examination</p>
 <i class="fas fa-chevron-right arrow"></i>
 </div>
 <div class="inspection-card" onclick="showResources()">
 <h3>
 <i class="fas fa-book icon"></i>
-                        Resources
-                    </h3>
+Resources
+</h3>
 <p>Inspection procedures manual and damage reference guide</p>
 <i class="fas fa-chevron-right arrow"></i>
 </div>
@@ -112,12 +430,12 @@
 <div class="status-group">
 <label>
 <input name="initial-status" required="" type="radio" value="pass"/>
-                        PASS - Approved for Service
-                    </label>
+PASS - Approved for Service
+</label>
 <label>
 <input name="initial-status" required="" type="radio" value="fail"/>
-                        FAIL - Remove from Service
-                    </label>
+FAIL - Remove from Service
+</label>
 </div>
 <div class="form-group">
 <label>Comments/Notes</label>
@@ -130,31 +448,18 @@
 <div class="upload-container">
 <button class="upload-btn" onclick="uploadImage('initial', true)" type="button">
 <i class="fas fa-camera"></i> Take Photo
-                    </button>
+</button>
 <button class="upload-btn" onclick="uploadImage('initial', false)" type="button">
 <i class="fas fa-upload"></i> Upload Photo
-                    </button>
+</button>
 </div>
 <div class="image-preview-container" id="initial-preview"></div>
 <input accept="image/*" class="hidden-file-input" id="initial-file" multiple="" type="file"/>
 <input accept="image/*" capture="environment" class="hidden-file-input" id="initial-camera" multiple="" type="file"/>
 </div>
-<!-- Signature Box Section -->
-<div class="form-section signature-section">
-<h3>Digital Signature</h3>
-<p>Sign to authorize this inspection report</p>
-<div class="signature-container">
-<div class="signature-pad" id="initial-signature"></div>
-<div class="signature-actions">
-<button class="btn-clear" onclick="clearSignature('initial')" type="button">
-<i class="fas fa-eraser"></i> Clear
-                        </button>
-</div>
-</div>
-</div>
 <div class="button-group">
-<button class="btn" onclick="generatePDF('initial')">Generate PDF Report</button>
 <button class="btn btn-back" onclick="goBack()">Back</button>
+<button class="btn" onclick="generatePDF('initial')">Generate PDF Report</button>
 </div>
 </div>
 <!-- Frequent Inspection Form -->
@@ -254,12 +559,12 @@
 <div class="status-group">
 <label>
 <input name="frequent-status" required="" type="radio" value="pass"/>
-                        PASS - Approved for Service
-                    </label>
+PASS - Approved for Service
+</label>
 <label>
 <input name="frequent-status" required="" type="radio" value="fail"/>
-                        FAIL - Remove from Service
-                    </label>
+FAIL - Remove from Service
+</label>
 </div>
 <div class="form-group">
 <label>Comments/Notes</label>
@@ -272,31 +577,18 @@
 <div class="upload-container">
 <button class="upload-btn" onclick="uploadImage('frequent', true)" type="button">
 <i class="fas fa-camera"></i> Take Photo
-                    </button>
+</button>
 <button class="upload-btn" onclick="uploadImage('frequent', false)" type="button">
 <i class="fas fa-upload"></i> Upload Photo
-                    </button>
+</button>
 </div>
 <div class="image-preview-container" id="frequent-preview"></div>
 <input accept="image/*" class="hidden-file-input" id="frequent-file" multiple="" type="file"/>
 <input accept="image/*" capture="environment" class="hidden-file-input" id="frequent-camera" multiple="" type="file"/>
 </div>
-<!-- Signature Box Section -->
-<div class="form-section signature-section">
-<h3>Digital Signature</h3>
-<p>Sign to authorize this inspection report</p>
-<div class="signature-container">
-<div class="signature-pad" id="frequent-signature"></div>
-<div class="signature-actions">
-<button class="btn-clear" onclick="clearSignature('frequent')" type="button">
-<i class="fas fa-eraser"></i> Clear
-                        </button>
-</div>
-</div>
-</div>
 <div class="button-group">
-<button class="btn" onclick="generatePDF('frequent')">Generate PDF Report</button>
 <button class="btn btn-back" onclick="goBack()">Back</button>
+<button class="btn" onclick="generatePDF('frequent')">Generate PDF Report</button>
 </div>
 </div>
 <!-- Periodic Inspection Form -->
@@ -448,12 +740,12 @@
 <div class="status-group">
 <label>
 <input name="periodic-status" required="" type="radio" value="pass"/>
-                        PASS - Approved for Service
-                    </label>
+PASS - Approved for Service
+</label>
 <label>
 <input name="periodic-status" required="" type="radio" value="fail"/>
-                        FAIL - Remove from Service
-                    </label>
+FAIL - Remove from Service
+</label>
 </div>
 <div class="form-group">
 <label>Recommended Inspection Frequency</label>
@@ -475,31 +767,18 @@
 <div class="upload-container">
 <button class="upload-btn" onclick="uploadImage('periodic', true)" type="button">
 <i class="fas fa-camera"></i> Take Photo
-                    </button>
+</button>
 <button class="upload-btn" onclick="uploadImage('periodic', false)" type="button">
 <i class="fas fa-upload"></i> Upload Photo
-                    </button>
+</button>
 </div>
 <div class="image-preview-container" id="periodic-preview"></div>
 <input accept="image/*" class="hidden-file-input" id="periodic-file" multiple="" type="file"/>
 <input accept="image/*" capture="environment" class="hidden-file-input" id="periodic-camera" multiple="" type="file"/>
 </div>
-<!-- Signature Box Section -->
-<div class="form-section signature-section">
-<h3>Digital Signature</h3>
-<p>Sign to authorize this inspection report</p>
-<div class="signature-container">
-<div class="signature-pad" id="periodic-signature"></div>
-<div class="signature-actions">
-<button class="btn-clear" onclick="clearSignature('periodic')" type="button">
-<i class="fas fa-eraser"></i> Clear
-                        </button>
-</div>
-</div>
-</div>
 <div class="button-group">
-<button class="btn" onclick="generatePDF('periodic')">Generate PDF Report</button>
 <button class="btn btn-back" onclick="goBack()">Back</button>
+<button class="btn" onclick="generatePDF('periodic')">Generate PDF Report</button>
 </div>
 </div>
 <!-- Resources Page -->
@@ -508,7 +787,8 @@
 <div class="form-section">
 <h3>Damage Reference Guide</h3>
 <div class="damage-reference">
-<img alt="Damage reference guide" src="https://i.imgur.com/KL00zMm.jpeg"/>
+<img alt="Damage reference guide" src="https://i.imgur.com/KL00zMm.jpeg" style="max-width: 100%; height: auto;"/>
+<p>Damage reference guide for tow strap inspection</p>
 </div>
 </div>
 <div class="form-section">
@@ -561,15 +841,102 @@
 <button class="btn btn-back" onclick="goBack()">Back to Home</button>
 </div>
 </div>
-<div class="footer">
+<div class="inspection footer">
 <p>© 2025 Dawnerz. All rights reserved.</p>
 <p>
-<a href="tel:8143008032">814-300-8032</a> | 
-                <a href="mailto:info@dawnerz.com">info@dawnerz.com</a> | 
-                <a href="http://dawnerz.com">dawnerz.com</a>
+<a href="tel:8143008032" style="color: #becdd9;">814-300-8032</a> |
+<a href="mailto:info@dawnerz.com" style="color: #becdd9;">info@dawnerz.com</a> |
+<a href="http://dawnerz.com" style="color: #becdd9;">dawnerz.com</a>
 </p>
 </div>
 </div>
-<script src="script.js"></script>
-</body>
-</html>
+<div class="return-home-container">
+<button class="return-home-btn" onclick="returnHome()">Return to Home</button>
+</div>
+</div>
+
+<!-- FAQ Page -->
+</div><div class="app-section" id="faqPage"><section style="padding: 80px 20px; background-color: #f9fafc; max-width: 900px; margin: auto;"><h2 style="font-size: 2.4rem; color: #2c3e50; margin-bottom: 30px; text-align: center;">Frequently Asked Questions</h2><div class="accordion" style="margin-top:40px;">
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">What does the recovery calculator actually calculate?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            The recovery calculator estimates the total resistance force necessary to recover a vehicle in distress, accounting for factors such as weight, terrain, slope, damage, and flat tires. It incorporates a 25% safety margin and provides the appropriate Working Load Limit (WLL) for your tow strap, factoring in both 3:1 and 5:1 safety ratios.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">Why does the calculator add 25% to the total resistance?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            The additional 25% accounts for unforeseen variables such as soft ground, mud, or inaccuracies in the estimated weight of the vehicle. This margin ensures you are not operating at the threshold of the strap's capacity, enhancing safety during recovery.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">What’s the difference between 3:1 and 5:1 in recovery?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            A 3:1 ratio represents the minimum recommended safety margin for standard towing operations. A 5:1 ratio is more suitable for challenging conditions, heavier loads, or commercial recoveries. It provides additional stress reduction on your gear and enhances overall safety during recovery.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">Does this apply to winches and snatch blocks?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            Yes, the force output from the calculator can be used to determine the appropriate tow straps, shackles, winches, and snatch blocks. Ensure that the Working Load Limits (WLL) of each component match and that the correct safety factors are applied throughout the entire recovery system.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">What if my vehicle has flat tires or is off-road?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            Flat tires introduce significant additional resistance due to increased drag. The calculator allows you to factor this into your recovery plan, ensuring that the WLL is adjusted to account for this extra force and that the recovery parameters are accurate.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">What kinds of tow straps can I inspect with this?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            This tool is designed for all webbing-based tow straps, including looped-end straps, snatch straps, and recovery straps. It is suitable for both personal and commercial applications, ensuring thorough inspections of all types of recovery gear.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">When should I inspect my tow strap?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            Tow straps should be inspected at key intervals: initially (first use), frequently (before each use), and periodically (monthly or quarterly). The tool guides you through the appropriate inspection process for each case, ensuring that your gear remains in compliance and safe to use.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">What are the top reasons a strap should be retired?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            A strap should be retired if it exhibits signs of damage such as cuts, fraying, melted fibers, chemical exposure, mold, UV degradation, or if the identification tag is missing or illegible. The tool flags these issues and includes them in your inspection report to ensure safe usage.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">Can I include photos in the inspection?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            Yes, you can upload or capture photos during the inspection process. These images are incorporated into the final inspection report for traceability, providing visual documentation of the strap's condition.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">Is this tool compliant with towing regulations?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            This tool adheres to the best practices outlined by the FMCSA and CVSA. While it is not a substitute for certified inspections, it supports safe equipment usage and provides a foundation for compliance with industry standards.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">How does this tool help with record keeping?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            The tool generates a detailed PDF report for each inspection, capturing essential information such as the inspector's name, date, strap ID, results, and any relevant comments. This provides a permanent digital record, valuable for audits, claims, or internal tracking purposes.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">Can I link inspections to specific straps or equipment?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            Yes, the inspection form allows you to capture strap IDs or serial numbers, enabling you to track the history, usage cycles, and condition of each strap over time, ensuring proper management and documentation.
+        </div>
+    </div>
+    <div class="accordion-item" style="border: 1px solid #ddd; margin-bottom: 10px; border-radius: 6px;">
+        <div class="accordion-header" onclick="toggleAccordion(this)" style="padding: 15px 20px; background-color: #f1f4f7; font-weight: bold; cursor: pointer;">What’s included in the PDF inspection report?</div>
+        <div class="accordion-body" style="display: none; padding: 15px 20px; background: #fff; color: #333;">
+            The PDF report includes the inspection type, the inspector's name, strap ID, detailed checklist results, optional comments, images, and a pass/fail status. The report ensures all inspection information is professionally documented for reference and future audits.
+        </div>
+    </div>
+</div>
+<div style="text-align: center; margin-top: 40px;">
+    <button class="return-home-btn" onclick="returnHome()">Return to Home</button>
+</div></section></div>
+&gt;
